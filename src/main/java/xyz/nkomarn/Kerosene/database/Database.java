@@ -2,14 +2,10 @@ package xyz.nkomarn.Kerosene.database;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.bson.Document;
 import xyz.nkomarn.Kerosene.util.Config;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Database {
 
