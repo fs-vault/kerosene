@@ -1,9 +1,10 @@
 package xyz.nkomarn.Kerosene;
 
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.eclipse.jetty.server.Server;
 import xyz.nkomarn.Kerosene.database.Database;
-import xyz.nkomarn.Kerosene.util.Config;
 import xyz.nkomarn.Kerosene.util.Metrics;
 
 import java.net.InetSocketAddress;
@@ -16,11 +17,15 @@ public class Kerosene extends JavaPlugin {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
-        Database.connect();
+
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(new ConnectionString(getConfig().getString("database")))
+                .build();
+        Database.connect(settings);
 
         // Start Prometheus exporter
         InetSocketAddress address = new InetSocketAddress("0.0.0.0",
-                Config.getInteger("exporter"));
+                getConfig().getInt("exporter"));
         server = new Server(address);
         server.setHandler(new Metrics());
 
