@@ -2,5 +2,5 @@ name: ${name}
 version: Build ${version}
 author: TechToolbox (@nkomarn)
 main: xyz.nkomarn.${name}.${name}
-description: Stuff n' Things that keep Firestarter ticking! Compiled ${maven.build.timestamp}.
-api-version: 1.14
+description: A library of stuff n' things that keep Firestarter ticking!
+api-version: 1.15

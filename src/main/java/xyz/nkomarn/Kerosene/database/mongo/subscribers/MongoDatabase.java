@@ -1,12 +1,11 @@
-package xyz.nkomarn.Kerosene.database;
+package xyz.nkomarn.Kerosene.database.mongo.subscribers;
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.bson.Document;
 
-public class Database {
-
+public class MongoDatabase {
     private static MongoClient syncClient;
     private static com.mongodb.reactivestreams.client.MongoClient asyncClient;
 
@@ -30,7 +29,6 @@ public class Database {
 
     public static SyncAsyncCollection<Document> getSyncAsyncCollection(String database, String collection) {
         return new SyncAsyncCollection<>(syncClient.getDatabase(database).getCollection(collection),
-                asyncClient.getDatabase(database).getCollection(collection));
+            asyncClient.getDatabase(database).getCollection(collection));
     }
-
 }

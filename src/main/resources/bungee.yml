@@ -1,5 +1,0 @@
-name: ${name}
-version: Build ${version}
-author: TechToolbox (@nkomarn)
-main: xyz.nkomarn.${name}.${name}Bungee
-description: Stuff n' Things that keep Firestarter ticking! Compiled ${maven.build.timestamp}.

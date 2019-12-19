@@ -1,4 +1,4 @@
-package xyz.nkomarn.Kerosene.database;
+package xyz.nkomarn.Kerosene.database.mongo.subscribers;
 
 import com.mongodb.client.MongoCollection;
 

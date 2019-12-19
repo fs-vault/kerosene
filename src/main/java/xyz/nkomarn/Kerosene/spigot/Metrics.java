@@ -1,4 +1,4 @@
-package xyz.nkomarn.Kerosene.util;
+package xyz.nkomarn.Kerosene.spigot;
 
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.Gauge;
@@ -7,8 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import xyz.nkomarn.Kerosene.Kerosene;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,7 +15,6 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 
 public class Metrics extends AbstractHandler {
-
     private Gauge players = Gauge.build().name("mc_players_total").help("Online players").create().register();
     private Gauge loadedChunks = Gauge.build().name("mc_loaded_chunks_total").help("Chunks loaded per world").labelNames("world").create().register();
     private Gauge playersOnline = Gauge.build().name("mc_players_online_total").help("Players currently online per world").labelNames("world").create().register();
@@ -28,19 +25,12 @@ public class Metrics extends AbstractHandler {
 
     @Override
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         if (!target.equals("/metrics")) {
             return;
         }
 
-        // Max TPS of 20
         tps.set(Math.min(20.0, Bukkit.getServer().getTPS()[0]));
-
-        /*
-         * Bukkit API calls have to be made from the main thread.
-         * That's why we use the BukkitScheduler to retrieve the server stats.
-         * */
-        Future<Object> future = Bukkit.getServer().getScheduler().callSyncMethod(Kerosene.instance, () -> {
+        Future<Object> future = Bukkit.getServer().getScheduler().callSyncMethod(Kerosene.getInstance(), () -> {
             players.set(Bukkit.getOnlinePlayers().size());
 
             for (World world : Bukkit.getWorlds()) {
@@ -67,7 +57,5 @@ public class Metrics extends AbstractHandler {
             Bukkit.getLogger().log(Level.FINE, "Failed to read server statistic: ", e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-
     }
-
 }

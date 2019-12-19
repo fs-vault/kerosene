@@ -1,2 +1,13 @@
-database: ""
-exporter: 2800
+database:
+  mongo:
+    enabled: true
+    uri: ""
+  redis:
+    enabled: false
+    host: ""
+    port: 6379
+    password: ""
+
+exporter:
+  enabled: false
+  port: 2800

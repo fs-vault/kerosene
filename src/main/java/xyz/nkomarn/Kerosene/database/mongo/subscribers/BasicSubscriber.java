@@ -1,11 +1,10 @@
-package xyz.nkomarn.Kerosene.database.subscribers;
+package xyz.nkomarn.Kerosene.database.mongo.subscribers;
 
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 public class BasicSubscriber<T> implements Subscriber<T> {
-
-    protected final long requested;
+    private final long requested;
 
     public BasicSubscriber() {
         this(Integer.MAX_VALUE);
@@ -30,5 +29,4 @@ public class BasicSubscriber<T> implements Subscriber<T> {
 
     @Override
     public void onComplete() {}
-
 }
