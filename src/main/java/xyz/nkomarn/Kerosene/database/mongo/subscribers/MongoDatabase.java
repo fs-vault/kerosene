@@ -9,7 +9,7 @@ public class MongoDatabase {
     private static MongoClient syncClient;
     private static com.mongodb.reactivestreams.client.MongoClient asyncClient;
 
-    public static void connect(MongoClientSettings settings) {
+    public static void connect(final MongoClientSettings settings) {
         syncClient = MongoClients.create(settings);
         asyncClient = com.mongodb.reactivestreams.client.MongoClients.create(settings);
     }

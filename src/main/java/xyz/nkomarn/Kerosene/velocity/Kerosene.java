@@ -10,6 +10,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.slf4j.Logger;
 import xyz.nkomarn.Kerosene.database.mongo.subscribers.MongoDatabase;
+import xyz.nkomarn.Kerosene.database.redis.RedisDatabase;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -19,24 +20,46 @@ import java.util.Objects;
     authors = {"TechToolbox (@nkomarn)"})
 public class Kerosene {
     private final ProxyServer server;
-    private final Logger logger;
+    private static Logger logger;
+    private static String serverId;
 
     @Inject
     public Kerosene(final ProxyServer server, final Logger logger) throws IOException {
         this.server = server;
-        this.logger = logger;
+        Kerosene.logger = logger;
         Config.loadConfig();
+        serverId = Config.getNode("server-id").getString();
+        logger.info(String.format("Running with identifier '%s'.", serverId));
     }
 
     @Subscribe
     public void onProxyInitialization(final ProxyInitializeEvent event) {
         final ConfigurationNode mongoNode = Config.getNode("database").getNode("mongo");
         if (mongoNode.getNode("enabled").getBoolean()) {
-            MongoClientSettings settings = MongoClientSettings.builder()
+            logger.info("Initializing Mongo database.");
+            final MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(Objects.requireNonNull(
                     mongoNode.getNode("uri").getString())))
                 .build();
             MongoDatabase.connect(settings);
         }
+
+        final ConfigurationNode redisNode = Config.getNode("database").getNode("redis");
+        if (redisNode.getNode("enabled").getBoolean()) {
+            logger.info("Initializing Redis database.");
+            final String host = redisNode.getNode("host").getString();
+            final int port = redisNode.getNode("port").getInt();
+            final String password = redisNode.getNode("password").getString();
+            final int maxConnections = redisNode.getNode("max-connections").getInt();
+            RedisDatabase.connect(host, port, password, maxConnections);
+        }
+    }
+
+    public static Logger getLogger() {
+        return logger;
+    }
+
+    public static String getServerId() {
+        return serverId;
     }
 }
