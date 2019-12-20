@@ -11,7 +11,8 @@ public class RedisDatabase {
     public static void connect(final String host, final int port, final String password, final int maxConnections) {
         JedisPoolConfig poolConfig = new JedisPoolConfig();
         poolConfig.setMaxTotal(Math.max(8, maxConnections));
-        pool = new JedisPool(poolConfig, host, port, 0, password);
+        if (password.length() > 0) pool = new JedisPool(poolConfig, host, port, 0);
+        else pool = new JedisPool(poolConfig, host, port, 0, password);
         Kerosene.getLogger().info("Redis connected.");
     }
 
