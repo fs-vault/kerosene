@@ -1,5 +1,6 @@
 package xyz.nkomarn.Kerosene.database.redis;
 
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import xyz.nkomarn.Kerosene.velocity.Kerosene;
@@ -16,5 +17,9 @@ public class RedisDatabase {
 
     public static JedisPool getPool() {
         return pool;
+    }
+
+    public static Jedis getResource() {
+        return pool.getResource();
     }
 }
