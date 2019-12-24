@@ -4,7 +4,7 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.eclipse.jetty.server.Server;
-import xyz.nkomarn.Kerosene.database.mongo.subscribers.MongoDatabase;
+import xyz.nkomarn.Kerosene.database.mongo.MongoDatabase;
 import xyz.nkomarn.Kerosene.database.redis.RedisDatabase;
 
 import java.net.InetSocketAddress;

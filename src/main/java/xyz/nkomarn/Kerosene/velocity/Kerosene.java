@@ -5,11 +5,12 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.slf4j.Logger;
-import xyz.nkomarn.Kerosene.database.mongo.subscribers.MongoDatabase;
+import xyz.nkomarn.Kerosene.database.mongo.MongoDatabase;
 import xyz.nkomarn.Kerosene.database.redis.RedisDatabase;
 
 import java.io.IOException;
@@ -33,17 +34,7 @@ public class Kerosene {
     }
 
     @Subscribe
-    public void onProxyInitialization(final ProxyInitializeEvent event) {
-        final ConfigurationNode mongoNode = Config.getNode("database").getNode("mongo");
-        if (mongoNode.getNode("enabled").getBoolean()) {
-            logger.info("Initializing Mongo database.");
-            final MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(new ConnectionString(Objects.requireNonNull(
-                    mongoNode.getNode("uri").getString())))
-                .build();
-            MongoDatabase.connect(settings);
-        }
-
+    public void onProxyInitialized(final ProxyInitializeEvent event) {
         final ConfigurationNode redisNode = Config.getNode("database").getNode("redis");
         if (redisNode.getNode("enabled").getBoolean()) {
             logger.info("Initializing Redis database.");
@@ -52,6 +43,29 @@ public class Kerosene {
             final String password = redisNode.getNode("password").getString();
             final int maxConnections = redisNode.getNode("max-connections").getInt();
             RedisDatabase.connect(host, port, password, maxConnections);
+        }
+
+        final ConfigurationNode mongoNode = Config.getNode("database").getNode("mongo");
+        if (mongoNode.getNode("enabled").getBoolean()) {
+            logger.info("Initializing Mongo database.");
+            final MongoClientSettings settings = MongoClientSettings.builder()
+                    .applyConnectionString(new ConnectionString(Objects.requireNonNull(
+                            mongoNode.getNode("uri").getString())))
+                    .build();
+            MongoDatabase.connect(settings);
+        }
+    }
+
+    @Subscribe
+    public void onProxyShutdown(final ProxyShutdownEvent event) {
+        final ConfigurationNode redisNode = Config.getNode("database").getNode("redis");
+        if (redisNode.getNode("enabled").getBoolean()) {
+            RedisDatabase.disconnect();
+        }
+
+        final ConfigurationNode mongoNode = Config.getNode("database").getNode("mongo");
+        if (mongoNode.getNode("enabled").getBoolean()) {
+            MongoDatabase.disconnect();
         }
     }
 

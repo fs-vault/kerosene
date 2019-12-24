@@ -1,9 +1,10 @@
-package xyz.nkomarn.Kerosene.database.mongo.subscribers;
+package xyz.nkomarn.Kerosene.database.mongo;
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.bson.Document;
+import xyz.nkomarn.Kerosene.database.mongo.subscribers.SyncAsyncCollection;
 
 public class MongoDatabase {
     private static MongoClient syncClient;

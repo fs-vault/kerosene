@@ -1,6 +1,6 @@
 name: ${name}
-version: Build ${version}
+version: 1.3
 author: TechToolbox (@nkomarn)
-main: xyz.nkomarn.${name}.${name}
+main: xyz.nkomarn.Kerosene.spigot.Kerosene
 description: A library of stuff n' things that keep Firestarter ticking!
 api-version: 1.15
