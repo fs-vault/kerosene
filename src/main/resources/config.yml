@@ -1,16 +1,2 @@
 database:
-  mongo:
-    enabled: true
-    uri: ""
-  redis:
-    enabled: false
-    host: ""
-    port: 6379
-    password: ""
-    max-connections: 8
-
-exporter:
-  enabled: false
-  port: 2800
-
-server-id: ""
+  uri: ""
