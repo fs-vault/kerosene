@@ -2,6 +2,9 @@ package xyz.nkomarn.Kerosene.database;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+
+import org.bson.Document;
+
 import com.mongodb.MongoClientSettings;
 
 /**
@@ -27,5 +30,10 @@ public class MongoDatabase {
 
     public static com.mongodb.reactivestreams.client.MongoClient getAsync() {
         return async;
+    }
+
+    public static FlexibleCollection<Document> getFlexibleCollection(String database, String collection) {
+        return new FlexibleCollection<>(sync.getDatabase(database).getCollection(collection), 
+            async.getDatabase(database).getCollection(collection));
     }
 }
