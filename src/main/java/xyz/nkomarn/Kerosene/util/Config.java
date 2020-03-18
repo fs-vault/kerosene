@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Utility class to easily manage the configuration.
+ * Utility class to easily manage the
+ * configuration for BungeeCord.
  */
 public class Config {
     private static Configuration config;

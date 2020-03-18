@@ -1,5 +1,5 @@
 name: Kerosene
-version: 2.0.2
+version: 2.1
 author: TechToolbox (@nkomarn)
 main: xyz.nkomarn.Kerosene.KeroseneBungee
 description: Firestarter's library of little bits and bobs that keep the server ticking.
