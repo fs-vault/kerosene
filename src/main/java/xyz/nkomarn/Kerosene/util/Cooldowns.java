@@ -4,21 +4,15 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import xyz.nkomarn.Kerosene.database.FlexibleCollection;
+import xyz.nkomarn.Kerosene.Kerosene;
 
 /**
  * Utility class to set and reset cooldowns for players.
  */
-public class Cooldown {
-    private final FlexibleCollection<Document> collection;
-
-    public Cooldown(FlexibleCollection<Document> collection) {
-        this.collection = collection;
-    }
-
+public class Cooldowns {
     public long getCooldown(String uuid, String type) {
         Bson filter = Filters.eq("_id", uuid);
-        Document player = collection.sync().find(filter).first();
+        Document player = Kerosene.getPlayerData().sync().find(filter).first();
         if (!player.containsKey("cooldowns")) {
             return 0;
         }
@@ -31,6 +25,6 @@ public class Cooldown {
         Bson update = new Document("$set", new Document().append("cooldowns",
                 new Document().append(type, System.currentTimeMillis())));
         UpdateOptions options = new UpdateOptions().upsert(true);
-        collection.sync().updateOne(filter, update, options);
+        Kerosene.getPlayerData().sync().updateOne(filter, update, options);
     }
 }

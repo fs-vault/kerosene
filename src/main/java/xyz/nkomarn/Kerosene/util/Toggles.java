@@ -4,21 +4,15 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import xyz.nkomarn.Kerosene.database.FlexibleCollection;
+import xyz.nkomarn.Kerosene.Kerosene;
 
 /**
  * Utility class to create persistent toggles for players.
  */
-public class Toggle {
-    private final FlexibleCollection<Document> collection;
-
-    public Toggle(FlexibleCollection<Document> collection) {
-        this.collection = collection;
-    }
-
+public class Toggles {
     public boolean getState(String uuid, String type) {
         Bson filter = Filters.eq("_id", uuid);
-        Document player = collection.sync().find(filter).first();
+        Document player = Kerosene.getPlayerData().sync().find(filter).first();
         if (!player.containsKey("toggles")) {
             return true;
         }
@@ -31,6 +25,6 @@ public class Toggle {
         Bson update = new Document("$set", new Document().append("toggles",
                 new Document().append(type, state)));
         UpdateOptions options = new UpdateOptions().upsert(true);
-        collection.sync().updateOne(filter, update, options);
+        Kerosene.getPlayerData().sync().updateOne(filter, update, options);
     }
 }
