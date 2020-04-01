@@ -1,7 +1,12 @@
 name: Kerosene
-version: 2.1
+version: 3.0
 author: TechToolbox (@nkomarn)
 main: xyz.nkomarn.Kerosene.Kerosene
 description: Firestarter's library of little bits and bobs that keep the server ticking.
 website: https://firestartermc.com/opensource
 api-version: 1.15
+depend: ['Essentials']
+
+commands:
+  kerosene:
+    description: "Kerosene core command."
