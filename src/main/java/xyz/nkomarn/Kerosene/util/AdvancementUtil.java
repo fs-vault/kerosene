@@ -32,7 +32,8 @@ public class AdvancementUtil {
      */
     public static void grantAdvancement(final Player player, final String advancementName) {
         if (isAdvancementComplete(player, advancementName)) return;
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format(
-                "advancement grant %s only firestarter:%s", player.getName(), advancementName));
+        final NamespacedKey advancementKey = new NamespacedKey("firestarter", advancementName);
+        final AdvancementProgress progress = player.getAdvancementProgress(Bukkit.getAdvancement(advancementKey));
+        progress.getRemainingCriteria().forEach(progress::awardCriteria);
     }
 }
