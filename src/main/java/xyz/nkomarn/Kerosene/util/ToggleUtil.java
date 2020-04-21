@@ -52,8 +52,11 @@ public class ToggleUtil {
 
         try {
             connection = LocalStorage.getConnection();
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO `toggles`(`uuid`, `key`, " +
-                    "`state`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `state` = ?;");
+            PreparedStatement statement = connection.prepareStatement("REPLACE INTO toggles (uuid, key, " +
+                    "state) VALUES (?, ?, ?);");
+            statement.setString(1, uuid.toString());
+            statement.setString(2, key);
+            statement.setBoolean(3, state);
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();

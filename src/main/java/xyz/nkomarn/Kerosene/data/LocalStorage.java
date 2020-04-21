@@ -68,7 +68,7 @@ public class LocalStorage {
 
         try {
             final String togglesQuery = "CREATE TABLE IF NOT EXISTS toggles (uuid TEXT PRIMARY KEY, key TEXT NOT" +
-                    " NULL, state BOOLEAN NOT NULL CHECK (state IN (0,1));";
+                    " NULL, state BOOLEAN NOT NULL CHECK (state IN (0,1)));";
 
             connection = LocalStorage.getConnection();
             PreparedStatement statement = connection.prepareStatement(togglesQuery);
