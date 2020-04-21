@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -33,7 +34,7 @@ public class LocalStorage {
             return false;
         }
 
-        Connection connection = null;
+        Connection connection;
         try {
             connection = getConnection();
             if (connection == null) return false;
@@ -56,6 +57,33 @@ public class LocalStorage {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to load database driver.", e);
+        }
+    }
+
+    /**
+     * Creates local tables in the database.
+     */
+    public static void createTables() {
+        Connection connection = null;
+
+        try {
+            final String togglesQuery = "CREATE TABLE IF NOT EXISTS toggles (uuid TEXT PRIMARY KEY, key TEXT NOT" +
+                    " NULL, state BOOLEAN NOT NULL CHECK (state IN (0,1));";
+
+            connection = LocalStorage.getConnection();
+            PreparedStatement statement = connection.prepareStatement(togglesQuery);
+            statement.execute();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

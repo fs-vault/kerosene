@@ -28,6 +28,8 @@ public class Kerosene extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
         }
 
+        LocalStorage.createTables();
+
         if (!EconomyUtil.initializeEconomy()) {
             getLogger().severe("Failed to initialize the economy.");
             Bukkit.getPluginManager().disablePlugin(this);

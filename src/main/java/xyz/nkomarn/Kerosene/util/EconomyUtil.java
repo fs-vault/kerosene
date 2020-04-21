@@ -2,11 +2,11 @@ package xyz.nkomarn.Kerosene.util;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 /**
- * Utility class for interfacing with a
- * Vault API economy instance.
+ * Utility class for interfacing with a Vault API economy instance.
  */
 public class EconomyUtil {
     private static Economy economy;
@@ -29,5 +29,38 @@ public class EconomyUtil {
         if (provider == null) return false;
         economy = provider.getProvider();
         return true;
+    }
+
+    /**
+     * Returns the player's current account balance.
+     * @param player The player to check balance for.
+     * @return The player's current account balance.
+     */
+    public static double getBalance(final Player player) {
+        double balance = 0.0;
+        try {
+            balance = getEconomy().getBalance(player);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        return balance;
+    }
+
+    /**
+     * Deposits an amount into a player's balance.
+     * @param player The player to deposit money to.
+     * @param amount Amount of money to deposit.
+     */
+    public static void deposit(final Player player, final double amount) {
+        getEconomy().depositPlayer(player, amount);
+    }
+
+    /**
+     * Withdraws an amount from a player's balance.
+     * @param player The player to withdraw money from.
+     * @param amount Amount of money to withdraw.
+     */
+    public static void withdraw(final Player player, final double amount) {
+        getEconomy().withdrawPlayer(player, amount);
     }
 }
