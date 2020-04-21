@@ -17,7 +17,7 @@ public class ToggleUtil {
      * @param key The name of the toggle.
      * @return The current state of the toggle.
      */
-    public boolean getToggleState(final UUID uuid, final String key) {
+    public static boolean getToggleState(final UUID uuid, final String key) {
         Connection connection = null;
 
         try {
@@ -47,7 +47,7 @@ public class ToggleUtil {
      * @param key The name of the toggle.
      * @param state The new state of the toggle.
      */
-    public void setToggleState(final UUID uuid, final String key, final boolean state) {
+    public static void setToggleState(final UUID uuid, final String key, final boolean state) {
         Connection connection = null;
 
         try {
