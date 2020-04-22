@@ -2,7 +2,7 @@ package xyz.nkomarn.Kerosene.util;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 /**
@@ -36,7 +36,7 @@ public class EconomyUtil {
      * @param player The player to check balance for.
      * @return The player's current account balance.
      */
-    public static double getBalance(final Player player) {
+    public static double getBalance(final OfflinePlayer player) {
         double balance = 0.0;
         try {
             balance = getEconomy().getBalance(player);
@@ -51,7 +51,7 @@ public class EconomyUtil {
      * @param player The player to deposit money to.
      * @param amount Amount of money to deposit.
      */
-    public static void deposit(final Player player, final double amount) {
+    public static void deposit(final OfflinePlayer player, final double amount) {
         getEconomy().depositPlayer(player, amount);
     }
 
@@ -60,7 +60,7 @@ public class EconomyUtil {
      * @param player The player to withdraw money from.
      * @param amount Amount of money to withdraw.
      */
-    public static void withdraw(final Player player, final double amount) {
+    public static void withdraw(final OfflinePlayer player, final double amount) {
         getEconomy().withdrawPlayer(player, amount);
     }
 }
