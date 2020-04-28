@@ -29,16 +29,16 @@ public class Kerosene extends JavaPlugin {
                 getConfig().getString("redis.password"),
                 getConfig().getInt("redis.pool-size"),
                 getConfig().getInt("redis.timeout"))) {
-            getLogger().severe("Failed to connect to database.");
+            getLogger().severe("Failed to connect to Redis.");
             Bukkit.getPluginManager().disablePlugin(this);
         }
 
         if (!LocalStorage.initialize()) {
             getLogger().severe("Failed to initialize local storage.");
             Bukkit.getPluginManager().disablePlugin(this);
+        } else {
+            LocalStorage.createTables();
         }
-
-        LocalStorage.createTables();
 
         if (!EconomyUtil.initializeEconomy()) {
             getLogger().severe("Failed to initialize the economy.");

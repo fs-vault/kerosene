@@ -1,5 +1,6 @@
 package xyz.nkomarn.Kerosene.data;
 
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import xyz.nkomarn.Kerosene.data.pubsub.PubSubHandler;
@@ -42,6 +43,14 @@ public class Redis {
      */
     public static JedisPool getPool() {
         return pool;
+    }
+
+    /**
+     * Returns a Jedis instance from the pool.
+     * @return A Jedis instance (resource);
+     */
+    public static Jedis getResource() {
+        return pool.getResource();
     }
 
     /**
