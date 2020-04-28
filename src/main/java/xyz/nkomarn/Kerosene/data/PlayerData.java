@@ -41,7 +41,7 @@ public class PlayerData {
      * Closes the connection pool and all connections.
      */
     public static void close() {
-        dataSource.close();
+        if (!dataSource.isClosed()) dataSource.close();
     }
 
     /**

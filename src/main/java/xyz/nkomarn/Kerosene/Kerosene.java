@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.nkomarn.Kerosene.data.LocalStorage;
 import xyz.nkomarn.Kerosene.data.PlayerData;
+import xyz.nkomarn.Kerosene.data.Redis;
 import xyz.nkomarn.Kerosene.util.EconomyUtil;
 
 public class Kerosene extends JavaPlugin {
@@ -19,6 +20,15 @@ public class Kerosene extends JavaPlugin {
         if (!PlayerData.connect(getConfig().getString("database.url"),
                 getConfig().getString("database.username"),
                 getConfig().getString("database.password"))) {
+            getLogger().severe("Failed to connect to database.");
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
+
+        if (!Redis.connect(getConfig().getString("redis.host"),
+                getConfig().getInt("redis.port"),
+                getConfig().getString("redis.password"),
+                getConfig().getInt("redis.pool-size"),
+                getConfig().getInt("redis.timeout"))) {
             getLogger().severe("Failed to connect to database.");
             Bukkit.getPluginManager().disablePlugin(this);
         }
@@ -39,6 +49,7 @@ public class Kerosene extends JavaPlugin {
     @Override
     public void onDisable() {
         PlayerData.close();
+        Redis.close();
     }
 
     /**
