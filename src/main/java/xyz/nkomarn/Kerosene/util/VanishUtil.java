@@ -74,7 +74,7 @@ public class VanishUtil {
      * Returns a Set of all the currently vanished players that are online.
      * @return A set of player UUIDs that are vanished and online.
      */
-    public static Set<UUID> getOnlineVanishedPlayers() {
+    public static Set<UUID> getVanishedPlayersOnline() {
         return getTotalVanishedPlayers().stream()
                 .filter(uuid -> Bukkit.getOfflinePlayer(uuid).isOnline())
                 .collect(Collectors.toSet());
