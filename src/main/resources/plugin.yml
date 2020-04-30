@@ -5,7 +5,9 @@ main: xyz.nkomarn.Kerosene.Kerosene
 description: Firestarter's library of little bits and bobs that keep the server ticking.
 website: https://firestartermc.com/opensource
 api-version: 1.15
-depend: ['Essentials', 'Vault']
+depend: ['Essentials', 'GriefPrevention', 'Vault']
 permissions:
+  firestarterm.admin:
+    description: "Allow access to administrative features."
   firestarter.vanish:
     description: "Allow viewing of vanished players."
