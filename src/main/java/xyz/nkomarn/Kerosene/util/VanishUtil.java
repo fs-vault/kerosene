@@ -11,6 +11,7 @@ import xyz.nkomarn.Kerosene.data.Redis;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Utility class for hiding players and checking
@@ -58,15 +59,25 @@ public class VanishUtil {
     }
 
     /**
-     * Gets a Set of all the currently vanished players both online and offline.
+     * Returns a Set of all the currently vanished players both online and offline.
      * @return A set of player UUIDs are that vanished.
      */
-    public static Set<UUID> getVanishedPlayers() {
+    public static Set<UUID> getTotalVanishedPlayers() {
         Set<UUID> vanishedPlayers = new HashSet<>();
         try (Jedis jedis = Redis.getResource()) {
             jedis.smembers("vanish").forEach(uuid -> vanishedPlayers.add(UUID.fromString(uuid)));
         }
         return vanishedPlayers;
+    }
+
+    /**
+     * Returns a Set of all the currently vanished players that are online.
+     * @return A set of player UUIDs that are vanished and online.
+     */
+    public static Set<UUID> getVanishedPlayersOnline() {
+        return getTotalVanishedPlayers().stream()
+                .filter(uuid -> Bukkit.getOfflinePlayer(uuid).isOnline())
+                .collect(Collectors.toSet());
     }
 
     /**
