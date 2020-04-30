@@ -1,5 +1,6 @@
 package xyz.nkomarn.Kerosene.util;
 
+import com.earth2me.essentials.User;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -27,6 +28,9 @@ public class VanishUtil {
             try (Jedis jedis = Redis.getResource()) {
                 jedis.sadd("vanish", player.getUniqueId().toString());
             }
+
+            User user = Kerosene.getEssentials().getUser(player.getUniqueId());
+            if (user != null) user.setHidden(true);
         });
 
         Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
@@ -49,6 +53,9 @@ public class VanishUtil {
             try (Jedis jedis = Redis.getResource()) {
                 jedis.srem("vanish", player.getUniqueId().toString());
             }
+
+            User user = Kerosene.getEssentials().getUser(player.getUniqueId());
+            if (user != null) user.setHidden(false);
         });
 
         Bukkit.getOnlinePlayers().forEach(onlinePlayer -> onlinePlayer.showPlayer(Kerosene.getKerosene(), player));
