@@ -1,9 +1,10 @@
 package xyz.nkomarn.Kerosene.util;
 
-import xyz.nkomarn.Kerosene.data.LocalStorage;
+import xyz.nkomarn.Kerosene.data.PlayerData;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
@@ -17,27 +18,19 @@ public class ToggleUtil {
      * @param key The name of the toggle.
      * @return The current state of the toggle.
      */
-    public static boolean getToggleState(final UUID uuid, final String key) {
-        Connection connection = null;
-
-        try {
-            connection = LocalStorage.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT IFNULL((SELECT `state` FROM " +
-                    "`toggles` WHERE `uuid` = ? LIMIT 1), FALSE);");
-            statement.setString(1, uuid.toString());
-            return statement.executeQuery().getBoolean(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+    public static boolean getToggleState(UUID uuid, String key) {
+        try (Connection connection = PlayerData.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("SELECT IFNULL((SELECT `state` FROM " +
+                    "`toggles` WHERE `key` = ? AND `uuid` = ? LIMIT 1), FALSE);")) {
+                statement.setString(1, key);
+                statement.setString(2, uuid.toString());
+                try (ResultSet result = statement.executeQuery()) {
+                    if (result.next()) return result.getBoolean(1);
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
         return false;
     }
 
@@ -47,27 +40,22 @@ public class ToggleUtil {
      * @param key The name of the toggle.
      * @param state The new state of the toggle.
      */
-    public static void setToggleState(final UUID uuid, final String key, final boolean state) {
-        Connection connection = null;
+    public static void setToggleState(UUID uuid, String key, boolean state) {
+        try (Connection connection = PlayerData.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM `toggles` WHERE `uuid` = ? AND `key` = ?;")) {
+                statement.setString(1, uuid.toString());
+                statement.setString(2, key);
+                statement.executeUpdate();
+            }
 
-        try {
-            connection = LocalStorage.getConnection();
-            PreparedStatement statement = connection.prepareStatement("REPLACE INTO toggles (uuid, key, " +
-                    "state) VALUES (?, ?, ?);");
-            statement.setString(1, uuid.toString());
-            statement.setString(2, key);
-            statement.setBoolean(3, state);
-            statement.execute();
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `toggles`(`uuid`, `key`, `state`) VALUES (?, ?, ?);")) {
+                statement.setString(1, uuid.toString());
+                statement.setString(2, key);
+                statement.setBoolean(3, state);
+                statement.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 }
