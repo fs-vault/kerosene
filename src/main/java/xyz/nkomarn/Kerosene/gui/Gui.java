@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.nkomarn.Kerosene.Kerosene;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a Gui Inventory with buttons.
@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public abstract class Gui {
     private final Inventory inventory;
-    private final Set<GuiButton> buttons = new HashSet<>();
+    private final Map<Integer, GuiButton> buttons = new HashMap<>();
     private final Player player;
     private final int size;
 
@@ -67,7 +67,7 @@ public abstract class Gui {
      * @param button An instance of the GuiButton to add to the Gui.
      */
     public void addButton(GuiButton button) {
-        this.buttons.add(button);
+        this.buttons.put(button.getSlot(), button);
     }
 
     /**
@@ -153,7 +153,7 @@ public abstract class Gui {
      * Registers this Gui in the GuiHandler and then opens it synchronously to the player.
      */
     public void open() {
-        buttons.forEach(button -> inventory.setItem(button.getSlot(), button.getItem()));
+        buttons.forEach((slot, button) -> inventory.setItem(slot, button.getItem()));
         Bukkit.getScheduler().runTask(Kerosene.getKerosene(), () -> {
             player.openInventory(inventory);
             GuiHandler.registerInventory(this);
@@ -173,12 +173,10 @@ public abstract class Gui {
      */
     public void handleClick(InventoryClickEvent event) {
         if (event.getClickedInventory() != null && event.getClickedInventory().equals(this.inventory)) {
-            for (GuiButton button : this.buttons) {
-                if (button.getSlot() == event.getSlot()) {
-                    button.handleClick(event.isShiftClick());
-                    player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 0.6f, 0.6f);
-                    return;
-                }
+            GuiButton button = this.buttons.get(event.getSlot());
+            if (button != null) {
+                button.handleClick(event.isShiftClick());
+                player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 0.6f, 0.6f);
             }
         }
     }
