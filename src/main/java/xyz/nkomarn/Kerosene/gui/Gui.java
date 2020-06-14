@@ -17,7 +17,7 @@ import java.util.Map;
  * Represents a Gui Inventory with buttons.
  * Makes it easy to create Guis in-game with minimal effort.
  */
-public abstract class Gui {
+public class Gui {
     private final Inventory inventory;
     private final Map<Integer, GuiButton> buttons = new HashMap<>();
     private final Player player;
@@ -52,14 +52,6 @@ public abstract class Gui {
      */
     public Player getPlayer() {
         return this.player;
-    }
-
-    /**
-     * Returns the size of the inventory as a count of slots.
-     * @return The size of the inventory, in slots.
-     */
-    public int getSize() {
-        return this.size;
     }
 
     /**
@@ -173,10 +165,14 @@ public abstract class Gui {
      */
     public void handleClick(InventoryClickEvent event) {
         if (event.getClickedInventory() != null && event.getClickedInventory().equals(this.inventory)) {
-            GuiButton button = this.buttons.get(event.getSlot());
-            if (button != null) {
-                button.handleClick(event.isShiftClick());
-                player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 0.6f, 0.6f);
+            if (event.getRawSlot() < event.getClickedInventory().getSize()) {
+                GuiButton button = this.buttons.get(event.getSlot());
+                if (button != null) {
+                    if (button.getCallback() != null) {
+                        button.getCallback().handle(button, event.getClick());
+                        player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 0.6f, 0.6f);
+                    }
+                }
             }
         }
     }
