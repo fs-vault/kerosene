@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import redis.clients.jedis.Jedis;
 import xyz.nkomarn.Kerosene.Kerosene;
 import xyz.nkomarn.Kerosene.data.Redis;
@@ -82,9 +83,15 @@ public class VanishUtil {
      * @return A set of player UUIDs that are vanished and online.
      */
     public static Set<UUID> getOnlineVanishedPlayers() {
-        return getTotalVanishedPlayers().stream()
-                .filter(uuid -> Bukkit.getOfflinePlayer(uuid).isOnline())
-                .collect(Collectors.toSet());
+        Set<UUID> vanished = new HashSet<>();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            for (MetadataValue meta : player.getMetadata("vanished")) {
+                if (meta.asBoolean()) {
+                    vanished.add(player.getUniqueId());
+                }
+            }
+        }
+        return vanished;
     }
 
     /**
