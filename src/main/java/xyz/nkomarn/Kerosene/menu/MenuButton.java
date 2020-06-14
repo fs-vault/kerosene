@@ -1,7 +1,8 @@
-package xyz.nkomarn.Kerosene.gui;
+package xyz.nkomarn.Kerosene.menu;
 
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -9,9 +10,9 @@ import org.bukkit.inventory.meta.ItemMeta;
  * Represents a button on a GUI Inventory.
  * Code can be bound to the button to execute when it is pressed in its GUI.
  */
-public class GuiButton {
-    private final Gui inventory;
-    private final ItemStack item;
+public class MenuButton {
+    private final Menu inventory;
+    private ItemStack item;
     private final int slot;
     private final GuiButtonCallback callback;
 
@@ -22,11 +23,16 @@ public class GuiButton {
      * @param slot The slot of the Gui Inventory in which to place the button.
      * @param callback The callback to code which should be executed on button click in the Gui Inventory.
      */
-    public GuiButton(Gui inventory, ItemStack item, int slot, GuiButtonCallback callback) {
+    public MenuButton(Menu inventory, ItemStack item, int slot, GuiButtonCallback callback) {
         this.inventory = inventory;
         this.item = item;
         this.slot = slot;
         this.callback = callback;
+        this.item.addItemFlags(
+                ItemFlag.HIDE_ENCHANTS,
+                ItemFlag.HIDE_POTION_EFFECTS,
+                ItemFlag.HIDE_ATTRIBUTES
+        );
     }
 
     /**
@@ -51,6 +57,16 @@ public class GuiButton {
      */
     public GuiButtonCallback getCallback() {
         return this.callback;
+    }
+
+    /**
+     * Updates the ItemStack of the GuiButton and then updates the inventory.
+     *
+     * @param item The new ItemStack for the GuiButton.
+     */
+    public void setItem(ItemStack item) {
+        this.item = item;
+        update();
     }
 
     /**
@@ -84,6 +100,6 @@ public class GuiButton {
      */
     @FunctionalInterface
     public interface GuiButtonCallback {
-        void handle(GuiButton button, ClickType clickType);
+        void handle(MenuButton button, ClickType clickType);
     }
 }
