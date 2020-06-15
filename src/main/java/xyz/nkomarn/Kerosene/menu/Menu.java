@@ -1,4 +1,4 @@
-package xyz.nkomarn.Kerosene.gui;
+package xyz.nkomarn.Kerosene.menu;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -17,9 +17,9 @@ import java.util.Map;
  * Represents a Gui Inventory with buttons.
  * Makes it easy to create Guis in-game with minimal effort.
  */
-public abstract class Gui {
+public class Menu {
     private final Inventory inventory;
-    private final Map<Integer, GuiButton> buttons = new HashMap<>();
+    private final Map<Integer, MenuButton> buttons = new HashMap<>();
     private final Player player;
     private final int size;
 
@@ -32,7 +32,7 @@ public abstract class Gui {
      * @param name The title of the Gui Inventory.
      * @param size The size of the Gui Inventory, in slots (must be a multiple of 9).
      */
-    public Gui(Player player, String name, int size) {
+    public Menu(Player player, String name, int size) {
         this.inventory = Bukkit.createInventory(player, size, name);
         this.player = player;
         this.size = size;
@@ -55,18 +55,10 @@ public abstract class Gui {
     }
 
     /**
-     * Returns the size of the inventory as a count of slots.
-     * @return The size of the inventory, in slots.
-     */
-    public int getSize() {
-        return this.size;
-    }
-
-    /**
      * Binds a GuiButton instance to the Gui, effectively creating a clickable action.
      * @param button An instance of the GuiButton to add to the Gui.
      */
-    public void addButton(GuiButton button) {
+    public void addButton(MenuButton button) {
         this.buttons.put(button.getSlot(), button);
     }
 
@@ -156,7 +148,7 @@ public abstract class Gui {
         buttons.forEach((slot, button) -> inventory.setItem(slot, button.getItem()));
         Bukkit.getScheduler().runTask(Kerosene.getKerosene(), () -> {
             player.openInventory(inventory);
-            GuiHandler.registerInventory(this);
+            MenuHandler.registerInventory(this);
         });
     }
 
@@ -173,10 +165,14 @@ public abstract class Gui {
      */
     public void handleClick(InventoryClickEvent event) {
         if (event.getClickedInventory() != null && event.getClickedInventory().equals(this.inventory)) {
-            GuiButton button = this.buttons.get(event.getSlot());
-            if (button != null) {
-                button.handleClick(event.isShiftClick());
-                player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 0.6f, 0.6f);
+            if (event.getRawSlot() < event.getClickedInventory().getSize()) {
+                MenuButton button = this.buttons.get(event.getSlot());
+                if (button != null) {
+                    if (button.getCallback() != null) {
+                        button.getCallback().handle(button, event.getClick());
+                        player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 0.6f, 0.6f);
+                    }
+                }
             }
         }
     }

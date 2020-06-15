@@ -37,7 +37,7 @@ public class ClaimUtil {
 
         if (claims.size() > 0) {
             for (Claim claim : claims) {
-                if (!claim.getOwnerName().equals(player.getName())) {
+                if (!claim.ownerID.equals(player.getUniqueId())) {
                     if (player.isOnline()) {
                         if (claim.allowBuild((Player) player, Material.AIR) != null) {
                             return true;
