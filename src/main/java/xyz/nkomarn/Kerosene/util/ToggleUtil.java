@@ -1,6 +1,8 @@
 package xyz.nkomarn.Kerosene.util;
 
+import org.bukkit.Bukkit;
 import xyz.nkomarn.Kerosene.data.PlayerData;
+import xyz.nkomarn.Kerosene.util.cache.PlayerCache;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +14,12 @@ import java.util.UUID;
  * Utility class for managing persistent player toggles.
  */
 public class ToggleUtil {
+
+    /**
+     * A cache containing the current state of a player's toggle.
+     */
+    public static PlayerCache<String, Boolean> CACHE = new PlayerCache<>();
+
     /**
      * Returns the current state of a player's toggle.
      * @param uuid The player to fetch toggle state for.
@@ -19,19 +27,25 @@ public class ToggleUtil {
      * @return The current state of the toggle.
      */
     public static boolean getToggleState(UUID uuid, String key) {
-        try (Connection connection = PlayerData.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("SELECT IFNULL((SELECT `state` FROM " +
-                    "`toggles` WHERE `key` = ? AND `uuid` = ? LIMIT 1), FALSE);")) {
-                statement.setString(1, key);
-                statement.setString(2, uuid.toString());
-                try (ResultSet result = statement.executeQuery()) {
-                    if (result.next()) return result.getBoolean(1);
+        return CACHE.get(uuid, key, () -> {
+            try (Connection connection = PlayerData.getConnection()) {
+                try (PreparedStatement statement = connection.prepareStatement("SELECT IFNULL((SELECT `state` FROM " +
+                        "`toggles` WHERE `key` = ? AND `uuid` = ? LIMIT 1), FALSE);")) {
+                    statement.setString(1, key);
+                    statement.setString(2, uuid.toString());
+                    try (ResultSet result = statement.executeQuery()) {
+                        if (result.next()) return result.getBoolean(1);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+            return false;
+        });
     }
 
     /**
@@ -54,6 +68,9 @@ public class ToggleUtil {
                 statement.setBoolean(3, state);
                 statement.executeUpdate();
             }
+
+            // CACHE.invalidate(uuid, key);
+            CACHE.put(uuid, key, state);
         } catch (SQLException e) {
             e.printStackTrace();
         }
