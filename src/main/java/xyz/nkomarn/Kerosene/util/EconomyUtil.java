@@ -8,8 +8,14 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 /**
  * Utility class for interfacing with a Vault API economy instance.
  */
-public class EconomyUtil {
+public final class EconomyUtil {
     private static Economy economy;
+
+    /**
+     * Private constructor preventing the instantiation of this static class
+     */
+    private EconomyUtil() {
+    }
 
     /**
      * Fetches an instance of the Vault economy.

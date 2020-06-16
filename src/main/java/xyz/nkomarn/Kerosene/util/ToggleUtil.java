@@ -13,12 +13,18 @@ import java.util.UUID;
 /**
  * Utility class for managing persistent player toggles.
  */
-public class ToggleUtil {
+public final class ToggleUtil {
 
     /**
      * A cache containing the current state of a player's toggle.
      */
     public static PlayerCache<String, Boolean> CACHE = new PlayerCache<>();
+
+    /**
+     * Private constructor preventing the instantiation of this static class
+     */
+    private ToggleUtil() {
+    }
 
     /**
      * Returns the current state of a player's toggle.
@@ -35,11 +41,7 @@ public class ToggleUtil {
                     statement.setString(2, uuid.toString());
                     try (ResultSet result = statement.executeQuery()) {
                         if (result.next()) return result.getBoolean(1);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
                     }
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
