@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import xyz.nkomarn.Kerosene.data.LocalStorage;
 import xyz.nkomarn.Kerosene.data.PlayerData;
 import xyz.nkomarn.Kerosene.data.Redis;
+import xyz.nkomarn.Kerosene.listeners.PlayerQuitListener;
 import xyz.nkomarn.Kerosene.menu.MenuHandler;
 import xyz.nkomarn.Kerosene.util.EconomyUtil;
 
@@ -47,6 +48,7 @@ public class Kerosene extends JavaPlugin {
         }
 
         Bukkit.getPluginManager().registerEvents(new MenuHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), this);
     }
 
     @Override
