@@ -12,7 +12,14 @@ import xyz.nkomarn.Kerosene.Kerosene;
  * Utility class for managing and updating player locations.
  * Includes methods for asynchronous teleportation using PaperLib.
  */
-public class LocationUtil {
+public final class LocationUtil {
+
+    /**
+     * Private constructor preventing the instantiation of this static class
+     */
+    private LocationUtil() {
+    }
+
     /**
      * Teleports a user asynchronously with Essentials which ensures /back compatibility.
      * @param player The player to teleport.

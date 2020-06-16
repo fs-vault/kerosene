@@ -11,6 +11,13 @@ import org.bukkit.entity.Player;
  * system and custom advancements in datapacks.
  */
 public class AdvancementUtil {
+
+    /**
+     * Private constructor preventing the instantiation of this static class
+     */
+    private AdvancementUtil() {
+    }
+
     /**
      * Checks whether a player has completed a specific advancement
      * @param player The player to check advancement status for

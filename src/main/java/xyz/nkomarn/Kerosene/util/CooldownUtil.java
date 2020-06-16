@@ -14,12 +14,18 @@ import java.util.concurrent.TimeUnit;
 /**
  * Utility class for managing cross-server player cooldowns.
  */
-public class CooldownUtil {
+public final class CooldownUtil {
 
     /**
      * A cache containing the last time a player's cooldown was reset in milliseconds.
      */
     public static final PlayerCache<String, Long> CACHE = new PlayerCache<>();
+
+    /**
+     * Private constructor preventing the instantiation of this static class
+     */
+    private CooldownUtil() {
+    }
 
     /**
      * Returns the last time a player's cooldown was reset in milliseconds.
@@ -29,8 +35,6 @@ public class CooldownUtil {
      */
     public static long getCooldown(UUID uuid, String key) {
         return CACHE.get(uuid, key, () -> {
-            Bukkit.getPlayer(uuid).sendMessage("Request to database");
-
             try (Connection connection = PlayerData.getConnection()) {
                 try (PreparedStatement statement = connection.prepareStatement("SELECT IFNULL((SELECT `cooldown` FROM " +
                         "`cooldowns` WHERE `key` = ? AND `uuid` = ? LIMIT 1), 0);")) {
@@ -61,7 +65,7 @@ public class CooldownUtil {
                 statement.executeUpdate();
             }
 
-            Long currentTime = System.currentTimeMillis();
+            long currentTime = System.currentTimeMillis();
 
             try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `cooldowns`(`uuid`, `key`, " +
                     "`cooldown`) VALUES (?, ?, ?);")) {

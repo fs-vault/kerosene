@@ -15,8 +15,14 @@ import java.util.Collection;
  * Utility class for managing and checking for
  * GriefPrevention claims.
  */
-public class ClaimUtil {
+public final class ClaimUtil {
     private static final DataStore DATA = GriefPrevention.instance.dataStore;
+
+    /**
+     * Private constructor preventing the instantiation of this static class
+     */
+    private ClaimUtil() {
+    }
 
     /**
      * Returns the GriefPrevention data store, used for viewing claims.
