@@ -1,4 +1,4 @@
-package xyz.nkomarn.Kerosene.listeners;
+package xyz.nkomarn.Kerosene.listener;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,8 +10,8 @@ import xyz.nkomarn.Kerosene.util.ToggleUtil;
  * Listener for cleaning up player data when a player leaves the server.
  */
 public class PlayerQuitListener implements Listener {
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerLeave(PlayerQuitEvent event) {
+    @EventHandler()
+    public void onPlayerQuit(PlayerQuitEvent event) {
         ToggleUtil.CACHE.invalidateAll(event.getPlayer().getUniqueId());
         CooldownUtil.CACHE.invalidateAll(event.getPlayer().getUniqueId());
     }

@@ -15,10 +15,9 @@ import xyz.nkomarn.Kerosene.Kerosene;
 public final class LocationUtil {
 
     /**
-     * Private constructor preventing the instantiation of this static class
+     * Private constructor preventing the instantiation of this static class.
      */
-    private LocationUtil() {
-    }
+    private LocationUtil() { }
 
     /**
      * Teleports a user asynchronously with Essentials which ensures /back compatibility.

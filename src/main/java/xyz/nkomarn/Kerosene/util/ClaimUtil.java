@@ -19,10 +19,9 @@ public final class ClaimUtil {
     private static final DataStore DATA = GriefPrevention.instance.dataStore;
 
     /**
-     * Private constructor preventing the instantiation of this static class
+     * Private constructor preventing the instantiation of this static class.
      */
-    private ClaimUtil() {
-    }
+    private ClaimUtil() { }
 
     /**
      * Returns the GriefPrevention data store, used for viewing claims.

@@ -12,7 +12,7 @@ public final class EconomyUtil {
     private static Economy economy;
 
     /**
-     * Private constructor preventing the instantiation of this static class
+     * Private constructor preventing the instantiation of this static class.
      */
     private EconomyUtil() {
     }

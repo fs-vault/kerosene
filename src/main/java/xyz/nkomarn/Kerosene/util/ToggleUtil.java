@@ -1,6 +1,5 @@
 package xyz.nkomarn.Kerosene.util;
 
-import org.bukkit.Bukkit;
 import xyz.nkomarn.Kerosene.data.PlayerData;
 import xyz.nkomarn.Kerosene.util.cache.PlayerCache;
 
@@ -21,10 +20,9 @@ public final class ToggleUtil {
     public static PlayerCache<String, Boolean> CACHE = new PlayerCache<>();
 
     /**
-     * Private constructor preventing the instantiation of this static class
+     * Private constructor preventing the instantiation of this static class.
      */
-    private ToggleUtil() {
-    }
+    private ToggleUtil() { }
 
     /**
      * Returns the current state of a player's toggle.
@@ -47,7 +45,7 @@ public final class ToggleUtil {
                 e.printStackTrace();
             }
             return false;
-        });
+        }).orElse(false);
     }
 
     /**
@@ -58,20 +56,14 @@ public final class ToggleUtil {
      */
     public static void setToggleState(UUID uuid, String key, boolean state) {
         try (Connection connection = PlayerData.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM `toggles` WHERE `uuid` = ? AND `key` = ?;")) {
-                statement.setString(1, uuid.toString());
-                statement.setString(2, key);
-                statement.executeUpdate();
-            }
-
-            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `toggles`(`uuid`, `key`, `state`) VALUES (?, ?, ?);")) {
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `toggles` (`uuid`, `key`, " +
+                    "`state`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `state` = ?;")) {
                 statement.setString(1, uuid.toString());
                 statement.setString(2, key);
                 statement.setBoolean(3, state);
+                statement.setBoolean(4, state);
                 statement.executeUpdate();
             }
-
-            // CACHE.invalidate(uuid, key);
             CACHE.put(uuid, key, state);
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,6 +1,5 @@
 package xyz.nkomarn.Kerosene.util;
 
-import org.bukkit.Bukkit;
 import xyz.nkomarn.Kerosene.data.PlayerData;
 import xyz.nkomarn.Kerosene.util.cache.PlayerCache;
 
@@ -22,10 +21,9 @@ public final class CooldownUtil {
     public static final PlayerCache<String, Long> CACHE = new PlayerCache<>();
 
     /**
-     * Private constructor preventing the instantiation of this static class
+     * Private constructor preventing the instantiation of this static class.
      */
-    private CooldownUtil() {
-    }
+    private CooldownUtil() { }
 
     /**
      * Returns the last time a player's cooldown was reset in milliseconds.
@@ -48,7 +46,7 @@ public final class CooldownUtil {
                 e.printStackTrace();
             }
             return 0L;
-        });
+        }).orElse(0L);
     }
 
     /**
@@ -57,24 +55,16 @@ public final class CooldownUtil {
      * @param key The name of the cooldown.
      */
     public static void resetCooldown(UUID uuid, String key) {
-
+        long currentTime = System.currentTimeMillis();
         try (Connection connection = PlayerData.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM `cooldowns` WHERE `uuid` = ? AND `key` = ?;")) {
-                statement.setString(1, uuid.toString());
-                statement.setString(2, key);
-                statement.executeUpdate();
-            }
-
-            long currentTime = System.currentTimeMillis();
-
-            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `cooldowns`(`uuid`, `key`, " +
-                    "`cooldown`) VALUES (?, ?, ?);")) {
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `cooldowns` (`uuid`, `key`, " +
+                    "`cooldown`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `cooldown` = ?;")) {
                 statement.setString(1, uuid.toString());
                 statement.setString(2, key);
                 statement.setLong(3, currentTime);
+                statement.setLong(4, currentTime);
                 statement.executeUpdate();
             }
-
             CACHE.put(uuid, key, currentTime);
         } catch (SQLException e) {
             e.printStackTrace();

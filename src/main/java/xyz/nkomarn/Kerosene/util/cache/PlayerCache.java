@@ -1,101 +1,100 @@
 package xyz.nkomarn.Kerosene.util.cache;
 
-import org.bukkit.Bukkit;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
 /**
- * Cache for caching multiple key value pairs linked to a player.
- * @param <K> Key
- * @param <V> Value
+ * Key-value pair data cache for persistent data linked to a players.
+ * @param <K> Data key type.
+ * @param <V> Data value type.
  */
 public class PlayerCache<K, V> {
-
     private final Map<UUID, Map<K, V>> data;
 
     /**
-     * Default constructor
+     * Create an instance of the cache.
      */
     public PlayerCache() {
         data = new HashMap<>();
     }
 
     /**
-     * Gets the value of a key if present in the cache. If the key is not present null will be returned.
-     * @param uniqueId of the player
-     * @param key to lookup
-     * @return value if key is present or null.
+     * Returns an Optional of the value of a key stored in the cache.
+     * @param uuid The UUID of the player for which to return the value.
+     * @param key The key of the value to look up.
+     * @return An Optional of the value stored.
      */
-    public V getIfPresent(UUID uniqueId, K key) {
-        Map<K, V> playerData = data.get(uniqueId);
-        if (playerData == null) return null;
-        return playerData.get(key);
+    public Optional<V> getCached(UUID uuid, K key) {
+        Map<K, V> playerData = data.get(uuid);
+        if (playerData == null) {
+            return Optional.empty();
+        }
+        return Optional.of(playerData.get(key));
     }
 
     /**
-     * Gets the value of a key if present in the cache. If the key is not present a callback will be called to obtain the value.
-     * @param uniqueId of tke player
-     * @param key to lookup
-     * @param callable to call when the key is not present in the cahe
-     * @return value if key is present or object returned by the callback.
+     * Returns an Optional of the value of a key stored in the cache.
+     * If not cached, a callback will be called to fetch the value.
+     * @param uuid The UUID of the player.
+     * @param key The key of the value to look up.
+     * @param callable The callable to call when the key is not present in the cache.
+     * @return value An Optional of the stored or callback value.
      */
-    public V get(UUID uniqueId, K key, Callable<? extends V> callable) {
-        Map<K, V> playerData = data.get(uniqueId);
+    public Optional<V> get(UUID uuid, K key, Callable<? extends V> callable) {
+        Map<K, V> playerData = data.get(uuid);
         if (playerData == null) {
-            this.data.put(uniqueId, new HashMap<>());
-            playerData = this.data.get(uniqueId);
+            data.put(uuid, new HashMap<>());
+            playerData = data.get(uuid);
         }
 
         if (playerData.containsKey(key)) {
-            return playerData.get(key);
+            return Optional.of(playerData.get(key));
         }
 
         try {
             V value = callable.call();
-            put(uniqueId, key, value);
-            return value;
+            put(uuid, key, value);
+            return Optional.of(value);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return null;
+        return Optional.empty();
     }
 
     /**
      * Invalidate a specific key for a player.
-     * @param uniqueId of the player
-     * @param key to invalidate.
+     * @param uuid The UUID of the player.
+     * @param key The key to invalidate.
      */
-    public void invalidate(UUID uniqueId, K key) {
-        Map<K, V> playerData = data.get(uniqueId);
-        if (playerData == null) return;
-        playerData.remove(key);
+    public void invalidate(UUID uuid, K key) {
+        Map<K, V> playerData = data.get(uuid);
+        if (playerData != null) playerData.remove(key);
     }
 
     /**
      * Invalidate all keys linked to a player.
-     * @param uniqueId of the player
+     * @param uuid The UUID of the player.
      */
-    public void invalidateAll(UUID uniqueId) {
-        this.data.remove(uniqueId);
+    public void invalidateAll(UUID uuid) {
+        this.data.remove(uuid);
     }
 
     /**
-     * Cache a specific key value pair.
-     * @param uniqueId of the player
-     * @param key to cache
-     * @param value to cache
+     * Cache a specific key-value pair.
+     * @param uuid The UUID of the player.
+     * @param key The key of the value to cache.
+     * @param value The value to cache.
      */
-    public void put(UUID uniqueId, K key, V value) {
-        Map<K, V> playerData = data.get(uniqueId);
+    public void put(UUID uuid, K key, V value) {
+        Map<K, V> playerData = data.get(uuid);
         if (playerData == null) {
-            this.data.put(uniqueId, new HashMap<>());
-            playerData = this.data.get(uniqueId);
+            this.data.put(uuid, new HashMap<>());
+            playerData = this.data.get(uuid);
         }
-
         playerData.put(key, value);
     }
 }
