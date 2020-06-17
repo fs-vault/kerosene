@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
  * Utility class for dealing with the Minecraft advancements
  * system and custom advancements in datapacks.
  */
-public class AdvancementUtil {
+public final class AdvancementUtil {
 
     /**
      * Private constructor preventing the instantiation of this static class.
