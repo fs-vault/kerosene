@@ -14,10 +14,25 @@ import java.util.UUID;
  */
 public class SkullBuilder extends ItemBuilderBase<SkullBuilder> {
 
+    /**
+     * Single Player Skull
+     */
     public SkullBuilder() {
-        super(Material.PLAYER_HEAD);
+        this(1);
     }
 
+    /**
+     * Multiple Player Skulls
+     */
+    public SkullBuilder(int amount) {
+        super(Material.PLAYER_HEAD, amount);
+    }
+
+    /**
+     * Change the skull to the skull of a specific player.
+     * @param player The player to set the skill for
+     * @return This instance
+     */
     public SkullBuilder player(OfflinePlayer player) {
         SkullMeta meta = (SkullMeta) this.item.getItemMeta();
         meta.setOwningPlayer(player);
@@ -25,6 +40,11 @@ public class SkullBuilder extends ItemBuilderBase<SkullBuilder> {
         return this;
     }
 
+    /**
+     * Set a custom texture on the skull.
+     * @param texture Base64 encoded texture data
+     * @return This instance
+     */
     public SkullBuilder texture(String texture) {
         SkullMeta meta = (SkullMeta) this.item.getItemMeta();
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
