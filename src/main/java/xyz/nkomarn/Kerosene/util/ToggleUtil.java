@@ -30,7 +30,7 @@ public final class ToggleUtil {
      * @param key The name of the toggle.
      * @return The current state of the toggle.
      */
-    public static boolean getToggleState(UUID uuid, String key) {
+    public static boolean get(UUID uuid, String key) {
         return CACHE.get(uuid, key, () -> {
             try (Connection connection = PlayerData.getConnection()) {
                 try (PreparedStatement statement = connection.prepareStatement("SELECT IFNULL((SELECT `state` FROM " +
@@ -54,7 +54,7 @@ public final class ToggleUtil {
      * @param key The name of the toggle.
      * @param state The new state of the toggle.
      */
-    public static void setToggleState(UUID uuid, String key, boolean state) {
+    public static void set(UUID uuid, String key, boolean state) {
         try (Connection connection = PlayerData.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `toggles` (`uuid`, `key`, " +
                     "`state`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `state` = ?;")) {
