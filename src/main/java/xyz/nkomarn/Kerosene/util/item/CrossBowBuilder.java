@@ -4,16 +4,23 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 
+/**
+ * Utility class intended to allow fast building of CrossBows.
+ */
 public class CrossBowBuilder extends ItemBuilderBase<CrossBowBuilder> {
 
+    /**
+     * A single crossbow
+     */
     public CrossBowBuilder() {
-        this(1);
+        super(Material.CROSSBOW, 1);
     }
 
-    public CrossBowBuilder(int amount) {
-        super(Material.CROSSBOW, amount);
-    }
-
+    /**
+     * Add a projectile to the current charged projectiles.
+     * @param projectile The projectile to add
+     * @return This instance
+     */
     public CrossBowBuilder chargeProjectile(ItemStack projectile) {
         if (isValidProjectile(projectile.getType())) {
             CrossbowMeta meta = (CrossbowMeta) this.item.getItemMeta();
