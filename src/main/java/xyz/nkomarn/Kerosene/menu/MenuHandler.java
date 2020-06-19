@@ -36,12 +36,14 @@ public class MenuHandler implements Listener {
             Menu menu = VIEWING_MENUS.get(event.getInventory());
             if (menu != null) {
                 VIEWING_MENUS.remove(event.getInventory());
+                menu.handleClose();
             }
         }
     }
 
     /**
      * Adds a Gui instance to the handler, effectively registering it as a Gui.
+     *
      * @param menu The Gui instance to add to the handler.
      */
     public static void registerInventory(Menu menu) {

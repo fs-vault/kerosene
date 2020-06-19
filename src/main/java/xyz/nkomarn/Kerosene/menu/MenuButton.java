@@ -7,8 +7,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 /**
- * Represents a button on a GUI Inventory.
- * Code can be bound to the button to execute when it is pressed in its GUI.
+ * Represents a button on a Menu Inventory.
+ * Code can be bound to the button to execute when it is pressed in its menu.
  */
 public class MenuButton {
     private final Menu inventory;
@@ -17,11 +17,12 @@ public class MenuButton {
     private final GuiButtonCallback callback;
 
     /**
-     * Creates a new GuiButton and binds it to the provided Inventory.
-     * @param inventory The Gui Inventory to bind the button to.
-     * @param item The ItemStack to represent the button in the Gui Inventory.
-     * @param slot The slot of the Gui Inventory in which to place the button.
-     * @param callback The callback to code which should be executed on button click in the Gui Inventory.
+     * Creates a new MenuButton and binds it to the provided Inventory.
+     *
+     * @param inventory The Menu Inventory to bind the button to.
+     * @param item      The ItemStack to represent the button in the Menu.
+     * @param slot      The slot of the Menu Inventory in which to place the button.
+     * @param callback  The callback to code which should be executed on button click in the Menu.
      */
     public MenuButton(Menu inventory, ItemStack item, int slot, GuiButtonCallback callback) {
         this.inventory = inventory;
@@ -36,23 +37,26 @@ public class MenuButton {
     }
 
     /**
-     * Returns the ItemStack which represents the GuiButton in the Gui Inventory.
-     * @return The ItemStack that is bound to this GuiButton.
+     * Returns the ItemStack which represents the MenuButton in the Menu Inventory.
+     *
+     * @return The ItemStack that is bound to this MenuButton.
      */
     public ItemStack getItem() {
         return this.item;
     }
 
     /**
-     * Returns the slot of the Gui Inventory that this button is in.
-     * @return The Gui Inventory slot of this button.
+     * Returns the slot of the Menu Inventory that this button is in.
+     *
+     * @return The Menu Inventory slot of this button.
      */
     public int getSlot() {
         return this.slot;
     }
 
     /**
-     * Returns the callback for this GuiButton.
+     * Returns the callback for this MenuButton.
+     *
      * @return The callback with code to run on click.
      */
     public GuiButtonCallback getCallback() {
@@ -60,9 +64,9 @@ public class MenuButton {
     }
 
     /**
-     * Updates the ItemStack of the GuiButton and then updates the inventory.
+     * Updates the ItemStack of the MenuButton and then updates the inventory.
      *
-     * @param item The new ItemStack for the GuiButton.
+     * @param item The new ItemStack for the MenuButton.
      */
     public void setItem(ItemStack item) {
         this.item = item;
@@ -70,8 +74,9 @@ public class MenuButton {
     }
 
     /**
-     * Updates the Material type of the GuiButton and then updates the inventory.
-     * @param material The new Material for the GuiButton.
+     * Updates the Material type of the MenuButton and then updates the inventory.
+     *
+     * @param material The new Material for the MenuButton.
      */
     public void setType(Material material) {
         item.setType(material);
@@ -79,7 +84,8 @@ public class MenuButton {
     }
 
     /**
-     * Updates the ItemMeta of the GuiButton and then updates the inventory.
+     * Updates the ItemMeta of the MenuButton and then updates the inventory.
+     *
      * @param meta The new ItemMeta for the GuiButton.
      */
     public void setItemMeta(ItemMeta meta) {
@@ -88,7 +94,7 @@ public class MenuButton {
     }
 
     /**
-     * Refreshes the Gui Inventory for the viewing player without reopening.
+     * Refreshes the Menu Inventory for the viewing player without reopening.
      */
     public void update() {
         inventory.getInventory().setItem(slot, item);
@@ -96,7 +102,7 @@ public class MenuButton {
     }
 
     /**
-     * Represents a callback for GuiButton click in the Gui Inventory.
+     * Represents a callback for MenuButton click in the Gui Inventory.
      */
     @FunctionalInterface
     public interface GuiButtonCallback {

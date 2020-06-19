@@ -14,23 +14,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents a Gui Inventory with buttons.
- * Makes it easy to create Guis in-game with minimal effort.
+ * Represents a Menu Inventory with buttons.
+ * Makes it easy to create menus in-game with minimal effort.
  */
 public class Menu {
     private final Inventory inventory;
     private final Map<Integer, MenuButton> buttons = new HashMap<>();
     private final Player player;
     private final int size;
+    private CloseCallback closeCallback;
 
     // TODO method to set inventory name on the fly
     // https://www.spigotmc.org/threads/how-to-set-the-title-of-an-open-inventory-itemgui.95572/
 
     /**
-     * Creates a new Gui Inventory with a provided player, title, and size.
-     * @param player The player to open the Gui to when open() is called.
-     * @param name The title of the Gui Inventory.
-     * @param size The size of the Gui Inventory, in slots (must be a multiple of 9).
+     * Creates a new Menu with a provided Inventory.
+     *
+     * @param inventory The Inventory to use for this Menu.
+     * @param player    The player to open the Menu to when open() is called.
+     */
+    public Menu(Player player, Inventory inventory) {
+        this.inventory = inventory;
+        this.player = player;
+        this.size = inventory.getSize();
+    }
+
+    /**
+     * Creates a new Menu Inventory with a provided player, title, and size.
+     *
+     * @param player The player to open the Menu to when open() is called.
+     * @param name   The title of the Menu Inventory.
+     * @param size   The size of the Menu Inventory, in slots (must be a multiple of 9).
      */
     public Menu(Player player, String name, int size) {
         this.inventory = Bukkit.createInventory(player, size, name);
@@ -39,31 +53,35 @@ public class Menu {
     }
 
     /**
-     * Return the Inventory instance tied to this Gui.
-     * @return The Inventory instance of this Gui.
+     * Return the Inventory instance tied to this Menu.
+     *
+     * @return The Inventory instance of this Menu.
      */
     public Inventory getInventory() {
         return this.inventory;
     }
 
     /**
-     * Returns the player the Gui is being displayed to.
-     * @return The player that the Gui is displayed to.
+     * Returns the player the Menu is being displayed to.
+     *
+     * @return The player that the Menu is displayed to.
      */
     public Player getPlayer() {
         return this.player;
     }
 
     /**
-     * Binds a GuiButton instance to the Gui, effectively creating a clickable action.
-     * @param button An instance of the GuiButton to add to the Gui.
+     * Binds a MenuButton instance to the Menu, effectively creating a clickable action.
+     *
+     * @param button An instance of the MenuButton to add to the Menu.
      */
     public void addButton(MenuButton button) {
         this.buttons.put(button.getSlot(), button);
     }
 
     /**
-     * Returns an ItemStack for the specified Material. Used when filling the Gui.
+     * Returns an ItemStack for the specified Material. Used when filling the Menu.
+     *
      * @param material The Material to make the ItemStack out of.
      * @return An ItemStack with the specified Material and a blank display name.
      */
@@ -77,6 +95,7 @@ public class Menu {
 
     /**
      * Fills the whole Inventory with a solid Material.
+     *
      * @param material The Material with which to fill the whole Inventory.
      */
     public void fill(Material material) {
@@ -89,6 +108,7 @@ public class Menu {
 
     /**
      * Fills the border of the Inventory with a solid Material.
+     *
      * @param material The Material with which to fill the border of the Inventory.
      */
     public void fillBorder(Material material) {
@@ -113,6 +133,7 @@ public class Menu {
 
     /**
      * Fills the border of the Inventory with two alternating Material types.
+     *
      * @param materialOne The first Material, which only displays on odd slots.
      * @param materialTwo The second Material, which only displays on even slots.
      */
@@ -142,7 +163,7 @@ public class Menu {
     }
 
     /**
-     * Registers this Gui in the GuiHandler and then opens it synchronously to the player.
+     * Registers this Menu in the GuiHandler and then opens it synchronously to the player.
      */
     public void open() {
         buttons.forEach((slot, button) -> inventory.setItem(slot, button.getItem()));
@@ -153,14 +174,33 @@ public class Menu {
     }
 
     /**
-     * Closes the GUI Inventory synchronously.
+     * Closes the Menu Inventory synchronously.
      */
     public void close() {
         Bukkit.getScheduler().runTask(Kerosene.getKerosene(), (Runnable) player::closeInventory);
     }
 
     /**
-     * Called when a GuiButton is clicked and handles the execution of the button's code.
+     * Set a callback to run when this Menu is closed.
+     *
+     * @param callback The callback to run on Menu close.
+     */
+    public void onClose(CloseCallback callback) {
+        this.closeCallback = callback;
+    }
+
+    /**
+     * Run the close callback when this Menu is closed.
+     */
+    public void handleClose() {
+        if (closeCallback != null) {
+            closeCallback.handle(this);
+        }
+    }
+
+    /**
+     * Called when a MenuButton is clicked and handles the execution of the button's code.
+     *
      * @param event An instance of the InventoryClickEvent.
      */
     public void handleClick(InventoryClickEvent event) {
@@ -175,5 +215,13 @@ public class Menu {
                 }
             }
         }
+    }
+
+    /**
+     * Represents a callback ran on Menu close.
+     */
+    @FunctionalInterface
+    public interface CloseCallback {
+        void handle(Menu menu);
     }
 }
