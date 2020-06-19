@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * Utility class intended to allow fast building of Skulls.
  */
-public class SkullBuilder extends ItemBuilder {
+public class SkullBuilder extends ItemBuilderBase<SkullBuilder> {
 
     public SkullBuilder() {
         super(Material.PLAYER_HEAD);
