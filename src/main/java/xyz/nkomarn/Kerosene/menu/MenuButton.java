@@ -29,11 +29,6 @@ public class MenuButton {
         this.item = item;
         this.slot = slot;
         this.callback = callback;
-        this.item.addItemFlags(
-                ItemFlag.HIDE_ENCHANTS,
-                ItemFlag.HIDE_POTION_EFFECTS,
-                ItemFlag.HIDE_ATTRIBUTES
-        );
     }
 
     /**
