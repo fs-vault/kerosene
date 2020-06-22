@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -83,6 +84,35 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
     public T lore(List<String> lore) {
         ItemMeta meta = this.item.getItemMeta();
         meta.setLore(translateLore(lore));
+        this.item.setItemMeta(meta);
+        return (T) this;
+    }
+
+
+    /**
+     * Add lore to the ItemStack.
+     * @param lore The lore to add.
+     * @return This instance
+     */
+    public T addLore(String... lore) {
+        return addLore(Arrays.asList(lore));
+    }
+
+    /**
+     * Add lore to the ItemStack.
+     * @param lore The lore to add.
+     * @return This instance
+     */
+    public T addLore(List<String> lore) {
+        ItemMeta meta = this.item.getItemMeta();
+        List<String> newLore = meta.getLore();
+        if (newLore == null) {
+            newLore = new ArrayList<>();
+        }
+
+        newLore.addAll(translateLore(lore));
+
+        meta.setLore(newLore);
         this.item.setItemMeta(meta);
         return (T) this;
     }
