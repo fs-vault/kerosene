@@ -119,6 +119,25 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
     }
 
     /**
+     * Removes a line of lore from the ItemStack.
+     * @param line The line to remove.
+     * @return This instance
+     */
+    public T removeLoreLine(int line) {
+        ItemMeta meta = this.item.getItemMeta();
+        List<String> newLore = meta.getLore();
+        if (newLore == null) {
+            newLore = new ArrayList<>();
+        }
+
+        newLore.remove(line - 1);
+
+        meta.setLore(newLore);
+        this.item.setItemMeta(meta);
+        return (T) this;
+    }
+
+    /**
      * Set the damage of the ItemStack
      * @param damage The new damage of the ItemStack
      * @return This instance
@@ -165,6 +184,16 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
             ((EnchantmentStorageMeta) meta).addStoredEnchant(enchantment, level, true);
         }
         this.item.setItemMeta(meta);
+        return (T) this;
+    }
+
+    /**
+     * Removes an enchantment from the ItemStack.
+     * @param enchantment The enchantment type to remove
+     * @return This instance
+     */
+    public T removeEnchant(Enchantment enchantment) {
+        this.item.removeEnchantment(enchantment);
         return (T) this;
     }
 
