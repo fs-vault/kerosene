@@ -9,6 +9,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -148,6 +149,22 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
      */
     public T enchantUnsafe(Enchantment enchantment, int level) {
         this.item.addUnsafeEnchantment(enchantment, level);
+        return (T) this;
+    }
+
+    /**
+     * Add an stored enchantment to the ItemStack.
+     * Should only be used for enchanted books.
+     * @param enchantment The enchantment to add
+     * @param level The level of the enchantment to add.
+     * @return This instance
+     */
+    public T storeEnchantment(Enchantment enchantment, int level) {
+        ItemMeta meta = this.item.getItemMeta();
+        if (meta instanceof EnchantmentStorageMeta) {
+            ((EnchantmentStorageMeta) meta).addStoredEnchant(enchantment, level, true);
+        }
+        this.item.setItemMeta(meta);
         return (T) this;
     }
 
