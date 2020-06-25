@@ -24,10 +24,11 @@ public final class LocationUtil {
      * @param player The player to teleport.
      * @param location The location to teleport the player.
      */
-    public static void teleportPlayer(final Player player, final Location location) {
+    public static void teleportPlayer(Player player, Location location) {
         try {
-            Kerosene.getEssentials().getUser(player).getTeleport().now(location, false,
-                    PlayerTeleportEvent.TeleportCause.PLUGIN);
+            player.teleport(location);
+            /*Kerosene.getEssentials().getUser(player).getTeleport().now(location, false,
+                    PlayerTeleportEvent.TeleportCause.PLUGIN);*/
         } catch (Exception e) {
             e.printStackTrace();
             player.sendMessage(ChatColor.RED + "Teleportation failed- please notify an admin.");
