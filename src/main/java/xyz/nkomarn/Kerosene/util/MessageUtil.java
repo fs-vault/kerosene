@@ -33,7 +33,6 @@ public final class MessageUtil {
         Matcher m = p.matcher(text);
 
         while(m.find()) {
-            System.out.println(m.group().trim());   // Debug
             res.add(m.group());
         }
         return res;

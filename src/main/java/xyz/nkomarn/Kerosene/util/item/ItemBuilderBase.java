@@ -198,6 +198,14 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
     }
 
     /**
+     * Add all ItemFlags's to the ItemStack.
+     * @return This instance
+     */
+    public T addAllItemFlags() {
+        return addItemFlags(ItemFlag.values());
+    }
+
+    /**
      * Add ItemFlag's to the ItemStack.
      * @param flags The flags to add
      * @return This instance
