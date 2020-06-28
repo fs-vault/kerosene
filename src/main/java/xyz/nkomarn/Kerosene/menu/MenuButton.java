@@ -2,7 +2,6 @@ package xyz.nkomarn.Kerosene.menu;
 
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
