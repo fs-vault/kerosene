@@ -1,28 +1,48 @@
 package xyz.nkomarn.Kerosene.gui.components.buttons;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import xyz.nkomarn.Kerosene.gui.GuiDefaults;
 import xyz.nkomarn.Kerosene.gui.GuiPosition;
 import xyz.nkomarn.Kerosene.gui.components.buttons.base.ButtonBase;
-import xyz.nkomarn.Kerosene.util.item.ItemBuilder;
 
 /**
  * Default implementation of the back button.
  */
 public class BackButtonComponent extends ButtonBase {
 
+    /**
+     * Create a back button.
+     * @param x The horizontal position.
+     * @param y The vertical position.
+     */
     public BackButtonComponent(int x, int y) {
         this(new GuiPosition(x, y));
     }
 
+    /**
+     * Create a back button.
+     * @param position The position of the button.
+     */
     public BackButtonComponent(GuiPosition position) {
-        this(position, getBackItem());
+        this(position, null);
+        this.setItem(getBackItem());
     }
 
+    /**
+     * Create a back button with a specific {@link ItemStack}.
+     * @param x The horizontal position.
+     * @param y The vertical position.
+     * @param item The {@link ItemStack}
+     */
     public BackButtonComponent(int x, int y, ItemStack item) {
         this(new GuiPosition(x, y), item);
     }
 
+    /**
+     * Create a back button with a specific {@link ItemStack}.
+     * @param position The position of the button.
+     * @param item The {@link ItemStack}
+     */
     public BackButtonComponent(GuiPosition position, ItemStack item) {
         super(position, item);
     }
@@ -34,13 +54,7 @@ public class BackButtonComponent extends ButtonBase {
         }
     }
 
-    private static ItemStack backItem;
-    private static ItemStack getBackItem() {
-        if(backItem == null) {
-            backItem = new ItemBuilder(Material.PAPER)
-                    .name("&b&lBack")
-                    .build();
-        }
-        return backItem;
+    protected ItemStack getBackItem() {
+        return GuiDefaults.BACK_ITEM;
     }
 }

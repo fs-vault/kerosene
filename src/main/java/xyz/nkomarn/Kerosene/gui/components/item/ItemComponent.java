@@ -39,6 +39,7 @@ public class ItemComponent implements Drawable {
 
     @Override
     public Map<GuiPosition, ItemStack> draw(Gui gui) {
+        if (item == null) return ImmutableMap.of();
         return ImmutableMap.of(position, item);
     }
 

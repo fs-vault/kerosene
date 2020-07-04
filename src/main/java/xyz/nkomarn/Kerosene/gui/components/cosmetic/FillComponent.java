@@ -3,6 +3,7 @@ package xyz.nkomarn.Kerosene.gui.components.cosmetic;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.Kerosene.gui.Gui;
+import xyz.nkomarn.Kerosene.gui.GuiDefaults;
 import xyz.nkomarn.Kerosene.gui.base.Drawable;
 import xyz.nkomarn.Kerosene.gui.GuiPosition;
 import xyz.nkomarn.Kerosene.util.item.ItemUtils;
@@ -19,18 +20,49 @@ public class FillComponent implements Drawable {
     private int x, y;
     private int width, height;
 
+    /**
+     * Fill the entire {@link Gui} with the {@link GuiDefaults#FILL_ITEM}.
+     */
+    public FillComponent() {
+        this(GuiDefaults.FILL_ITEM);
+    }
+
+    /**
+     * Fill the entire {@link Gui} with a fill item of a specific {@link Material}.
+     * @param fillMaterial The material to make the fill item out of.
+     */
     public FillComponent(Material fillMaterial) {
         this(ItemUtils.makeFillItem(fillMaterial));
     }
 
+    /**
+     * Fill the entire {@link Gui} with a specific fill item.
+     * @param fillItem The fill item.
+     */
     public FillComponent(ItemStack fillItem) {
         this(0, 0, 9, -1, fillItem);
     }
 
+    /**
+     * Fill a specific region of the {@link Gui} with a specific material.
+     * @param x The horizontal start position.
+     * @param y The vertical start position.
+     * @param width The width of the region to fill.
+     * @param height The height of the region to fill.
+     * @param fillMaterial The material to use as a fill item.
+     */
     public FillComponent(int x, int y, int width, int height, Material fillMaterial) {
         this(x, y, width, height, ItemUtils.makeFillItem(fillMaterial));
     }
 
+    /**
+     * Fill a specific region of the {@link Gui} with a specific fill item.
+     * @param x The horizontal start position.
+     * @param y The vertical start position.
+     * @param width The width of the region to fill.
+     * @param height The height of the region to fill.
+     * @param fillItem The item to use as a fill item.
+     */
     public FillComponent(int x, int y, int width, int height, ItemStack fillItem) {
         setX(x);
         setY(y);
@@ -114,6 +146,13 @@ public class FillComponent implements Drawable {
         return fillItem;
     }
 
+    /**
+     * Change the fill item.
+     *
+     * Note: If the {@link Gui} is already displayed to any players, {@link Gui#update()} should be called to apply the changes.
+     *
+     * @param fillItem The new fill item.
+     */
     public void setFillItem(ItemStack fillItem) {
         this.fillItem = fillItem;
     }

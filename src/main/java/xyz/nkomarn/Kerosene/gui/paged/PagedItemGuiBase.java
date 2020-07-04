@@ -3,6 +3,7 @@ package xyz.nkomarn.Kerosene.gui.paged;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.Kerosene.gui.Gui;
+import xyz.nkomarn.Kerosene.gui.GuiDefaults;
 import xyz.nkomarn.Kerosene.gui.components.buttons.ButtonComponent;
 import xyz.nkomarn.Kerosene.gui.components.cosmetic.FillComponent;
 import xyz.nkomarn.Kerosene.gui.components.item.ItemComponent;
@@ -117,27 +118,20 @@ public abstract class PagedItemGuiBase extends Gui {
      */
     public abstract Gui getPageGui(int page);
 
-    // region static
-
-    public static ItemStack previousItem, nextItem;
-
-    public static ItemStack getPreviousItem() {
-        if (previousItem == null) {
-           previousItem = new ItemBuilder(Material.SPRUCE_BUTTON)
-                   .name("&f&lPrevious")
-                   .build();
-        }
-        return previousItem;
+    /**
+     * Gets the {@link ItemStack} for the previous button.
+     * @return The previous button {@link ItemStack}
+     */
+    protected ItemStack getPreviousItem() {
+        return GuiDefaults.PREVIOUS_ITEM;
     }
 
-    public static ItemStack getNextItem() {
-        if (nextItem == null) {
-            nextItem = new ItemBuilder(Material.SPRUCE_BUTTON)
-                    .name("&f&lNext")
-                    .build();
-        }
-        return nextItem;
+    /**
+     * Gets the {@link ItemStack} for the next button.
+     * @return The next button {@link ItemStack}
+     */
+    protected ItemStack getNextItem() {
+        return GuiDefaults.NEXT_ITEM;
     }
 
-    // endregion static
 }

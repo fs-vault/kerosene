@@ -2,6 +2,8 @@ package xyz.nkomarn.Kerosene.gui.components.cosmetic;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import xyz.nkomarn.Kerosene.gui.Gui;
+import xyz.nkomarn.Kerosene.gui.GuiDefaults;
 import xyz.nkomarn.Kerosene.gui.GuiPosition;
 import xyz.nkomarn.Kerosene.gui.components.cosmetic.base.BorderBase;
 import xyz.nkomarn.Kerosene.util.item.ItemUtils;
@@ -11,36 +13,76 @@ import xyz.nkomarn.Kerosene.util.item.ItemUtils;
  */
 public class BorderComponent extends BorderBase {
 
-    private ItemStack fillItem1;
+    private ItemStack fillItem;
 
-    public BorderComponent(Material fillMaterial1) {
-        this(0, 0, 9, -1, fillMaterial1);
+    /**
+     * Create a border on the entire {@link xyz.nkomarn.Kerosene.gui.Gui} with the {@link GuiDefaults#FILL_ITEM}
+     */
+    public BorderComponent() {
+        this(0, 0, 9, -1, GuiDefaults.FILL_ITEM);
     }
 
-    public BorderComponent(int x, int y, int width, int height, Material fillMaterial1) {
-        this(x, y, width, height, ItemUtils.makeFillItem(fillMaterial1));
+    /**
+     * Create a border on the entire {@link xyz.nkomarn.Kerosene.gui.Gui} with a fill item of a specific {@link Material}
+     * @param fillMaterial Material to create.
+     */
+    public BorderComponent(Material fillMaterial) {
+        this(0, 0, 9, -1, fillMaterial);
     }
 
-    public BorderComponent(ItemStack fillItem1) {
-        this(0, 0, 9, -1, fillItem1);
+    /**
+     * Create a border on the entire {@link xyz.nkomarn.Kerosene.gui.Gui} with a fill item of a specific {@link ItemStack}
+     * @param fillItem the fill item to use.
+     */
+    public BorderComponent(ItemStack fillItem) {
+        this(0, 0, 9, -1, fillItem);
     }
 
-    public BorderComponent(int x, int y, int width, int height, ItemStack fillItem1) {
+    /**
+     * Create a border around a specific region of the {@link xyz.nkomarn.Kerosene.gui.Gui} with {@link GuiDefaults#FILL_ITEM}
+     */
+    public BorderComponent(int x, int y, int width, int height) {
+        this(x, y, width, height, GuiDefaults.FILL_ITEM);
+    }
+
+    /**
+     * Create a border around a specific region of the {@link xyz.nkomarn.Kerosene.gui.Gui} with a specific {@link Material}
+     */
+    public BorderComponent(int x, int y, int width, int height, Material fillMaterial) {
+        this(x, y, width, height, ItemUtils.makeFillItem(fillMaterial));
+    }
+
+    /**
+     * Create a border around a specific region of the {@link xyz.nkomarn.Kerosene.gui.Gui} with a specific {@link ItemStack}
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param fillItem
+     */
+    public BorderComponent(int x, int y, int width, int height, ItemStack fillItem) {
         super(x, y, width, height);
-        setFillItem1(fillItem1);
+        setFillItem(fillItem);
     }
 
     @Override
     public ItemStack getItemForPosition(GuiPosition position) {
-        return this.fillItem1;
+        return this.fillItem;
     }
 
-    public ItemStack getFillItem1() {
-        return fillItem1;
+    public ItemStack getFillItem() {
+        return fillItem;
     }
 
-    public void setFillItem1(ItemStack fillItem1) {
-        this.fillItem1 = fillItem1;
+    /**
+     * Change the fill item.
+     *
+     * Note: If the {@link xyz.nkomarn.Kerosene.gui.Gui} is already displayed to any players, {@link xyz.nkomarn.Kerosene.gui.Gui#update()} should be called to apply the changes.
+     *
+     * @param fillItem The new fill item.
+     */
+    public void setFillItem(ItemStack fillItem) {
+        this.fillItem = fillItem;
     }
 
 }

@@ -117,6 +117,4 @@ public abstract class BorderBase implements Drawable {
         // maximum height is handled in draw(Gui)
         this.height = height;
     }
-
-
 }

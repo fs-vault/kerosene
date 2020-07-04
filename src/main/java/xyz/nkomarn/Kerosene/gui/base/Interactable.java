@@ -19,7 +19,10 @@ public interface Interactable extends GuiElement {
      */
      void onInteract(InteractEvent event);
 
-     class InteractEvent {
+    /**
+     * Interaction details
+     */
+    class InteractEvent {
          private final Gui gui;
          private final GuiPosition position;
          private final Player player;

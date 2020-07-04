@@ -3,6 +3,7 @@ package xyz.nkomarn.Kerosene.gui.predefined;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.Kerosene.gui.Gui;
+import xyz.nkomarn.Kerosene.gui.GuiDefaults;
 import xyz.nkomarn.Kerosene.gui.base.Interactable;
 import xyz.nkomarn.Kerosene.gui.components.buttons.ButtonComponent;
 import xyz.nkomarn.Kerosene.gui.components.cosmetic.FillComponent;
@@ -60,12 +61,17 @@ public class ConfirmationGui extends Gui {
 
         addElement(new FillComponent(Material.GRAY_STAINED_GLASS_PANE));
 
-        addElement(new ItemComponent(4, 1, buildDetailsItem(detailLines)));
+        addElement(new ItemComponent(4, 1, getDetailsItem(detailLines)));
         addElement(new ButtonComponent(2, 1, getConfirmItem(), confirmCallback));
         addElement(new ButtonComponent(6, 1, getCancelItem(), cancelCallback));
     }
 
-    private ItemStack buildDetailsItem(List<String> detailsLines) {
+    /**
+     * Gets the details item.
+     * @param detailsLines The details dialog lines.
+     * @return Details item.
+     */
+    protected ItemStack getDetailsItem(List<String> detailsLines) {
         return new ItemBuilder(Material.BOOK)
                 .name(detailsLines.get(0))
                 .addLore(detailsLines.subList(1, detailsLines.size())
@@ -76,29 +82,20 @@ public class ConfirmationGui extends Gui {
                 .build();
     }
 
-    // region static helpers
-
-    private static ItemStack confirmItem, cancelItem;
-
-    private static ItemStack getConfirmItem() {
-        if(confirmItem == null) {
-            confirmItem = new ItemBuilder(Material.LIME_BANNER)
-                    .name("&a&lConfirm")
-                    .build();
-        }
-
-        return confirmItem;
+    /**
+     * Gets the confirm item.
+     * @return The confirm item.
+     */
+    protected ItemStack getConfirmItem() {
+        return GuiDefaults.CONFIRM_ITEM;
     }
 
-    private static ItemStack getCancelItem() {
-        if (cancelItem == null) {
-            cancelItem = new ItemBuilder(Material.RED_BANNER)
-                    .name("&c&lCancel")
-                    .build();
-        }
-
-        return cancelItem;
+    /**
+     * Get the cancel item.
+     * @return The cancel item.
+     */
+    protected ItemStack getCancelItem() {
+        return GuiDefaults.CANCEL_ITEM;
     }
 
-    // endregion static helpers
 }

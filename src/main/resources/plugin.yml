@@ -11,6 +11,8 @@ commands:
   kerosene:
     description: "Base Kerosene management command."
     permission: "firestarterm.admin"
+  test:
+    description: "Test command"
 
 permissions:
   firestarterm.admin:
