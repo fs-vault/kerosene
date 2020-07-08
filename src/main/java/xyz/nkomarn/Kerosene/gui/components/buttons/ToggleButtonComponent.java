@@ -3,10 +3,10 @@ package xyz.nkomarn.Kerosene.gui.components.buttons;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import xyz.nkomarn.Kerosene.chat.Chat;
 import xyz.nkomarn.Kerosene.gui.GuiDefaults;
 import xyz.nkomarn.Kerosene.gui.GuiPosition;
 import xyz.nkomarn.Kerosene.gui.components.buttons.base.ButtonBase;
-import xyz.nkomarn.Kerosene.util.MessageUtil;
 import xyz.nkomarn.Kerosene.util.item.ItemBuilder;
 
 import java.util.List;
@@ -103,7 +103,7 @@ public class ToggleButtonComponent extends ButtonBase {
      * @param stateChangeCallback The state change callback.
      */
     public ToggleButtonComponent(GuiPosition position, String title, String description, Material enabledMaterial, Material disabledMaterial, StateProvider stateProvider, StateChangeCallback stateChangeCallback) {
-        this(position, title, MessageUtil.splitString(description, 25), enabledMaterial, disabledMaterial, stateProvider, stateChangeCallback);
+        this(position, title, Chat.splitString(description, 25), enabledMaterial, disabledMaterial, stateProvider, stateChangeCallback);
     }
 
     /**
