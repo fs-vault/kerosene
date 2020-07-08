@@ -2,13 +2,13 @@ package xyz.nkomarn.Kerosene.gui.predefined;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import xyz.nkomarn.Kerosene.chat.Chat;
 import xyz.nkomarn.Kerosene.gui.Gui;
 import xyz.nkomarn.Kerosene.gui.GuiDefaults;
 import xyz.nkomarn.Kerosene.gui.base.Interactable;
 import xyz.nkomarn.Kerosene.gui.components.buttons.ButtonComponent;
 import xyz.nkomarn.Kerosene.gui.components.cosmetic.FillComponent;
 import xyz.nkomarn.Kerosene.gui.components.item.ItemComponent;
-import xyz.nkomarn.Kerosene.util.MessageUtil;
 import xyz.nkomarn.Kerosene.util.item.ItemBuilder;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class ConfirmationGui extends Gui {
      * @param cancelCallback The callback on canceled.
      */
     public ConfirmationGui(Gui parent, String details, Interactable confirmCallback, Interactable cancelCallback) {
-        this(parent, MessageUtil.splitString(details, 25), confirmCallback, cancelCallback);
+        this(parent, Chat.splitString(details, 25), confirmCallback, cancelCallback);
     }
     /**
      * Create a new {@link ConfirmationGui}
