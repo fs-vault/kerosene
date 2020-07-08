@@ -4,6 +4,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.nkomarn.Kerosene.util.CooldownUtil;
+import xyz.nkomarn.Kerosene.util.DebugUtil;
 import xyz.nkomarn.Kerosene.util.ToggleUtil;
 
 /**
@@ -14,5 +15,6 @@ public class PlayerQuitListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         ToggleUtil.CACHE.invalidateAll(event.getPlayer().getUniqueId());
         CooldownUtil.CACHE.invalidateAll(event.getPlayer().getUniqueId());
+        DebugUtil.disableAll(event.getPlayer());
     }
 }

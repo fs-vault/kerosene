@@ -2,15 +2,32 @@ package xyz.nkomarn.Kerosene;
 
 import com.earth2me.essentials.Essentials;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import xyz.nkomarn.Kerosene.commands.KeroseneCommand;
 import xyz.nkomarn.Kerosene.data.LocalStorage;
 import xyz.nkomarn.Kerosene.data.PlayerData;
 import xyz.nkomarn.Kerosene.data.Redis;
+import xyz.nkomarn.Kerosene.gui.Gui;
+import xyz.nkomarn.Kerosene.gui.GuiListener;
+import xyz.nkomarn.Kerosene.gui.GuiPosition;
+import xyz.nkomarn.Kerosene.gui.components.buttons.ToggleButtonComponent;
+import xyz.nkomarn.Kerosene.gui.components.cosmetic.BorderComponent;
 import xyz.nkomarn.Kerosene.listener.PlayerQuitListener;
 import xyz.nkomarn.Kerosene.menu.MenuHandler;
+import xyz.nkomarn.Kerosene.util.DebugUtil;
 import xyz.nkomarn.Kerosene.util.EconomyUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Kerosene extends JavaPlugin {
+
+    public static final String DEBUG_CATEGORY_GUI_INTERACT = "gui:interact";
+
     private static Kerosene kerosene;
     private static Essentials essentials;
 
@@ -47,8 +64,13 @@ public class Kerosene extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
         }
 
+        DebugUtil.registerCategory(DEBUG_CATEGORY_GUI_INTERACT);
+
         Bukkit.getPluginManager().registerEvents(new MenuHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new GuiListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), this);
+
+        getCommand("kerosene").setExecutor(new KeroseneCommand());
     }
 
     @Override
