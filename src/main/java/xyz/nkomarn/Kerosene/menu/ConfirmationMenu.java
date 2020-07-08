@@ -2,7 +2,7 @@ package xyz.nkomarn.Kerosene.menu;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import xyz.nkomarn.Kerosene.util.MessageUtil;
+import xyz.nkomarn.Kerosene.chat.Chat;
 import xyz.nkomarn.Kerosene.util.item.ItemBuilder;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 public class ConfirmationMenu extends Menu {
 
     public ConfirmationMenu(Player player, String question, MenuButton.GuiButtonCallback yes, MenuButton.GuiButtonCallback no) {
-        this(player, MessageUtil.splitString(question, 25), yes, no);
+        this(player, Chat.splitString(question, 25), yes, no);
     }
 
     public ConfirmationMenu(Player player, List<String> lines, MenuButton.GuiButtonCallback yes, MenuButton.GuiButtonCallback no) {

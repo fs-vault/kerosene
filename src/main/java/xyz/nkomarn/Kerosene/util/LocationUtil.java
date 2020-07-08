@@ -1,5 +1,6 @@
 package xyz.nkomarn.Kerosene.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,14 +26,15 @@ public final class LocationUtil {
      * @param location The location to teleport the player.
      */
     public static void teleportPlayer(Player player, Location location) {
-        try {
-            player.teleport(location);
-            /*Kerosene.getEssentials().getUser(player).getTeleport().now(location, false,
-                    PlayerTeleportEvent.TeleportCause.PLUGIN);*/
-        } catch (Exception e) {
-            e.printStackTrace();
-            player.sendMessage(ChatColor.RED + "Teleportation failed- please notify an admin.");
-        }
+        Bukkit.getScheduler().runTask(Kerosene.getKerosene(), () -> {
+            try {
+                Kerosene.getEssentials().getUser(player).getTeleport().now(location, false,
+                        PlayerTeleportEvent.TeleportCause.PLUGIN);
+            } catch (Exception e) {
+                e.printStackTrace();
+                player.sendMessage(ChatColor.RED + "Teleportation failed- please notify an admin.");
+            }
+        });
     }
 
     /**
