@@ -1,11 +1,11 @@
 name: Kerosene
-version: 3.3
+version: 4.0
 author: TechToolbox (@nkomarn)
-main: xyz.nkomarn.Kerosene.Kerosene
+main: xyz.nkomarn.kerosene.Kerosene
 description: Firestarter's library of little bits and bobs that keep the server ticking.
 website: https://firestartermc.com/opensource
 api-version: 1.16
-depend: ['Essentials', 'GriefPrevention', 'Vault']
+depend: ['Essentials', 'Vault']
 
 commands:
   kerosene:
@@ -16,6 +16,3 @@ permissions:
   firestarterm.admin:
     default: op
     description: "Allow access to administrative features."
-  firestarter.vanish:
-    default: op
-    description: "Allow viewing of vanished players."

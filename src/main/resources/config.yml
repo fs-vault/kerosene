@@ -9,3 +9,6 @@ redis:
   password: ""
   pool-size: 8
   timeout: 2000
+
+pool:
+  threads: 3
