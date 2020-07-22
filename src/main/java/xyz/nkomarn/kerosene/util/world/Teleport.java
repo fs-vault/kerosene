@@ -23,8 +23,22 @@ public final class Teleport {
     }
 
     /**
+     * Synchronously checks if a location has enough space for a player.
+     * This is intended to be used as a teleport safety check.
+     *
+     * @param floor The block the player is going to be standing on.
+     * @return The safety check result.
+     */
+    public static boolean checkSafetySync(@NotNull Block floor) {
+        Block legs = floor.getLocation().add(0, 1, 0).getBlock();
+        Block head = floor.getLocation().add(0, 2, 0).getBlock();
+        return floor.getType().isSolid() && legs.getType() == Material.AIR && head.getType() == Material.AIR;
+    }
+
+
+    /**
      * Asynchronously checks if a location has enough space for a player.
-     * This is inteded to be used as a teleport safety check.
+     * This is intended to be used as a teleport safety check.
      *
      * @param floor The block the player is going to be standing on.
      * @return A future of the safety check result.
