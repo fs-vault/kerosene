@@ -10,9 +10,9 @@ depend: ['Essentials', 'Vault']
 commands:
   kerosene:
     description: "Base Kerosene management command."
-    permission: "firestarterm.admin"
+    permission: "firestarter.admin"
 
 permissions:
-  firestarterm.admin:
+  firestarter.admin:
     default: op
     description: "Allow access to administrative features."

@@ -211,7 +211,7 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
      * @return This instance
      */
     public T addItemFlags(ItemFlag... flags) {
-        this.item.getItemMeta().addItemFlags(flags);
+        this.item.addItemFlags(flags);
         return (T) this;
     }
 

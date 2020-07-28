@@ -13,8 +13,7 @@ import xyz.nkomarn.kerosene.menu.MenuHandler;
 import xyz.nkomarn.kerosene.util.internal.Debug;
 import xyz.nkomarn.kerosene.util.Economy;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * Kerosene is a core library that many of Firestarter's plugins extend. This library is intended to be
@@ -26,7 +25,7 @@ public class Kerosene extends JavaPlugin {
 
     private static Kerosene KEROSENE;
     private static Essentials ESSENTIALS;
-    private static ExecutorService POOL;
+    private static ForkJoinPool POOL;
     private static LocalStorage STORAGE;
 
     @Override
@@ -35,7 +34,7 @@ public class Kerosene extends JavaPlugin {
 
         KEROSENE = this;
         ESSENTIALS = (Essentials) Bukkit.getPluginManager().getPlugin("essentials");
-        POOL = Executors.newFixedThreadPool(getConfig().getInt("pool.threads"));
+        POOL = new ForkJoinPool(getConfig().getInt("pool.threads"));
         STORAGE = new LocalStorage("kerosene");
 
         if (!PlayerData.connect(getConfig().getString("database.url"),
@@ -81,7 +80,7 @@ public class Kerosene extends JavaPlugin {
         return KEROSENE;
     }
 
-    public static ExecutorService getPool() {
+    public static ForkJoinPool getPool() {
         return POOL;
     }
 
