@@ -82,7 +82,6 @@ public class ConfirmationGui extends Gui {
             this.cancelCallback = event -> { // default
                 GuiDefaults.playSelectSound(event.getPlayer());
                 event.getGui().navigateToParent();
-                event.getGui().close();
             };
         }
 
