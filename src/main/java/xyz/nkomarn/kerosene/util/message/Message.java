@@ -15,9 +15,9 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Message {
+public final class Message {
 
-    public Message() {
+    private Message() {
     }
 
     public static void sendActionbar(@NotNull Player player, @NotNull BaseComponent[] message) {
