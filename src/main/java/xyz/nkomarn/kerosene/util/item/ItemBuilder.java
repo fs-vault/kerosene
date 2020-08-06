@@ -38,7 +38,7 @@ public class ItemBuilder extends ItemBuilderBase<ItemBuilder> {
      * @param item The starting ItemStack
      */
     public static ItemBuilder of(ItemStack item) {
-        return new ItemBuilder(item);
+        return new ItemBuilder(item.clone());
     }
 
 }
