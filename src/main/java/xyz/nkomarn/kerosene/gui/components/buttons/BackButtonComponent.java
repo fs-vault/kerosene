@@ -17,7 +17,7 @@ public class BackButtonComponent extends ButtonBase {
      * @param y The vertical position.
      */
     public BackButtonComponent(int x, int y) {
-        this(x, y, (String) null);
+        this(x, y, new String[0]);
     }
 
     /**
@@ -35,7 +35,7 @@ public class BackButtonComponent extends ButtonBase {
      * @param position The position of the button.
      */
     public BackButtonComponent(GuiPosition position) {
-        this(position, (String) null);
+        this(position, new String[0]);
     }
 
     /**
@@ -76,11 +76,8 @@ public class BackButtonComponent extends ButtonBase {
     }
 
     protected ItemStack getBackItem(String[] lore) {
-        if (lore != null) {
-            return ItemBuilder.of(GuiDefaults.BACK_ITEM)
-                    .addLore(lore)
-                    .build();
-        }
-        return GuiDefaults.BACK_ITEM;
+        return ItemBuilder.of(GuiDefaults.BACK_ITEM)
+                .addLore(lore)
+                .build();
     }
 }

@@ -153,7 +153,6 @@ public abstract class PlayerPagedItemGuiBase extends PlayerGui {
     public void update(boolean items) {
         if (items) {
             this.pageContent = getPageContent(page, this.itemsPerPage);
-            System.out.println(this.pageContent.size()); // TODO remove debug line
         }
         super.update();
     }
