@@ -1,7 +1,9 @@
 package xyz.nkomarn.kerosene.util.player;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import xyz.nkomarn.kerosene.Kerosene;
 
 public final class PlayerUtil {
 
@@ -15,9 +17,11 @@ public final class PlayerUtil {
      * @param itemStack The item to give.
      */
     public static void giveOrDropItem(Player player, ItemStack itemStack) {
-        player.getInventory().addItem(itemStack).forEach(((integer, overflowStack) -> {
-            player.getWorld().dropItemNaturally(player.getLocation(), overflowStack);
-        }));
+        Bukkit.getScheduler().runTask(Kerosene.getKerosene(), task -> {
+            player.getInventory().addItem(itemStack).forEach(((integer, overflowStack) -> {
+                player.getWorld().dropItemNaturally(player.getLocation(), overflowStack);
+            }));
+        });
     }
 
 }
