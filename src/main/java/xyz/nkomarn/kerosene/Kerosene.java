@@ -7,6 +7,7 @@ import xyz.nkomarn.kerosene.commands.KeroseneCommand;
 import xyz.nkomarn.kerosene.data.db.LocalStorage;
 import xyz.nkomarn.kerosene.data.db.PlayerData;
 import xyz.nkomarn.kerosene.data.redis.Redis;
+import xyz.nkomarn.kerosene.gui.Gui;
 import xyz.nkomarn.kerosene.gui.GuiListener;
 import xyz.nkomarn.kerosene.listener.player.QuitListener;
 import xyz.nkomarn.kerosene.menu.MenuHandler;
@@ -71,6 +72,7 @@ public class Kerosene extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        Gui.closeAll();
         MenuHandler.closeAll();
         PlayerData.close();
         Redis.close();

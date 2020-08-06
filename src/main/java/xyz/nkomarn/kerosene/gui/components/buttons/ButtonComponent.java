@@ -2,6 +2,7 @@ package xyz.nkomarn.kerosene.gui.components.buttons;
 
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
+import xyz.nkomarn.kerosene.gui.GuiDefaults;
 import xyz.nkomarn.kerosene.gui.base.Interactable;
 import xyz.nkomarn.kerosene.gui.GuiPosition;
 import xyz.nkomarn.kerosene.gui.components.buttons.base.ButtonBase;
@@ -38,6 +39,7 @@ public class ButtonComponent extends ButtonBase {
     @Override
     public void onInteract(InteractEvent event) {
         if (event.getSlotType() == InventoryType.SlotType.CONTAINER && event.getPosition().equals(this.getPosition())) {
+            GuiDefaults.playSelectSound(event.getPlayer());
             this.callback.onInteract(event);
         }
     }

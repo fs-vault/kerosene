@@ -1,6 +1,7 @@
 package xyz.nkomarn.kerosene.gui.predefined;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.kerosene.util.message.Message;
 import xyz.nkomarn.kerosene.gui.Gui;
@@ -11,7 +12,9 @@ import xyz.nkomarn.kerosene.gui.components.cosmetic.FillComponent;
 import xyz.nkomarn.kerosene.gui.components.item.ItemComponent;
 import xyz.nkomarn.kerosene.util.item.ItemBuilder;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -19,51 +22,20 @@ import java.util.stream.Collectors;
  */
 public class ConfirmationGui extends Gui {
 
-    /**
-     * Create a new {@link ConfirmationGui}
-     * @param details The details to how on the information item.
-     * @param confirmCallback The callback on confirmation.
-     * @param cancelCallback The callback on canceled.
-     */
-    public ConfirmationGui(String details, Interactable confirmCallback, Interactable cancelCallback) {
-        this(null, details, confirmCallback, cancelCallback);
-    }
-
-    /**
-     * Create a new {@link ConfirmationGui}
-     * @param parent The parent Gui
-     * @param details The details to how on the information item.
-     * @param confirmCallback The callback on confirmation.
-     * @param cancelCallback The callback on canceled.
-     */
-    public ConfirmationGui(Gui parent, String details, Interactable confirmCallback, Interactable cancelCallback) {
-        this(parent, Message.splitString(details, 25), confirmCallback, cancelCallback);
-    }
-    /**
-     * Create a new {@link ConfirmationGui}
-     * @param detailLines The details to how on the information item.
-     * @param confirmCallback The callback on confirmation.
-     * @param cancelCallback The callback on canceled.
-     */
-    public ConfirmationGui(List<String> detailLines, Interactable confirmCallback, Interactable cancelCallback) {
-        this(null, detailLines, confirmCallback, cancelCallback);
-    }
-
-    /**
-     * Create a new {@link ConfirmationGui}
-     * @param parent The parent Gui
-     * @param detailLines The details to how on the information item.
-     * @param confirmCallback The callback on confirmation.
-     * @param cancelCallback The callback on canceled.
-     */
-    public ConfirmationGui(Gui parent, List<String> detailLines, Interactable confirmCallback, Interactable cancelCallback) {
-        super(parent, "Please Confirm", 3);
+    private ConfirmationGui(Gui parent, ItemStack item, List<String> detailLines, Interactable confirmCallback, Interactable cancelCallback) {
+        super(parent, "Please Confirm", item == null ? 3 : 5);
 
         addElement(new FillComponent(Material.GRAY_STAINED_GLASS_PANE));
 
-        addElement(new ItemComponent(4, 1, getDetailsItem(detailLines)));
-        addElement(new ButtonComponent(2, 1, getConfirmItem(), confirmCallback));
-        addElement(new ButtonComponent(6, 1, getCancelItem(), cancelCallback));
+        int offset = 0;
+        if (item != null) {
+            offset = 2;
+            addElement(new ItemComponent(4, 1, item));
+        }
+
+        addElement(new ItemComponent(4, 1 + offset, getDetailsItem(detailLines)));
+        addElement(new ButtonComponent(2, 1 + offset, getConfirmItem(), confirmCallback));
+        addElement(new ButtonComponent(6, 1 + offset, getCancelItem(), cancelCallback));
     }
 
     /**
@@ -74,11 +46,7 @@ public class ConfirmationGui extends Gui {
     protected ItemStack getDetailsItem(List<String> detailsLines) {
         return new ItemBuilder(Material.BOOK)
                 .name(detailsLines.get(0))
-                .addLore(detailsLines.subList(1, detailsLines.size())
-                        .stream()
-                        .map(l -> "&f" + l)
-                        .collect(Collectors.toList())
-                )
+                .addLore(detailsLines.subList(1, detailsLines.size()))
                 .build();
     }
 
@@ -96,6 +64,76 @@ public class ConfirmationGui extends Gui {
      */
     protected ItemStack getCancelItem() {
         return GuiDefaults.CANCEL_ITEM;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+
+        private ItemStack itemStack;
+        private List<String> detailLines;
+        private Interactable confirmCallback;
+        private Interactable cancelCallback;
+        private Gui parent;
+
+        private Builder() {
+            this.cancelCallback = event -> { // default
+                GuiDefaults.playSelectSound(event.getPlayer());
+                event.getGui().navigateToParent();
+            };
+        }
+
+        public Builder parent(Gui parent) {
+            this.parent = parent;
+            return this;
+        }
+
+        public Builder item(ItemStack itemStack) {
+            this.itemStack = itemStack;
+            return this;
+        }
+
+        public Builder details(String details) {
+            this.detailLines = Message.splitString(details, 25).stream()
+                    .map(l -> "&f" + l)
+                    .collect(Collectors.toList());
+            return this;
+        }
+
+        public Builder details(String... detailLines) {
+            this.detailLines = Arrays.asList(detailLines);
+            return this;
+        }
+
+        public Builder details(List<String> detailLines) {
+            this.detailLines = detailLines;
+            return this;
+        }
+
+        public Builder confirm(Interactable event) {
+            confirmCallback = event;
+            return this;
+        }
+
+        public Builder cancel(Interactable event) {
+            cancelCallback = event;
+            return this;
+        }
+
+        public ConfirmationGui build() {
+            return new ConfirmationGui(parent, itemStack, detailLines, confirmCallback, cancelCallback);
+        }
+
+        public void open(Player... players) {
+            build().open(players);
+        }
+
+        public void open(Set<Player> players) {
+            build().open(players);
+        }
+
     }
 
 }

@@ -7,6 +7,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.kerosene.Kerosene;
 import xyz.nkomarn.kerosene.gui.base.Drawable;
+import xyz.nkomarn.kerosene.gui.base.DrawingContext;
 import xyz.nkomarn.kerosene.gui.base.GuiElement;
 import xyz.nkomarn.kerosene.gui.base.Interactable;
 
@@ -59,9 +60,7 @@ public class Gui implements InventoryHolder, Interactable {
         guiElements.add(element);
 
         if (element instanceof Drawable) {
-            Drawable drawable = (Drawable) element;
-            drawDrawable(drawable);
-            drawableElements.add(drawable);
+            drawableElements.add((Drawable) element);
         }
 
         if (element instanceof Interactable) {
@@ -89,9 +88,7 @@ public class Gui implements InventoryHolder, Interactable {
      * Close the Gui for all viewers
      */
     public void close() {
-        Bukkit.getScheduler().runTask(Kerosene.getKerosene(), () -> {
-            this.viewers.forEach(Player::closeInventory);
-        });
+        this.viewers.forEach(Player::closeInventory);
     }
 
     /**
@@ -108,6 +105,7 @@ public class Gui implements InventoryHolder, Interactable {
                     }
                 }
 
+                render(player);
                 player.openInventory(this.inventory);
                 viewers.add(player);
             });
@@ -133,11 +131,10 @@ public class Gui implements InventoryHolder, Interactable {
      * Trigger an update for the current Gui.
      */
     public void update() {
-        for (Drawable drawable : drawableElements) {
-            drawDrawable(drawable);
-        }
-
-        this.viewers.forEach(Player::updateInventory);
+        this.viewers.forEach(player -> {
+            render(player);
+            player.updateInventory();
+        });
     }
 
     /**
@@ -150,16 +147,20 @@ public class Gui implements InventoryHolder, Interactable {
         }
 
         this.parent.open(this.getViewers());
-        this.close();
     }
 
-    private void drawDrawable(Drawable drawable) {
-        Map<GuiPosition, ItemStack> items = drawable.draw(this);
-        if (items == null) return;
+    protected void render(Player player) {
+        getInventory().clear();
 
-        items.forEach((vector2i, stack) -> {
-            this.inventory.setItem(vector2i.getX() + 9 * vector2i.getY(), stack);
-        });
+        for (Drawable drawable : drawableElements) {
+            DrawingContext context = new DrawingContext(this, player);
+            Map<GuiPosition, ItemStack> items = drawable.draw(context);
+            if (items == null) return;
+
+            items.forEach((vector2i, stack) -> {
+                this.inventory.setItem(vector2i.getX() + 9 * vector2i.getY(), stack);
+            });
+        }
     }
 
     void removeViewer(Player player) {
@@ -225,5 +226,12 @@ public class Gui implements InventoryHolder, Interactable {
      */
     public void setOverridable(boolean overridable) {
         this.overridable = overridable;
+    }
+
+    public static void closeAll() {
+        // Close all open Gui's to prevent players from taking any items out.
+        Bukkit.getOnlinePlayers().stream()
+                .filter(player -> player.getOpenInventory().getTopInventory().getHolder() instanceof Gui)
+                .forEach(player -> ((Gui) player.getOpenInventory().getTopInventory().getHolder()).close());
     }
 }

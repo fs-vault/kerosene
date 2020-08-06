@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.kerosene.gui.Gui;
 import xyz.nkomarn.kerosene.gui.base.Drawable;
 import xyz.nkomarn.kerosene.gui.GuiPosition;
+import xyz.nkomarn.kerosene.gui.base.DrawingContext;
 
 import java.util.Map;
 
@@ -38,9 +39,9 @@ public class ItemComponent implements Drawable {
     }
 
     @Override
-    public Map<GuiPosition, ItemStack> draw(Gui gui) {
-        if (item == null) return ImmutableMap.of();
-        return ImmutableMap.of(position, item);
+    public Map<GuiPosition, ItemStack> draw(DrawingContext context) {
+        if (getItem() == null) return ImmutableMap.of();
+        return ImmutableMap.of(position, getItem());
     }
 
     /**

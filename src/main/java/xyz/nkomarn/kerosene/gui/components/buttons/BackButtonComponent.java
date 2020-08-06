@@ -4,6 +4,7 @@ import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.kerosene.gui.GuiDefaults;
 import xyz.nkomarn.kerosene.gui.GuiPosition;
 import xyz.nkomarn.kerosene.gui.components.buttons.base.ButtonBase;
+import xyz.nkomarn.kerosene.util.item.ItemBuilder;
 
 /**
  * Default implementation of the back button.
@@ -16,7 +17,17 @@ public class BackButtonComponent extends ButtonBase {
      * @param y The vertical position.
      */
     public BackButtonComponent(int x, int y) {
-        this(new GuiPosition(x, y));
+        this(x, y, (String) null);
+    }
+
+    /**
+     * Create a back button.
+     * @param x The horizontal position.
+     * @param y The vertical position.
+     * @param lore The lore.
+     */
+    public BackButtonComponent(int x, int y, String... lore) {
+        this(new GuiPosition(x, y), lore);
     }
 
     /**
@@ -24,8 +35,17 @@ public class BackButtonComponent extends ButtonBase {
      * @param position The position of the button.
      */
     public BackButtonComponent(GuiPosition position) {
-        this(position, null);
-        this.setItem(getBackItem());
+        this(position, (String) null);
+    }
+
+    /**
+     * Create a back button.
+     * @param position The position of the button.
+     * @param lore The lore.
+     */
+    public BackButtonComponent(GuiPosition position, String... lore) {
+        this(position, (ItemStack) null);
+        this.setItem(getBackItem(lore));
     }
 
     /**
@@ -50,11 +70,17 @@ public class BackButtonComponent extends ButtonBase {
     @Override
     public void onInteract(InteractEvent event) {
         if (event.getPosition().equals(this.getPosition())) {
+            GuiDefaults.playSelectSound(event.getPlayer());
             event.getGui().navigateToParent();
         }
     }
 
-    protected ItemStack getBackItem() {
+    protected ItemStack getBackItem(String[] lore) {
+        if (lore != null) {
+            return ItemBuilder.of(GuiDefaults.BACK_ITEM)
+                    .addLore(lore)
+                    .build();
+        }
         return GuiDefaults.BACK_ITEM;
     }
 }
