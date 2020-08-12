@@ -108,8 +108,10 @@ public class Gui implements InventoryHolder, Interactable {
                     }
                 }
 
+                this.render(player);
+                this.onOpen(player);
                 player.openInventory(this.inventory);
-                viewers.add(player);
+                this.viewers.add(player);
             });
         });
     }
@@ -163,6 +165,7 @@ public class Gui implements InventoryHolder, Interactable {
     }
 
     void removeViewer(Player player) {
+        this.onClose(player);
         this.viewers.remove(player);
     }
 
@@ -225,5 +228,21 @@ public class Gui implements InventoryHolder, Interactable {
      */
     public void setOverridable(boolean overridable) {
         this.overridable = overridable;
+    }
+
+    public void onOpen(Player player) {
+    }
+
+    public void onClose(Player player) {
+    }
+
+    /**
+     * Close all open Gui's.
+     */
+    public static void closeAll() {
+        // Close all open Gui's to prevent players from taking any items out.
+        Bukkit.getOnlinePlayers().stream()
+                .filter(player -> player.getOpenInventory().getTopInventory().getHolder() instanceof Gui)
+                .forEach(player -> ((Gui) player.getOpenInventory().getTopInventory().getHolder()).close());
     }
 }
