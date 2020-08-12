@@ -108,7 +108,6 @@ public class Gui implements InventoryHolder, Interactable {
                     }
                 }
 
-                this.render(player);
                 this.onOpen(player);
                 player.openInventory(this.inventory);
                 this.viewers.add(player);
