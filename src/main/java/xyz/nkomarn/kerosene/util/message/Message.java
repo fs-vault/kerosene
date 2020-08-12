@@ -3,6 +3,7 @@ package xyz.nkomarn.kerosene.util.message;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,8 @@ public class Message {
 
     public Message() {
     }
+
+    public static final String INSUFFICIENT_PERMISSIONS = ChatColor.RED + "" + ChatColor.BOLD + "Error:" + ChatColor.RESET + "" + ChatColor.GRAY + "Insufficient permissions";
 
     public static void sendActionbar(@NotNull Player player, @NotNull BaseComponent[] message) {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, message);

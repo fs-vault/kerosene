@@ -47,6 +47,7 @@ public class GuiListener implements Listener {
 
         Gui gui = (Gui) holder;
         gui.removeViewer((Player) event.getPlayer());
+        gui.onClose((Player) event.getPlayer());
     }
 
 }
