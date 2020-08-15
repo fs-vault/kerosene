@@ -7,5 +7,7 @@
 /target
 /.m2
 /.gradle
+/build
+/gradle/wrapper/gradle-wrapper.jar
 .factorypath
 dependency-reduced-pom.xml

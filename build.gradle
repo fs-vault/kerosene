@@ -1,5 +1,16 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.2"
+    }
+}
+
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
 }
 
 group 'com.firestartermc'
@@ -7,16 +18,37 @@ version '5.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven {
         url 'https://papermc.io/repo/repository/maven-public/'
     }
     maven {
         url 'https://ci.ender.zone/plugin/repository/everything/'
     }
+    maven {
+        url 'https://libraries.minecraft.net/'
+    }
+    maven {
+        url 'https://jitpack.io/'
+    }
 }
 
 dependencies {
+    compileOnly 'com.destroystokyo.paper:paper:1.16.1-R0.1-SNAPSHOT'
     compileOnly 'net.ess3:EssentialsX:2.17.2'
+    compileOnly 'com.github.milkbowl:vaultapi:1.7'
+    compileOnly 'com.mojang:authlib:1.5.21'
     compileOnly 'org.jetbrains:annotations:20.0.0'
-    compileOnly 'com.destroystokyo.paper:paper-api:1.16.1-R0.1-SNAPSHOT'
+    compile "io.papermc:paperlib:1.0.5"
+    compile "com.zaxxer:HikariCP:3.4.2"
+    compile "io.lettuce:lettuce-core:5.3.3.RELEASE"
 }
+
+shadowJar {
+    relocate 'io.papermc.lib', 'com.firestartermc.kerosene.util.paperlib'
+    relocate 'com.zaxxer.hikari', 'com.firestartermc.kerosene.util.hikari'
+    relocate 'io.lettuce.core', 'com.firestartermc.kerosene.util.lettuce'
+    exclude 'io.netty', 'com.firestartermc.kerosene.util.netty'
+}
+
+assemble.dependsOn shadowJar
