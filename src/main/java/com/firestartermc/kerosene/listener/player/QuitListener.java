@@ -1,5 +1,7 @@
 package com.firestartermc.kerosene.listener.player;
 
+import com.firestartermc.kerosene.event.PubSubMessageEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -18,5 +20,10 @@ public class QuitListener implements Listener {
         Toggle.CACHE.invalidateAll(event.getPlayer().getUniqueId());
         Cooldown.CACHE.invalidateAll(event.getPlayer().getUniqueId());
         Debug.disableAll(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPubSub(PubSubMessageEvent event) {
+        Bukkit.broadcastMessage(event.getChannel() + ": " + event.getMessage());
     }
 }

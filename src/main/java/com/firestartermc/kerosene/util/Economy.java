@@ -26,8 +26,7 @@ public final class Economy {
      * @return Whether the economy has been successfully initialized.
      */
     public static boolean initializeEconomy() {
-        RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> provider = Bukkit.getServer()
-                .getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> provider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         if (provider == null) return false;
         economy = provider.getProvider();
         return true;

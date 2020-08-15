@@ -35,6 +35,15 @@ public class LocalStorage {
     }
 
     /**
+     * Returns the name of this local storage database.
+     *
+     * @return The name of this local storage.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * Returns a new connection to the local database.
      *
      * @return A new connection to the local database.
@@ -42,14 +51,5 @@ public class LocalStorage {
      */
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:sqlite:" + location);
-    }
-
-    /**
-     * Returns the name of this local storage database.
-     *
-     * @return The name of this local storage.
-     */
-    public String getName() {
-        return name;
     }
 }

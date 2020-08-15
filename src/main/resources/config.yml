@@ -4,8 +4,7 @@ database:
   password: ""
 
 redis:
-  host: 127.0.0.1
-  port: 6379
+  uri: "redis://localhost:6379"
   password: ""
   pool-size: 8
   timeout: 2000

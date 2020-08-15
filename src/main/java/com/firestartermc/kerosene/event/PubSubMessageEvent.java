@@ -2,6 +2,7 @@ package com.firestartermc.kerosene.event;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An event fired when a Pub/Sub message is received.
@@ -9,24 +10,30 @@ import org.bukkit.event.HandlerList;
 public class PubSubMessageEvent extends Event {
     
     private static final HandlerList handlers = new HandlerList();
+
     private final String channel;
     private final String message;
 
-    public PubSubMessageEvent(final String channel, final String message) {
+    public PubSubMessageEvent(@NotNull String channel, @NotNull String message) {
+        super(true);
         this.channel = channel;
         this.message = message;
     }
 
-    public String getChannel() {
+    public @NotNull String getChannel() {
         return this.channel;
     }
 
-    public String getMessage() {
+    public @NotNull String getMessage() {
         return this.message;
     }
 
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static @NotNull HandlerList getHandlerList() {
         return handlers;
     }
 }

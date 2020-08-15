@@ -6,7 +6,9 @@ website: "https://firestartermc.com/opensource"
 version: "5.0"
 api-version: "1.16"
 
-depend: ['Essentials', 'Vault']
+softdepend:
+  - "Essentials"
+  - "Vault"
 
 commands:
   kerosene:
