@@ -1,10 +1,11 @@
-name: Kerosene
-version: 4.0
-author: TechToolbox (@nkomarn)
-main: xyz.nkomarn.kerosene.Kerosene
-description: Firestarter's library of little bits and bobs that keep the server ticking.
-website: https://firestartermc.com/opensource
-api-version: 1.16
+name: "Kerosene"
+description: "Firestarter's library of little bits and bobs that keep the server ticking."
+main: "com.firestartermc.kerosene.Kerosene"
+author: "TechToolbox (nkomarn)"
+website: "https://firestartermc.com/opensource"
+version: "5.0"
+api-version: "1.16"
+
 depend: ['Essentials', 'Vault']
 
 commands:

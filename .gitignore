@@ -6,5 +6,6 @@
 *.iml
 /target
 /.m2
+/.gradle
 .factorypath
 dependency-reduced-pom.xml
