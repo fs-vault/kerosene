@@ -31,14 +31,14 @@ public interface Interactable extends GuiElement {
          private final InventoryType.SlotType slotType;
          private boolean canceled;
 
-         public InteractEvent(Gui gui, GuiPosition position, Player player, ClickType clickType, InventoryAction action, InventoryType.SlotType slotType) {
+         public InteractEvent(Gui gui, GuiPosition position, Player player, ClickType clickType, InventoryAction action, InventoryType.SlotType slotType, boolean canceled) {
              this.gui = gui;
              this.position = position;
              this.player = player;
              this.clickType = clickType;
              this.action = action;
              this.slotType = slotType;
-             this.canceled = true;
+             this.canceled = canceled;
          }
 
          /**

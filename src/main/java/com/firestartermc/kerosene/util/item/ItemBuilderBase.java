@@ -300,6 +300,9 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
     }
 
     private List<String> translateLore(List<String> lore) {
+        if(lore == null || lore.size() == 0) {
+            return new ArrayList<>();
+        }
         return lore.stream()
                 .map(line -> ChatColor.translateAlternateColorCodes('&', line))
                 .collect(Collectors.toList());

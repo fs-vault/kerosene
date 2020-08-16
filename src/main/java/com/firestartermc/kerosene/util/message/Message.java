@@ -16,12 +16,13 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Message {
+public final class Message {
 
-    public Message() {
+    private Message() {
     }
 
-    public static final String INSUFFICIENT_PERMISSIONS = ChatColor.RED + "" + ChatColor.BOLD + "Error:" + ChatColor.RESET + "" + ChatColor.GRAY + "Insufficient permissions";
+    public static final String ERROR_PREFIX = ChatColor.RED + "" + ChatColor.BOLD + "Error: " + ChatColor.GRAY;
+    public static final String INSUFFICIENT_PERMISSIONS = ERROR_PREFIX + "Insufficient permissions";
 
     public static void sendActionbar(@NotNull Player player, @NotNull BaseComponent[] message) {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, message);

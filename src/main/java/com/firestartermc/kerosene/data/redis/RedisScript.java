@@ -1,49 +1,38 @@
 package com.firestartermc.kerosene.data.redis;
 
 import com.firestartermc.kerosene.Kerosene;
+import io.lettuce.core.ScriptOutputType;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import reactor.core.publisher.Flux;
 
 public class RedisScript {
 
     private final String script;
     private final String hash;
 
-    private RedisScript(@NotNull String script, @NotNull String hash) {
+    RedisScript(@NotNull String script, @NotNull String hash) {
         this.script = script;
         this.hash = hash;
     }
 
-    public static CompletableFuture<RedisScript> of(@NotNull String script) {
-        CompletableFuture<RedisScript> future = new CompletableFuture<>();
-        Kerosene.getRedis().reactive().scriptLoad(script).subscribe(hash -> future.complete(new RedisScript(script, hash)));
-        return future;
+    public <T> Flux<T> evalCast() {
+        return this.eval().map(o -> (T) o);
     }
 
-    public <T> T evalCast() {
-        return (T) this.eval();
+    public <T> Flux<T> evalCast(@NotNull String[] keys, @NotNull String[] args) {
+        return this.eval(keys, args).map(o -> (T) o);
     }
 
-    public <T> T evalCast(@NotNull List<String> keys, @NotNull List<String> args) {
-        return (T) this.eval(keys, args);
+    public Flux<Object> eval() {
+        return this.eval(new String[0], new String[0]);
     }
 
-    public Object eval() {
-        return this.eval(new ArrayList<>(), new ArrayList<>());
+    public Flux<Object> eval(@NotNull String[] keys, @NotNull String[] args) {
+        return Kerosene.getRedis().reactive()
+                .evalsha(this.hash, ScriptOutputType.MULTI, keys, args)
+                .onErrorResume((one) ->
+                    Kerosene.getRedis().reactive()
+                            .eval(this.script, ScriptOutputType.MULTI, keys, args)
+                );
     }
-
-    public Object eval(List<String> keys, List<String> args) {
-        /*try (Jedis jedis = Redis.getResource()) {
-            try {
-                return jedis.evalsha(this.hash, keys, args);
-            } catch (JedisNoScriptException e) {
-                return jedis.eval(this.script, keys, args);
-            }
-        }*/
-        return null;
-    }
-
 }

@@ -3,8 +3,10 @@ package com.firestartermc.kerosene;
 import com.earth2me.essentials.Essentials;
 import com.firestartermc.kerosene.data.db.PlayerData;
 import com.firestartermc.kerosene.data.redis.Redis;
+import com.firestartermc.kerosene.gui.Gui;
 import com.firestartermc.kerosene.gui.GuiListener;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.firestartermc.kerosene.commands.KeroseneCommand;
@@ -21,6 +23,7 @@ import java.util.concurrent.ForkJoinPool;
  */
 public class Kerosene extends JavaPlugin {
 
+    public static final String PREFIX = ChatColor.translateAlternateColorCodes('&', "&6&lKerosene: &7");
     public static final String DEBUG_CATEGORY_GUI_INTERACT = "gui:interact";
 
     private static Kerosene KEROSENE;
@@ -59,6 +62,7 @@ public class Kerosene extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        Gui.closeAll();
         PlayerData.close();
         REDIS.shutdown();
     }

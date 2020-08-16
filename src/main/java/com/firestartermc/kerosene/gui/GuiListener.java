@@ -4,8 +4,10 @@ import com.google.common.collect.ImmutableList;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.InventoryHolder;
 import com.firestartermc.kerosene.Kerosene;
 import com.firestartermc.kerosene.gui.base.Interactable;
@@ -33,9 +35,24 @@ public class GuiListener implements Listener {
                 "&7Action: &e" + event.getAction().name()
         ));
 
-        Interactable.InteractEvent interactEvent = new Interactable.InteractEvent(gui, position, player, event.getClick(), event.getAction(), event.getSlotType());
+        boolean topInventory = event.getRawSlot() < event.getInventory().getSize();
+        boolean canceled = topInventory
+                || event.getAction() == InventoryAction.COLLECT_TO_CURSOR
+                || event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY;
+
+        Interactable.InteractEvent interactEvent = new Interactable.InteractEvent(gui, position, player, event.getClick(), event.getAction(), event.getSlotType(), canceled);
         gui.onInteract(interactEvent);
         event.setCancelled(interactEvent.isCanceled());
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onInventoryDrag(InventoryDragEvent event) {
+        InventoryHolder holder = event.getInventory().getHolder();
+        if (!(holder instanceof Gui)) {
+            return;
+        }
+
+        event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)
