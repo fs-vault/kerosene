@@ -34,7 +34,7 @@ public class Redis {
         this.pubSub.getStatefulConnection().addListener(new PubSubHandler());
     }
 
-    private StatefulRedisConnection<String, String> borrow() {
+    private @NotNull StatefulRedisConnection<String, String> borrow() {
         try {
             return pool.borrowObject();
         } catch (Exception e) {
@@ -42,27 +42,27 @@ public class Redis {
         }
     }
 
-    public RedisCommands<String, String> sync() {
+    public @NotNull RedisCommands<String, String> sync() {
         return borrow().sync();
     }
 
-    public RedisAsyncCommands<String, String> async() {
+    public @NotNull RedisAsyncCommands<String, String> async() {
         return borrow().async();
     }
 
-    public RedisReactiveCommands<String, String> reactive() {
+    public @NotNull RedisReactiveCommands<String, String> reactive() {
         return borrow().reactive();
     }
 
-    public void subscribe(String... channels) {
+    public void subscribe(@NotNull String... channels) {
         pubSub.subscribe(channels);
     }
 
-    public void unsubscribe(String... channels) {
+    public void unsubscribe(@NotNull String... channels) {
         pubSub.unsubscribe(channels);
     }
 
-    public Mono<RedisScript> loadScrip(String script) {
+    public @NotNull Mono<RedisScript> loadScript(@NotNull String script) {
         return reactive().scriptLoad(script)
                 .map(hash -> new RedisScript(script, hash));
     }
