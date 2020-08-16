@@ -13,8 +13,8 @@ public interface Drawable extends GuiElement {
 
     /**
      * Gets all the icons and there position on the gui.
-     * @param gui The {@link Gui} the icons are drawn for.
+     * @param context The {@link DrawingContext}.
      * @return A mapping between position on the {@link Gui} and the {@link ItemStack}
      */
-    Map<GuiPosition, ItemStack> draw(Gui gui);
+    Map<GuiPosition, ItemStack> draw(DrawingContext context);
 }

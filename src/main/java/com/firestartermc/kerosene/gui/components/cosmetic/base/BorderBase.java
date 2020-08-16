@@ -1,5 +1,6 @@
 package com.firestartermc.kerosene.gui.components.cosmetic.base;
 
+import com.firestartermc.kerosene.gui.base.DrawingContext;
 import org.bukkit.inventory.ItemStack;
 import com.firestartermc.kerosene.gui.Gui;
 import com.firestartermc.kerosene.gui.GuiPosition;
@@ -28,9 +29,9 @@ public abstract class BorderBase implements Drawable {
     }
 
     @Override
-    public Map<GuiPosition, ItemStack> draw(Gui gui) {
+    public Map<GuiPosition, ItemStack> draw(DrawingContext context) {
         Map<GuiPosition, ItemStack> result = new HashMap<>();
-        int rows = gui.getRows();
+        int rows = context.getGui().getRows();
 
         if (this.y > rows - 1) {
             return null; // starts outside gui (vertically) -> don't render

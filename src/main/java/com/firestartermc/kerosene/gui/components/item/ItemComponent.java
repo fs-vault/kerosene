@@ -1,5 +1,6 @@
 package com.firestartermc.kerosene.gui.components.item;
 
+import com.firestartermc.kerosene.gui.base.DrawingContext;
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.inventory.ItemStack;
 import com.firestartermc.kerosene.gui.Gui;
@@ -38,9 +39,9 @@ public class ItemComponent implements Drawable {
     }
 
     @Override
-    public Map<GuiPosition, ItemStack> draw(Gui gui) {
-        if (item == null) return ImmutableMap.of();
-        return ImmutableMap.of(position, item);
+    public Map<GuiPosition, ItemStack> draw(DrawingContext context) {
+        if (getItem() == null) return ImmutableMap.of();
+        return ImmutableMap.of(position, getItem());
     }
 
     /**

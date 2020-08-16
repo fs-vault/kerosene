@@ -1,9 +1,9 @@
 package com.firestartermc.kerosene.util.item;
 
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+
+//import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
 
 public final class ItemUtils {
 
@@ -17,7 +17,7 @@ public final class ItemUtils {
                 .build();
     }
 
-    public static @NotNull String getFriendlyName(Material material) {
-        return CraftItemStack.asNMSCopy(new ItemStack(material)).getName().getString();
-    }
+//    public static @NotNull String getFriendlyName(Material material) { // TODO wtf is this for??
+//        return CraftItemStack.asNMSCopy(new ItemStack(material)).getName().getString();
+//    }
 }

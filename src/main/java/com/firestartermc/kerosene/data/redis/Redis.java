@@ -12,6 +12,9 @@ import io.lettuce.core.support.ConnectionPoolSupport;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.jetbrains.annotations.NotNull;
+import reactor.core.publisher.Mono;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Database class which allows for easy pooled access to Redis database connections using Jedis.
@@ -57,6 +60,11 @@ public class Redis {
 
     public void unsubscribe(String... channels) {
         pubSub.unsubscribe(channels);
+    }
+
+    public Mono<RedisScript> loadScrip(String script) {
+        return reactive().scriptLoad(script)
+                .map(hash -> new RedisScript(script, hash));
     }
 
     public void shutdown() {

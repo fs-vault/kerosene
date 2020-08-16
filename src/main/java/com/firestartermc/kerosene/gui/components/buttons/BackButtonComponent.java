@@ -1,6 +1,7 @@
 package com.firestartermc.kerosene.gui.components.buttons;
 
 import com.firestartermc.kerosene.gui.components.buttons.base.ButtonBase;
+import com.firestartermc.kerosene.util.item.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
 import com.firestartermc.kerosene.gui.GuiDefaults;
 import com.firestartermc.kerosene.gui.GuiPosition;
@@ -16,7 +17,17 @@ public class BackButtonComponent extends ButtonBase {
      * @param y The vertical position.
      */
     public BackButtonComponent(int x, int y) {
-        this(new GuiPosition(x, y));
+        this(x, y, new String[0]);
+    }
+
+    /**
+     * Create a back button.
+     * @param x The horizontal position.
+     * @param y The vertical position.
+     * @param lore The lore.
+     */
+    public BackButtonComponent(int x, int y, String... lore) {
+        this(new GuiPosition(x, y), lore);
     }
 
     /**
@@ -24,8 +35,16 @@ public class BackButtonComponent extends ButtonBase {
      * @param position The position of the button.
      */
     public BackButtonComponent(GuiPosition position) {
-        this(position, null);
-        this.setItem(getBackItem());
+        this(position, new String[0]);
+    }
+
+    /**
+     * Create a back button.
+     * @param position The position of the button.
+     */
+    public BackButtonComponent(GuiPosition position, String... lore) {
+        this(position, (ItemStack) null);
+        this.setItem(getBackItem(lore));
     }
 
     /**
@@ -54,7 +73,9 @@ public class BackButtonComponent extends ButtonBase {
         }
     }
 
-    protected ItemStack getBackItem() {
-        return GuiDefaults.BACK_ITEM;
+    protected ItemStack getBackItem(String[] lore) {
+        return ItemBuilder.of(GuiDefaults.BACK_ITEM)
+                .addLore(lore)
+                .build();
     }
 }

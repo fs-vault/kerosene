@@ -18,7 +18,7 @@ import java.util.Optional;
 public class KeroseneCommand implements TabExecutor {
 
     private final Kerosene kerosene;
-    private static final String PREFIX = ChatColor.translateAlternateColorCodes('&', "&6&lKerosene: &7");
+
 
     public KeroseneCommand(@NotNull Kerosene kerosene) {
         this.kerosene = kerosene;
@@ -27,7 +27,7 @@ public class KeroseneCommand implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (args.length < 1 || !sender.hasPermission("firestarter.admin")) {
-            sender.sendMessage(PREFIX + "Firestarter utility core (version " + kerosene.getDescription().getVersion() + ").");
+            sender.sendMessage(Kerosene.PREFIX + "Firestarter utility core (version " + kerosene.getDescription().getVersion() + ").");
             return true;
         }
 
@@ -62,7 +62,7 @@ public class KeroseneCommand implements TabExecutor {
     }
 
     public void healthCheck(@NotNull CommandSender sender, @NotNull String[] args) {
-        sender.sendMessage(PREFIX + "Running system health check.");
+        sender.sendMessage(Kerosene.PREFIX + "Running system health check.");
         Kerosene.getRedis().reactive().ping().subscribe(result -> {
             sender.sendMessage(ChatColor.GRAY + "Redis ping: " + ChatColor.GOLD + result);
         });

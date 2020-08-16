@@ -1,5 +1,6 @@
 package com.firestartermc.kerosene.gui;
 
+import com.firestartermc.kerosene.gui.base.DrawingContext;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -59,9 +60,7 @@ public class Gui implements InventoryHolder, Interactable {
         guiElements.add(element);
 
         if (element instanceof Drawable) {
-            Drawable drawable = (Drawable) element;
-            drawDrawable(drawable);
-            drawableElements.add(drawable);
+            drawableElements.add((Drawable) element);
         }
 
         if (element instanceof Interactable) {
@@ -89,9 +88,7 @@ public class Gui implements InventoryHolder, Interactable {
      * Close the Gui for all viewers
      */
     public void close() {
-        Bukkit.getScheduler().runTask(Kerosene.getKerosene(), () -> {
-            this.viewers.forEach(Player::closeInventory);
-        });
+        this.viewers.forEach(Player::closeInventory);
     }
 
     /**
@@ -109,6 +106,7 @@ public class Gui implements InventoryHolder, Interactable {
                 }
 
                 this.onOpen(player);
+                this.render(player);
                 player.openInventory(this.inventory);
                 this.viewers.add(player);
             });
@@ -134,11 +132,10 @@ public class Gui implements InventoryHolder, Interactable {
      * Trigger an update for the current Gui.
      */
     public void update() {
-        for (Drawable drawable : drawableElements) {
-            drawDrawable(drawable);
-        }
-
-        this.viewers.forEach(Player::updateInventory);
+        this.viewers.forEach(player -> {
+            this.render(player);
+            player.updateInventory();
+        });
     }
 
     /**
@@ -151,16 +148,21 @@ public class Gui implements InventoryHolder, Interactable {
         }
 
         this.parent.open(this.getViewers());
-        this.close();
     }
 
-    private void drawDrawable(Drawable drawable) {
-        Map<GuiPosition, ItemStack> items = drawable.draw(this);
-        if (items == null) return;
+    protected void render(Player player) {
+        getInventory().clear();
 
-        items.forEach((vector2i, stack) -> {
-            this.inventory.setItem(vector2i.getX() + 9 * vector2i.getY(), stack);
-        });
+        for (Drawable drawable : this.drawableElements) {
+            DrawingContext context = new DrawingContext(this, player);
+            Map<GuiPosition, ItemStack> items = drawable.draw(context);
+            if (items == null) return;
+
+            items.forEach((vector2i, stack) -> {
+                this.inventory.setItem(vector2i.getX() + 9 * vector2i.getY(), stack);
+            });
+        }
+
     }
 
     void removeViewer(Player player) {
