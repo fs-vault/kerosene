@@ -6,9 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
-import com.firestartermc.kerosene.data.Cooldown;
+import com.firestartermc.kerosene.data.type.Cooldown;
 import com.firestartermc.kerosene.util.internal.Debug;
-import com.firestartermc.kerosene.data.Toggle;
+import com.firestartermc.kerosene.data.type.Toggle;
 
 /**
  * Listener for cleaning up player data when a player leaves the server.

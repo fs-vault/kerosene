@@ -1,4 +1,4 @@
-package com.firestartermc.kerosene.data;
+package com.firestartermc.kerosene.data.type;
 
 import com.firestartermc.kerosene.data.cache.PlayerCache;
 import com.firestartermc.kerosene.data.db.PlayerData;

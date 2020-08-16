@@ -5,7 +5,8 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * An event fired when a Pub/Sub message is received.
+ * Fired when a Pub/Sub message is received on subscribed channels.
+ * This event is fired asynchronously.
  */
 public class PubSubMessageEvent extends Event {
     
