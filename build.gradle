@@ -31,16 +31,14 @@ dependencies {
     implementation 'com.mojang:authlib:1.5.21'
     compileOnly 'org.jetbrains:annotations:20.0.0'
     compile "io.papermc:paperlib:1.0.5"
-    compile "com.zaxxer:HikariCP:3.4.2"
+    compile "com.zaxxer:HikariCP:3.4.5"
     compile "io.lettuce:lettuce-core:5.3.3.RELEASE"
-    compile "org.apache.commons:commons-pool2:2.8.1"
 }
 
 shadowJar {
     relocate 'io.papermc.lib', 'com.firestartermc.kerosene.lib.paperlib'
     relocate 'com.zaxxer.hikari', 'com.firestartermc.kerosene.lib.hikari'
     relocate 'io.lettuce.core', 'com.firestartermc.kerosene.lib.lettuce'
-    relocate 'org.apache.commons.pool2', 'com.firestartermc.kerosene.lib.pool2'
     exclude 'io.netty', 'com.firestartermc.kerosene.lib.netty'
 }
 
