@@ -1,11 +1,17 @@
 plugins {
     id 'java'
+    id 'java-library'
     id 'com.github.johnrengelman.shadow' version '6.0.0'
     id 'maven'
 }
 
 group 'com.firestartermc'
 version '5.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 repositories {
     mavenLocal()
@@ -26,20 +32,54 @@ repositories {
 
 dependencies {
     implementation 'com.destroystokyo.paper:paper-api:1.16.1-R0.1-SNAPSHOT'
-    implementation 'net.ess3:EssentialsX:2.17.2'
-    implementation 'com.github.milkbowl:vaultapi:1.7'
-    implementation 'com.mojang:authlib:1.5.21'
-    compileOnly 'org.jetbrains:annotations:20.0.0'
+    api 'net.ess3:EssentialsX:2.17.2'
+    api 'com.github.milkbowl:vaultapi:1.7'
+    api 'com.mojang:authlib:1.5.21'
+    api 'com.github.MyzelYam:PremiumVanishAPI:2.0.3'
+
     compile "io.papermc:paperlib:1.0.5"
     compile "com.zaxxer:HikariCP:3.4.5"
     compile "io.lettuce:lettuce-core:5.3.3.RELEASE"
+
+    compileOnly 'org.jetbrains:annotations:20.0.0'
 }
 
 shadowJar {
-    relocate 'io.papermc.lib', 'com.firestartermc.kerosene.lib.paperlib'
-    relocate 'com.zaxxer.hikari', 'com.firestartermc.kerosene.lib.hikari'
-    relocate 'io.lettuce.core', 'com.firestartermc.kerosene.lib.lettuce'
-    exclude 'io.netty', 'com.firestartermc.kerosene.lib.netty'
+//    relocate 'io.papermc.lib', 'com.firestartermc.kerosene.lib.paperlib'
+//    relocate 'com.zaxxer.hikari', 'com.firestartermc.kerosene.lib.hikari'
+//    relocate 'io.lettuce.core', 'com.firestartermc.kerosene.lib.lettuce'
+    exclude 'co/aikar/**'
+    exclude 'com/destroystokyo/paper/**'
+    exclude 'com/earth2me/**'
+    exclude 'com/google/**'
+    exclude 'com/mojang/**'
+    exclude 'de/myzelyam/api/**'
+    exclude 'io/netty/**'
+    exclude 'javax/**'
+    exclude 'junit/**'
+    exclude 'mojang-translations/**'
+    exclude 'net/ess3/**'
+    exclude 'net/md_5/**'
+    exclude 'net/milkbowl/**'
+    exclude 'org/apache/**'
+    exclude 'org/bukkit/**'
+    exclude 'org/hamcrest/**'
+    exclude 'org/json/**'
+    exclude 'org/junit/**'
+    exclude 'org/objectweb/**'
+    exclude 'org/slf4j/**'
+    exclude 'org/spigotmc/**'
+    exclude 'org/yaml/**'
+    exclude '*.txt'
+    exclude '*.properties'
+    exclude 'items.json'
+    exclude 'items.csv'
+    exclude 'custom_items.yml'
+    exclude 'kits.yml'
+    exclude 'tpr.yml'
+    exclude 'worth.yml'
 }
 
-assemble.dependsOn shadowJar
+artifacts {
+    archives shadowJar
+}

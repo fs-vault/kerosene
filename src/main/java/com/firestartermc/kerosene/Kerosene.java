@@ -5,6 +5,7 @@ import com.firestartermc.kerosene.data.db.PlayerData;
 import com.firestartermc.kerosene.data.redis.Redis;
 import com.firestartermc.kerosene.gui.Gui;
 import com.firestartermc.kerosene.gui.GuiListener;
+import com.firestartermc.kerosene.listener.player.VanishListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
@@ -29,7 +30,7 @@ public class Kerosene extends JavaPlugin {
     private static Kerosene KEROSENE;
     private static Essentials ESSENTIALS;
     private static ForkJoinPool POOL;
-    private static Redis REDIS;
+    private Redis redis;
 
     @Override
     public void onEnable() {
@@ -39,11 +40,12 @@ public class Kerosene extends JavaPlugin {
 
         KEROSENE = this;
         POOL = new ForkJoinPool(getConfig().getInt("pool.threads"));
-        REDIS = new Redis(getConfig().getString("redis.uri", ""));
+        redis = new Redis(getConfig().getString("redis.uri", ""));
 
         Arrays.asList(
                 new GuiListener(),
-                new QuitListener()
+                new QuitListener(),
+                new VanishListener(redis)
         ).forEach(listener -> pluginManager.registerEvents(listener, this));
 
         registerHooks();
@@ -64,7 +66,7 @@ public class Kerosene extends JavaPlugin {
     public void onDisable() {
         Gui.closeAll();
         PlayerData.close();
-        REDIS.shutdown();
+        redis.shutdown();
     }
 
     public static Kerosene getKerosene() {
@@ -76,7 +78,7 @@ public class Kerosene extends JavaPlugin {
     }
 
     public static Redis getRedis() {
-        return REDIS;
+        return getKerosene().redis;
     }
 
     public static Essentials getEssentials() {
