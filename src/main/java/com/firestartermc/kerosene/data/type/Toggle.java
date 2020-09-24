@@ -30,7 +30,9 @@ public final class Toggle {
      * @return The current state of the toggle.
      */
     public static boolean get(UUID uuid, String key) {
-        return CACHE.get(uuid, key, () -> {
+        // TODO
+        return false;
+        /*return CACHE.get(uuid, key, () -> {
             try (Connection connection = PlayerData.getConnection()) {
                 try (PreparedStatement statement = connection.prepareStatement("SELECT IFNULL((SELECT `state` FROM `toggles` WHERE `key` = ? AND `uuid` = ? LIMIT 1), FALSE);")) {
                     statement.setString(1, key);
@@ -44,7 +46,7 @@ public final class Toggle {
                 e.printStackTrace();
             }
             return false;
-        }).orElse(false);
+        });*/
     }
 
     /**

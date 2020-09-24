@@ -18,7 +18,7 @@ public final class PlayerUtil {
      * @param player The player to attempt to give the item.
      * @param itemStack The item to give.
      */
-    public static void giveOrDropItem(Player player, ItemStack itemStack) {
+    public static void giveOrDropItem(Player player, ItemStack itemStack) { // TODO check if main thread before making a task to avoid unecessary scheduler tasks
         Bukkit.getScheduler().runTask(Kerosene.getKerosene(), task -> {
             player.getInventory().addItem(itemStack).forEach(((integer, overflowStack) -> {
                 player.getWorld().dropItemNaturally(player.getLocation(), overflowStack);

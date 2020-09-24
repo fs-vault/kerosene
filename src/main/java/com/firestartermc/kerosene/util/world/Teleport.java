@@ -52,21 +52,4 @@ public final class Teleport {
         return future;
     }
 
-    /**
-     * Teleports a player asynchronously with Essentials which ensures /back compatibility.
-     *
-     * @param player   The player to teleport.
-     * @param location The location to teleport the player.
-     * @return A future of the teleport result.
-     */
-    public static CompletableFuture<Boolean> teleportPlayer(@NotNull Player player, @NotNull Location location) {
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        Kerosene.getPool().submit(() -> Kerosene.getEssentials().getUser(player).getAsyncTeleport().now(
-                location,
-                false,
-                PlayerTeleportEvent.TeleportCause.PLUGIN,
-                future
-        ));
-        return future;
-    }
 }

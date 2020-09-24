@@ -5,6 +5,8 @@ import com.firestartermc.kerosene.data.db.PlayerData;
 import com.firestartermc.kerosene.data.redis.Redis;
 import com.firestartermc.kerosene.gui.Gui;
 import com.firestartermc.kerosene.gui.GuiListener;
+import com.firestartermc.kerosene.user.User;
+import com.firestartermc.kerosene.user.UserManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
@@ -13,6 +15,8 @@ import com.firestartermc.kerosene.commands.KeroseneCommand;
 import com.firestartermc.kerosene.listener.player.QuitListener;
 import com.firestartermc.kerosene.util.internal.Debug;
 import com.firestartermc.kerosene.util.Economy;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.concurrent.ForkJoinPool;
@@ -27,9 +31,16 @@ public class Kerosene extends JavaPlugin {
     public static final String DEBUG_CATEGORY_GUI_INTERACT = "gui:interact";
 
     private static Kerosene KEROSENE;
-    private static Essentials ESSENTIALS;
     private static ForkJoinPool POOL;
     private static Redis REDIS;
+
+    private final UserManager userManager;
+
+    private Essentials essentials;
+
+    public Kerosene() {
+        this.userManager = new UserManager(this);
+    }
 
     @Override
     public void onEnable() {
@@ -39,9 +50,10 @@ public class Kerosene extends JavaPlugin {
 
         KEROSENE = this;
         POOL = new ForkJoinPool(getConfig().getInt("pool.threads"));
-        REDIS = new Redis(getConfig().getString("redis.uri", ""));
+        // REDIS = new Redis(getConfig().getString("redis.uri", ""));
 
         Arrays.asList(
+                userManager,
                 new GuiListener(),
                 new QuitListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, this));
@@ -49,13 +61,13 @@ public class Kerosene extends JavaPlugin {
         registerHooks();
 
 
-        /*if (!PlayerData.connect(getConfig().getString("database.url"),
+        if (!PlayerData.connect(getConfig().getString("database.url"),
                 getConfig().getString("database.username"),
                 getConfig().getString("database.password"))) {
 
             Bukkit.shutdown();
             throw new RuntimeException("Failed to connect to database.");
-        }*/
+        }
 
         Debug.registerCategory(DEBUG_CATEGORY_GUI_INTERACT);
     }
@@ -79,13 +91,20 @@ public class Kerosene extends JavaPlugin {
         return REDIS;
     }
 
-    public static Essentials getEssentials() {
-        return ESSENTIALS;
+
+    @NotNull
+    public UserManager getUserManager() {
+        return userManager;
+    }
+
+    @Nullable
+    public Essentials getEssentials() {
+        return essentials;
     }
 
     private void registerHooks() {
         if (getServer().getPluginManager().isPluginEnabled("Essentials")) {
-            ESSENTIALS = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+            essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
             getLogger().info("Hooked into Essentials.");
         }
 

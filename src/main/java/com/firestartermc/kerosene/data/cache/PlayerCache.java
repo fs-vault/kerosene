@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 /**
  * Key-value pair data cache for persistent data linked to a players.
@@ -20,7 +22,7 @@ public class PlayerCache<K, V> {
      * Create an instance of the cache.
      */
     public PlayerCache() {
-        data = new HashMap<>();
+        this.data = new HashMap<>();
     }
 
     /**
@@ -37,7 +39,7 @@ public class PlayerCache<K, V> {
             return Optional.empty();
         }
 
-        return Optional.of(playerData.get(key));
+        return Optional.ofNullable(playerData.get(key));
     }
 
     /**
@@ -49,7 +51,7 @@ public class PlayerCache<K, V> {
      * @param callable The callable to call when the key is not present in the cache.
      * @return value An Optional of the stored or callback value.
      */
-    public Optional<V> get(UUID uuid, K key, Callable<? extends V> callable) {
+    public CompletableFuture<V> get(UUID uuid, K key, Callable<? extends V> callable) {
         Map<K, V> playerData = data.get(uuid);
 
         if (playerData == null) {
@@ -58,18 +60,18 @@ public class PlayerCache<K, V> {
         }
 
         if (playerData.containsKey(key)) {
-            return Optional.of(playerData.get(key));
+            return CompletableFuture.completedFuture(playerData.get(key));
         }
 
-        try {
-            V value = callable.call();
-            put(uuid, key, value);
-            return Optional.of(value);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return Optional.empty();
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                V value = callable.call();
+                put(uuid, key, value);
+                return value;
+            } catch (Exception e) {
+                throw new CompletionException(e);
+            }
+        });
     }
 
     /**
@@ -92,7 +94,7 @@ public class PlayerCache<K, V> {
      * @param uuid The UUID of the player.
      */
     public void invalidateAll(UUID uuid) {
-        this.data.remove(uuid);
+        data.remove(uuid);
     }
 
     /**
@@ -106,8 +108,8 @@ public class PlayerCache<K, V> {
         Map<K, V> playerData = data.get(uuid);
 
         if (playerData == null) {
-            this.data.put(uuid, new HashMap<>());
-            playerData = this.data.get(uuid);
+            data.put(uuid, new HashMap<>());
+            playerData = data.get(uuid);
         }
 
         playerData.put(key, value);

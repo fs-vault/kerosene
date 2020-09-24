@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '6.0.0'
     id 'maven'
+    id 'maven-publish'
 }
 
 group 'com.firestartermc'
@@ -25,21 +26,36 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.destroystokyo.paper:paper-api:1.16.1-R0.1-SNAPSHOT'
-    implementation 'net.ess3:EssentialsX:2.17.2'
-    implementation 'com.github.milkbowl:vaultapi:1.7'
-    implementation 'com.mojang:authlib:1.5.21'
-    compileOnly 'org.jetbrains:annotations:20.0.0'
+    compileOnly 'com.destroystokyo.paper:paper-api:1.16.1-R0.1-SNAPSHOT'
+    compileOnly 'net.ess3:EssentialsX:2.17.2'
+    compileOnly 'com.github.milkbowl:vaultapi:1.7'
+    compileOnly 'com.mojang:authlib:1.5.21'
+    compile 'org.jetbrains:annotations:20.0.0'
+    compile 'it.unimi.dsi:fastutil:8.4.2'
     compile "io.papermc:paperlib:1.0.5"
     compile "com.zaxxer:HikariCP:3.4.5"
     compile "io.lettuce:lettuce-core:5.3.3.RELEASE"
+}
+
+compileJava {
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
 }
 
 shadowJar {
     relocate 'io.papermc.lib', 'com.firestartermc.kerosene.lib.paperlib'
     relocate 'com.zaxxer.hikari', 'com.firestartermc.kerosene.lib.hikari'
     relocate 'io.lettuce.core', 'com.firestartermc.kerosene.lib.lettuce'
+    relocate 'it.unimi.dsi.fastutil', 'com.firestartermc.kerosene.lib.fastutil'
     exclude 'io.netty', 'com.firestartermc.kerosene.lib.netty'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
 }
 
 assemble.dependsOn shadowJar
