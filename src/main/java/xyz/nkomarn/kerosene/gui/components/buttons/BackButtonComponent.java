@@ -50,6 +50,7 @@ public class BackButtonComponent extends ButtonBase {
     @Override
     public void onInteract(InteractEvent event) {
         if (event.getPosition().equals(this.getPosition())) {
+            GuiDefaults.playSelectSound(event.getPlayer());
             event.getGui().navigateToParent();
         }
     }
