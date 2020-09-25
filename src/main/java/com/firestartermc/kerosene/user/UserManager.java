@@ -30,12 +30,12 @@ public class UserManager implements Listener {
         return users.get(player.getUniqueId());
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         users.put(event.getPlayer().getUniqueId(), new User(kerosene, event.getPlayer()));
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerQuit(PlayerQuitEvent event) {
         users.remove(event.getPlayer().getUniqueId());
     }

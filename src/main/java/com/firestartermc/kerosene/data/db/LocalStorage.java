@@ -3,6 +3,7 @@ package com.firestartermc.kerosene.data.db;
 import org.jetbrains.annotations.NotNull;
 import com.firestartermc.kerosene.Kerosene;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.Connection;
@@ -15,14 +16,15 @@ import java.sql.SQLException;
  */
 public class LocalStorage {
 
-    private final String name, location;
+    private final String name;
+    private final String location;
 
-    public LocalStorage(@NotNull String name) {
+    public LocalStorage(File directory, String name) {
         this.name = name;
-        this.location = String.format("%s/dbs/%s.db", Kerosene.getKerosene().getDataFolder().toString(), name);
+        this.location = String.format("%s/dbs/%s.db", directory.toString(), name);
 
         try {
-            Files.createDirectories(Kerosene.getKerosene().getDataFolder().toPath().resolve("dbs"));
+            Files.createDirectories(directory.toPath().resolve("dbs"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,6 +41,7 @@ public class LocalStorage {
      *
      * @return The name of this local storage.
      */
+    @NotNull
     public String getName() {
         return name;
     }
@@ -49,7 +52,9 @@ public class LocalStorage {
      * @return A new connection to the local database.
      * @throws SQLException Exception that may occur while creating a new connection.
      */
+    @NotNull
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:sqlite:" + location);
     }
+
 }

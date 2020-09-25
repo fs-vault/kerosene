@@ -37,4 +37,5 @@ public class PubSubMessageEvent extends Event {
     public static @NotNull HandlerList getHandlerList() {
         return handlers;
     }
+
 }

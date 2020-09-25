@@ -1,5 +1,6 @@
 package com.firestartermc.kerosene.util.player;
 
+import com.firestartermc.kerosene.util.ThreadUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -18,12 +19,15 @@ public final class PlayerUtil {
      * @param player The player to attempt to give the item.
      * @param itemStack The item to give.
      */
-    public static void giveOrDropItem(Player player, ItemStack itemStack) { // TODO check if main thread before making a task to avoid unecessary scheduler tasks
-        Bukkit.getScheduler().runTask(Kerosene.getKerosene(), task -> {
-            player.getInventory().addItem(itemStack).forEach(((integer, overflowStack) -> {
-                player.getWorld().dropItemNaturally(player.getLocation(), overflowStack);
-            }));
-        });
+    public static void giveOrDropItem(Player player, ItemStack itemStack) {
+        if (!ThreadUtil.isMainThread()) {
+            Bukkit.getScheduler().runTask(Kerosene.getKerosene(), () -> giveOrDropItem(player, itemStack));
+            return;
+        }
+
+        player.getInventory().addItem(itemStack).forEach(((integer, overflowStack) -> {
+            player.getWorld().dropItemNaturally(player.getLocation(), overflowStack);
+        }));
     }
 
     /**

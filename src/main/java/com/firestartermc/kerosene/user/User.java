@@ -39,7 +39,11 @@ public class User extends OfflineUser {
         return cooldownCache;
     }
 
-    @NotNull
+    public double getBalance() {
+        return kerosene.getEconomy().getBalance(player);
+    }
+
+    @NotNull // TODO move somewhere?
     public CompletableFuture<Boolean> teleport(Location location) {
         if (kerosene.getEssentials() == null) {
             return PaperLib.teleportAsync(player, location, PlayerTeleportEvent.TeleportCause.PLUGIN);
