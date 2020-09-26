@@ -25,7 +25,7 @@ public final class CooldownCache {
 
     @NotNull
     public CompletableFuture<Long> getCooldown(String key) {
-        return cache.get(player.getUniqueId(), key, () -> {
+        return cache.get(key, () -> {
             try {
                 Connection connection = PlayerData.getConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT IFNULL((SELECT `cooldown` FROM `cooldowns` WHERE `key` = ? AND `uuid` = ? LIMIT 1), 0);");
@@ -41,14 +41,13 @@ public final class CooldownCache {
                     return result.getLong(1);
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw new CompletionException(e);
             }
-
-            return System.currentTimeMillis();
         });
     }
 
     public CompletableFuture<Void> setCooldown(String key, long value) {
+        cache.put(key, value);
         return CompletableFuture.supplyAsync(() -> {
             try {
                 Connection connection = PlayerData.getConnection();

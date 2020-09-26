@@ -16,7 +16,7 @@ import java.util.concurrent.CompletionException;
  */
 public class PlayerCache<K, V> {
 
-    private final Map<UUID, Map<K, V>> data;
+    private final Map<K, V> data;
 
     /**
      * Create an instance of the cache.
@@ -28,45 +28,30 @@ public class PlayerCache<K, V> {
     /**
      * Returns an Optional of the value of a key stored in the cache.
      *
-     * @param uuid The UUID of the player for which to return the value.
-     * @param key  The key of the value to look up.
+     * @param key The key of the value to look up.
      * @return An Optional of the value stored.
      */
-    public Optional<V> getCached(UUID uuid, K key) {
-        Map<K, V> playerData = data.get(uuid);
-
-        if (playerData == null) {
-            return Optional.empty();
-        }
-
-        return Optional.ofNullable(playerData.get(key));
+    public Optional<V> getCached(K key) {
+        return Optional.ofNullable(data.get(key));
     }
 
     /**
      * Returns an Optional of the value of a key stored in the cache.
      * If not cached, a callback will be called to fetch the value.
      *
-     * @param uuid     The UUID of the player.
      * @param key      The key of the value to look up.
      * @param callable The callable to call when the key is not present in the cache.
      * @return value An Optional of the stored or callback value.
      */
-    public CompletableFuture<V> get(UUID uuid, K key, Callable<? extends V> callable) {
-        Map<K, V> playerData = data.get(uuid);
-
-        if (playerData == null) {
-            data.put(uuid, new HashMap<>());
-            playerData = data.get(uuid);
-        }
-
-        if (playerData.containsKey(key)) {
-            return CompletableFuture.completedFuture(playerData.get(key));
+    public CompletableFuture<V> get(K key, Callable<? extends V> callable) {
+        if (data.containsKey(key)) {
+            return CompletableFuture.completedFuture(data.get(key));
         }
 
         return CompletableFuture.supplyAsync(() -> {
             try {
                 V value = callable.call();
-                put(uuid, key, value);
+                put(key, value);
                 return value;
             } catch (Exception e) {
                 throw new CompletionException(e);
@@ -77,42 +62,27 @@ public class PlayerCache<K, V> {
     /**
      * Invalidate a specific key for a player.
      *
-     * @param uuid The UUID of the player.
-     * @param key  The key to invalidate.
+     * @param key The key to invalidate.
      */
-    public void invalidate(UUID uuid, K key) {
-        Map<K, V> playerData = data.get(uuid);
-
-        if (playerData != null) {
-            playerData.remove(key);
-        }
+    public void invalidate(K key) {
+        data.remove(key);
     }
 
     /**
      * Invalidate all keys linked to a player.
-     *
-     * @param uuid The UUID of the player.
      */
-    public void invalidateAll(UUID uuid) {
-        data.remove(uuid);
+    public void invalidateAll() {
+        data.clear();
     }
 
     /**
      * Cache a specific key-value pair.
      *
-     * @param uuid  The UUID of the player.
      * @param key   The key of the value to cache.
      * @param value The value to cache.
      */
-    public void put(UUID uuid, K key, V value) {
-        Map<K, V> playerData = data.get(uuid);
-
-        if (playerData == null) {
-            data.put(uuid, new HashMap<>());
-            playerData = data.get(uuid);
-        }
-
-        playerData.put(key, value);
+    public void put(K key, V value) {
+        data.put(key, value);
     }
 
 }
