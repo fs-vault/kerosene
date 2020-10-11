@@ -7,6 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,12 +23,14 @@ public class UserManager implements Listener {
         this.users = new HashMap<>();
     }
 
-    public User getUser(UUID uuid) {
-        return users.get(uuid);
+    @Nullable
+    public User getUser(Player player) {
+        return getUser(player.getUniqueId());
     }
 
-    public User getUser(Player player) {
-        return users.get(player.getUniqueId());
+    @Nullable
+    public User getUser(UUID uuid) {
+        return users.get(uuid);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

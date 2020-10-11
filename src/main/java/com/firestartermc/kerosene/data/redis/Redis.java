@@ -12,18 +12,17 @@ import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Mono;
 
 /**
- * Database class which allows for easy pooled access to Redis database connections using Jedis.
+ * Database class which allows for easy pooled access to Redis database connections.
  */
 public class Redis {
 
-    private final RedisClient client;
     private final StatefulRedisConnection<String, String> connection;
     private final RedisPubSubAsyncCommands<String, String> pubSub;
 
     public Redis(@NotNull String uri) {
         RedisURI redisUri = RedisURI.create(uri);
 
-        this.client = RedisClient.create(redisUri);
+        RedisClient client = RedisClient.create(redisUri);
         this.connection = client.connect();
         this.pubSub = client.connectPubSub().async();
         this.pubSub.getStatefulConnection().addListener(new PubSubHandler());

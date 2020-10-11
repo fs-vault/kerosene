@@ -2,11 +2,11 @@ package com.firestartermc.kerosene;
 
 import com.earth2me.essentials.Essentials;
 import com.firestartermc.kerosene.data.db.LocalStorage;
-import com.firestartermc.kerosene.data.db.PlayerData;
+import com.firestartermc.kerosene.data.db.RemoteStorage;
 import com.firestartermc.kerosene.data.redis.Redis;
+import com.firestartermc.kerosene.economy.EconomyWrapper;
 import com.firestartermc.kerosene.gui.Gui;
 import com.firestartermc.kerosene.gui.GuiListener;
-import com.firestartermc.kerosene.user.User;
 import com.firestartermc.kerosene.user.UserManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ForkJoinPool;
 
 /**
@@ -39,7 +40,8 @@ public class Kerosene extends JavaPlugin {
     private final ForkJoinPool threadPool;
     private final UserManager userManager;
 
-    private Economy economy;
+    private RemoteStorage playerData; // TODO use in constructor
+    private EconomyWrapper economy;
     private Essentials essentials;
 
     public Kerosene() {
@@ -66,42 +68,50 @@ public class Kerosene extends JavaPlugin {
         registerHooks();
 
 
-        if (!PlayerData.connect(getConfig().getString("database.url"),
+        playerData = new RemoteStorage(getConfig().getString("database.url"),
                 getConfig().getString("database.username"),
-                getConfig().getString("database.password"))) {
-
-            Bukkit.shutdown();
-            throw new RuntimeException("Failed to connect to database.");
-        }
+                getConfig().getString("database.password")).connect();
 
         Debug.registerCategory(DEBUG_CATEGORY_GUI_INTERACT);
     }
 
     @Override
     public void onDisable() {
-        Gui.closeAll();
-        PlayerData.close();
+        playerData.close();
+
         REDIS.shutdown();
+
+        Gui.closeAll();
     }
 
-    @NotNull
     public static Kerosene getKerosene() {
         return kerosene;
     }
 
-    @NotNull
     public ForkJoinPool getPool() {
         return threadPool;
     }
 
-    @NotNull
+    public void callAsync(Callable<Void> callable) {
+        getPool().submit(() -> {
+            try {
+                callable.call();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     public UserManager getUserManager() {
         return userManager;
     }
 
-    @NotNull
     public LocalStorage getLocalStorage(String name) {
         return new LocalStorage(getDataFolder(), name);
+    }
+
+    public RemoteStorage getPlayerData() {
+        return playerData;
     }
 
     @Nullable
@@ -110,7 +120,7 @@ public class Kerosene extends JavaPlugin {
     }
 
     @Nullable
-    public Economy getEconomy() {
+    public EconomyWrapper getEconomy() {
         return economy;
     }
 
@@ -133,7 +143,7 @@ public class Kerosene extends JavaPlugin {
                 return;
             }
 
-            economy = provider.getProvider();
+            economy = new EconomyWrapper(provider.getProvider());
         }
     }
 }

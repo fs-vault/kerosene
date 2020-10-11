@@ -1,65 +1,83 @@
 package com.firestartermc.kerosene.data.cache;
 
-import com.firestartermc.kerosene.data.db.PlayerData;
+import com.firestartermc.kerosene.Kerosene;
+import com.firestartermc.kerosene.data.db.RemoteStorage;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
 public final class ToggleCache {
 
-    private final Player player;
+    private final Kerosene kerosene;
+    private final UUID uuid;
     private final PlayerCache<String, Boolean> cache;
 
-    private ToggleCache(Player player) {
-        this.player = player;
+    private static final String SELECT_SQL = "SELECT IFNULL((SELECT `state` FROM `toggles` WHERE `key` = ? AND `uuid` = ? LIMIT 1), FALSE);";
+    private static final String UPDATE_SQL = "INSERT INTO `toggles` (`uuid`, `key`, `state`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `state` = ?;";
+
+    public ToggleCache(Kerosene kerosene, UUID uuid) {
+        this.kerosene = kerosene;
+        this.uuid = uuid;
         this.cache = new PlayerCache<>();
-    }
 
-    public CompletableFuture<Boolean> getState(String key) {
-        return cache.get(key, () -> {
-            try {
-                Connection connection = PlayerData.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT IFNULL((SELECT `state` FROM `toggles` WHERE `key` = ? AND `uuid` = ? LIMIT 1), FALSE);");
-                statement.setString(1, key);
-                statement.setString(2, player.getUniqueId().toString());
-                ResultSet result = statement.executeQuery();
-
-                try (connection; statement; result) {
-                    if (!result.next()) {
-                        return false;
-                    }
-
-                    return result.getBoolean(1);
-                }
-            } catch (SQLException e) {
-                throw new CompletionException(e);
-            }
+        kerosene.callAsync(() -> {
+            cache();
+            return null;
         });
     }
 
-    public CompletableFuture<Void> setState(String key, boolean state) {
-        cache.put(key, state);
-        return CompletableFuture.supplyAsync(() -> {
-           try {
-               Connection connection = PlayerData.getConnection();
-               PreparedStatement statement = connection.prepareStatement("INSERT INTO `toggles` (`uuid`, `key`, `state`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `state` = ?;");
-               statement.setString(1, player.getUniqueId().toString());
-               statement.setString(2, key);
-               statement.setBoolean(3, state);
-               statement.setBoolean(4, state);
+    private void cache() throws SQLException {
+        var connection = kerosene.getPlayerData().getConnection();
+        var statement = connection.prepareStatement("SELECT `key`, `state` FROM `toggles` WHERE `uuid` = ?;");
+        var result = statement.executeQuery();
 
-               try (connection; statement) {
-                   statement.executeUpdate();
-                   return null;
-               }
-           } catch (SQLException e) {
-               throw new CompletionException(e);
-           }
+        try (connection; statement; result) {
+            while (result.next()) {
+                cache.put(result.getString(1), result.getBoolean(2));
+            }
+        }
+    }
+
+    public boolean getState(String key) {
+        return cache.get(key, () -> {
+            var connection = kerosene.getPlayerData().getConnection();
+            var statement = connection.prepareStatement(SELECT_SQL);
+            statement.setString(1, key);
+            statement.setString(2, uuid.toString());
+            var result = statement.executeQuery();
+
+            try (connection; statement; result) {
+                if (!result.next()) {
+                    return false;
+                }
+
+                return result.getBoolean(1);
+            }
+        }).orElse(false);
+    }
+
+    public void setState(String key, boolean state) {
+        cache.put(key, state);
+        kerosene.callAsync(() -> {
+            var connection = kerosene.getPlayerData().getConnection();
+            var statement = connection.prepareStatement(UPDATE_SQL);
+            statement.setString(1, uuid.toString());
+            statement.setString(2, key);
+            statement.setBoolean(3, state);
+            statement.setBoolean(4, state);
+
+            try (connection; statement) {
+                statement.executeUpdate();
+            }
+
+            return null;
         });
     }
 }

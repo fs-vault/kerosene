@@ -43,20 +43,20 @@ public class PlayerCache<K, V> {
      * @param callable The callable to call when the key is not present in the cache.
      * @return value An Optional of the stored or callback value.
      */
-    public CompletableFuture<V> get(K key, Callable<? extends V> callable) {
+    public Optional<V> get(K key, Callable<? extends V> callable) {
         if (data.containsKey(key)) {
-            return CompletableFuture.completedFuture(data.get(key));
+            return Optional.of(data.get(key));
         }
 
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                V value = callable.call();
-                put(key, value);
-                return value;
-            } catch (Exception e) {
-                throw new CompletionException(e);
-            }
-        });
+        try {
+            V value = callable.call();
+            put(key, value);
+            return Optional.of(value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
     }
 
     /**
