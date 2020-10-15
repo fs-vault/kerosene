@@ -22,6 +22,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ForkJoinPool;
 
 /**
@@ -92,12 +94,13 @@ public class Kerosene extends JavaPlugin {
         return threadPool;
     }
 
-    public void callAsync(Callable<Void> callable) {
-        getPool().submit(() -> {
+    public CompletableFuture<Void> callAsync(Callable<Void> callable) {
+        return CompletableFuture.supplyAsync(() -> {
             try {
                 callable.call();
+                return null;
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new CompletionException(e);
             }
         });
     }
