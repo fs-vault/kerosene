@@ -1,7 +1,7 @@
 package com.firestartermc.kerosene.gui.components.buttons;
 
 import com.firestartermc.kerosene.gui.components.buttons.base.ButtonBase;
-import com.firestartermc.kerosene.util.message.Message;
+import com.firestartermc.kerosene.util.message.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -103,7 +103,7 @@ public class ToggleButtonComponent extends ButtonBase {
      * @param stateChangeCallback The state change callback.
      */
     public ToggleButtonComponent(GuiPosition position, String title, String description, Material enabledMaterial, Material disabledMaterial, StateProvider stateProvider, StateChangeCallback stateChangeCallback) {
-        this(position, title, Message.splitString(description, 25), enabledMaterial, disabledMaterial, stateProvider, stateChangeCallback);
+        this(position, title, MessageUtil.splitString(description, 25), enabledMaterial, disabledMaterial, stateProvider, stateChangeCallback);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.firestartermc.kerosene.gui.predefined;
 
-import com.firestartermc.kerosene.util.message.Message;
+import com.firestartermc.kerosene.util.message.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -40,7 +40,7 @@ public class ConfirmationGui extends Gui {
      * @param cancelCallback The callback on canceled.
      */
     public ConfirmationGui(Gui parent, String details, Interactable confirmCallback, Interactable cancelCallback) {
-        this(parent, Message.splitString(details, 25), confirmCallback, cancelCallback);
+        this(parent, MessageUtil.splitString(details, 25), confirmCallback, cancelCallback);
     }
     /**
      * Create a new {@link ConfirmationGui}
@@ -146,7 +146,7 @@ public class ConfirmationGui extends Gui {
         }
 
         public Builder details(String details) {
-            this.detailLines = Message.splitString(details, 25).stream()
+            this.detailLines = MessageUtil.splitString(details, 25).stream()
                     .map(l -> "&f" + l)
                     .collect(Collectors.toList());
             return this;

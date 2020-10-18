@@ -19,8 +19,8 @@ public final class AdvancementUtil {
     }
 
     public static boolean isComplete(Player player, String namespace, String name) {
-        NamespacedKey key = new NamespacedKey(namespace, name);
-        Advancement advancement = Bukkit.getAdvancement(key);
+        var key = new NamespacedKey(namespace, name);
+        var advancement = Bukkit.getAdvancement(key);
 
         if (advancement == null) {
             return false;
@@ -38,15 +38,14 @@ public final class AdvancementUtil {
             return;
         }
 
-        NamespacedKey key = new NamespacedKey(namespace, name);
-        Advancement advancement = Bukkit.getAdvancement(key);
+        var key = new NamespacedKey(namespace, name);
+        var advancement = Bukkit.getAdvancement(key);
 
         if (advancement == null) {
             return;
         }
 
-        AdvancementProgress progress = player.getAdvancementProgress(advancement);
+        var progress = player.getAdvancementProgress(advancement);
         progress.getRemainingCriteria().forEach(progress::awardCriteria);
     }
-
 }

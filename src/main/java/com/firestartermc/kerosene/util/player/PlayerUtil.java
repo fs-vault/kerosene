@@ -1,12 +1,16 @@
 package com.firestartermc.kerosene.util.player;
 
-import com.firestartermc.kerosene.util.ThreadUtil;
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import com.firestartermc.kerosene.Kerosene;
+
+import java.util.concurrent.CompletableFuture;
 
 public final class PlayerUtil {
 
@@ -20,7 +24,7 @@ public final class PlayerUtil {
      * @param itemStack The item to give.
      */
     public static void giveOrDropItem(Player player, ItemStack itemStack) {
-        if (!ThreadUtil.isMainThread()) {
+        if (!Bukkit.getServer().isPrimaryThread()) {
             Bukkit.getScheduler().runTask(Kerosene.getKerosene(), () -> giveOrDropItem(player, itemStack));
             return;
         }
@@ -45,6 +49,17 @@ public final class PlayerUtil {
         } else {
             player.setVelocity(vector);
         }
+    }
+
+    @NotNull
+    public static CompletableFuture<Boolean> teleport(@NotNull Player player, @NotNull Location location) {
+        if (Kerosene.getKerosene().getEssentials() == null) {
+            return PaperLib.teleportAsync(player, location, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        }
+
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        Kerosene.getKerosene().getEssentials().getUser(player).getAsyncTeleport().now(location, false, PlayerTeleportEvent.TeleportCause.PLUGIN, future);
+        return future;
     }
 
 }

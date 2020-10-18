@@ -1,43 +1,20 @@
 package com.firestartermc.kerosene.util.message;
 
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.BaseComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import com.firestartermc.kerosene.util.internal.Reflection;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.regex.Matcher;
+import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-public final class Message {
+public final class MessageUtil {
 
-    private Message() {
-    }
-
-    public static final String ERROR_PREFIX = ChatColor.RED + "" + ChatColor.BOLD + "Error: " + ChatColor.GRAY;
-    public static final String INSUFFICIENT_PERMISSIONS = ERROR_PREFIX + "Insufficient permissions";
-
-    public static void sendActionbar(@NotNull Player player, @NotNull BaseComponent[] message) {
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, message);
-    }
-
-    public static void broadcastActionbar(@NotNull BaseComponent[] message) {
-        Bukkit.getOnlinePlayers().forEach(player -> sendActionbar(player, message));
-    }
-
-    public static void sendChat(@NotNull Player player, @NotNull BaseComponent[] message) {
-        player.spigot().sendMessage(message);
-    }
-
-    public static void broadcastChat(@NotNull BaseComponent[] message) {
-        Bukkit.getOnlinePlayers().forEach(player -> sendChat(player, message));
+    private MessageUtil() {
     }
 
     /**
@@ -47,6 +24,7 @@ public final class Message {
      * @return json Serialized JSON.
      * @see <a href="https://www.spigotmc.org/threads/tut-item-tooltips-with-the-chatcomponent-api.65964/">Source.</a>
      */
+    @NotNull
     public static String getJsonFromItemStack(ItemStack itemStack) {
         // ItemStack methods to get a net.minecraft.server.ItemStack object for serialization
         Class<?> craftItemStackClazz = Reflection.getOBCClass("inventory.CraftItemStack");
@@ -75,21 +53,17 @@ public final class Message {
     }
 
     /**
-     * Split text on at specific size.
+     * Splits a given String at a given length, effectively
+     * splitting it into multiple, separate lines.
      *
      * @param text     Text to split.
-     * @param lineSize Size to split by.
+     * @param lineSize Maximum line size.
      * @return Array of the split parts.
      */
     public static List<String> splitString(String text, int lineSize) {
-        List<String> res = new ArrayList<>();
-
-        Pattern p = Pattern.compile("\\b.{1," + (lineSize - 1) + "}\\b\\W?");
-        Matcher m = p.matcher(text);
-
-        while (m.find()) {
-            res.add(m.group());
-        }
-        return res;
+        var matcher = Pattern.compile("\\b.{1," + (lineSize - 1) + "}\\b\\W?").matcher(text);
+        return matcher.results()
+                .map(MatchResult::group)
+                .collect(Collectors.toList());
     }
 }
