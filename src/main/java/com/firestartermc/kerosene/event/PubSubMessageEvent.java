@@ -1,17 +1,21 @@
 package com.firestartermc.kerosene.event;
 
+import com.firestartermc.kerosene.data.redis.Redis;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Fired when a Pub/Sub message is received on subscribed channels.
- * This event is fired asynchronously.
+ * This event is called when a {@link Redis} Pub/Sub message is received on
+ * one of the registered Pub/Sub channels. It is called immediately as the
+ * message is received.
+ *
+ * This event allows for easy Pub/Sub message handling via Bukkit API
+ * listener classes.
  */
 public class PubSubMessageEvent extends Event {
-    
-    private static final HandlerList handlers = new HandlerList();
 
+    private static final HandlerList handlers = new HandlerList();
     private final String channel;
     private final String message;
 
@@ -21,21 +25,24 @@ public class PubSubMessageEvent extends Event {
         this.message = message;
     }
 
-    public @NotNull String getChannel() {
+    @NotNull
+    public String getChannel() {
         return this.channel;
     }
 
-    public @NotNull String getMessage() {
+    @NotNull
+    public String getMessage() {
         return this.message;
     }
 
+    @NotNull
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
-    public static @NotNull HandlerList getHandlerList() {
+    @NotNull
+    public static HandlerList getHandlerList() {
         return handlers;
     }
-
 }

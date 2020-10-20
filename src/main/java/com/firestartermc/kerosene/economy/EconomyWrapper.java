@@ -1,16 +1,19 @@
 package com.firestartermc.kerosene.economy;
 
+import com.firestartermc.kerosene.data.redis.Redis;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.List;
 
 /**
- * A quick and dirty Vault economy wrapper intended to allow
- * external dependents to interface with the current server's
- * economy without having to externally import the Vault API.
+ * A quick and dirty Vault API {@link Economy} wrapper intended to allow external
+ * dependents to interface with the current server's economy without having to
+ * externally import or depend on the Vault API.
  */
+@ThreadSafe
 public class EconomyWrapper implements Economy {
 
     private final Economy economy;
@@ -233,5 +236,4 @@ public class EconomyWrapper implements Economy {
     public boolean createPlayerAccount(OfflinePlayer player, String worldName) {
         return economy.createPlayerAccount(player, worldName);
     }
-
 }

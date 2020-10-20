@@ -20,23 +20,26 @@ public class Redis {
     private final RedisPubSubAsyncCommands<String, String> pubSub;
 
     public Redis(@NotNull String uri) {
-        RedisURI redisUri = RedisURI.create(uri);
+        var redisUri = RedisURI.create(uri);
+        var client = RedisClient.create(redisUri);
 
-        RedisClient client = RedisClient.create(redisUri);
         this.connection = client.connect();
         this.pubSub = client.connectPubSub().async();
         this.pubSub.getStatefulConnection().addListener(new PubSubHandler());
     }
 
-    public @NotNull RedisCommands<String, String> sync() {
+    @NotNull
+    public RedisCommands<String, String> sync() {
         return connection.sync();
     }
 
-    public @NotNull RedisAsyncCommands<String, String> async() {
+    @NotNull
+    public RedisAsyncCommands<String, String> async() {
         return connection.async();
     }
 
-    public @NotNull RedisReactiveCommands<String, String> reactive() {
+    @NotNull
+    public RedisReactiveCommands<String, String> reactive() {
         return connection.reactive();
     }
 
@@ -48,16 +51,15 @@ public class Redis {
         pubSub.unsubscribe(channels);
     }
 
-    public @NotNull Mono<RedisScript> loadScript(@NotNull String script) {
+    @NotNull
+    public Mono<RedisScript> loadScript(@NotNull String script) {
         return reactive().scriptLoad(script)
                 .map(hash -> new RedisScript(script, hash));
     }
 
-    public void shutdown() {
-        if (connection == null) {
-            return;
+    public void close() {
+        if (connection != null) {
+            connection.close();
         }
-
-        connection.close();
     }
 }

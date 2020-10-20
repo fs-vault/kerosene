@@ -1,8 +1,8 @@
 name: "Kerosene"
-description: "Firestarter's library of little bits and bobs that keep the server ticking."
+description: "Library of core server components and APIs."
 main: "com.firestartermc.kerosene.Kerosene"
-author: "TechToolbox (nkomarn)"
-website: "https://firestartermc.com/opensource"
+author: "Firestarter Minecraft Servers"
+website: "https://firestartermc.com"
 version: "5.0"
 api-version: "1.16"
 

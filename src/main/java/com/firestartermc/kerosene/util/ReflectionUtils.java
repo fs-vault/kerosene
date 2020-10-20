@@ -1,4 +1,4 @@
-package com.firestartermc.kerosene.util.internal;
+package com.firestartermc.kerosene.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Source: https://gist.github.com/sainttx/34fdd8fa7657024414ba
  */
-public class Reflection {
+public class ReflectionUtils {
     /*
      * The server version string to location NMS & OBC classes
      */

@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Miscellaneous block utility methods.
  * <p>
- * This class contains methods for interacting with blocks. It also
+ * This class provides methods for interacting with blocks. It also
  * provides easy-to-use, thread-safe utilities for safety checking
  * block locations, intended to be used for teleportation checks.
  *

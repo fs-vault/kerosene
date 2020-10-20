@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Miscellaneous {@link Player} utility methods.
  * <p>
- * This class contains methods for common actions that are ran on
+ * This class provides methods for common actions that are ran on
  * players. It also provides easy-to-use, thread-safe utilities
  * that can be safely used in the {@link BukkitScheduler} or executors.
  *

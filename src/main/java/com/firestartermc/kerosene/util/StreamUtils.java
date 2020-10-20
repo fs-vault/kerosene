@@ -4,9 +4,9 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public final class StreamUtil {
+public final class StreamUtils {
 
-    private StreamUtil() {
+    private StreamUtils() {
     }
 
     public static String streamToString(InputStream is) {

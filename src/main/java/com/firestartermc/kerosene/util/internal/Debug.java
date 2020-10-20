@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 
 public final class Debug {
 
+    public static final String DEBUG_CATEGORY_GUI_INTERACT = "gui:interact";
     public static final String PREFIX = ChatColor.DARK_PURPLE + ChatColor.BOLD.toString() + "Debug: " + ChatColor.GRAY;
     public static final String HEADER = "&7>>>>> &5&lDebug: &e%s";
     public static final String FOOTER = "&7<<<<<";

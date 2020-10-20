@@ -42,5 +42,4 @@ public class UserManager implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         users.remove(event.getPlayer().getUniqueId());
     }
-
 }

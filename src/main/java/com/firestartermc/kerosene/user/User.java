@@ -4,6 +4,7 @@ import com.firestartermc.kerosene.Kerosene;
 import com.firestartermc.kerosene.data.cache.CooldownCache;
 import com.firestartermc.kerosene.data.cache.ToggleCache;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class User {
 
@@ -17,14 +18,17 @@ public class User {
         this.toggleCache = new ToggleCache(kerosene, player.getUniqueId());
     }
 
+    @NotNull
     public Player getPlayer() {
         return player;
     }
 
+    @NotNull
     public CooldownCache getCooldowns() {
         return cooldownCache;
     }
 
+    @NotNull
     public ToggleCache getToggles() {
         return toggleCache;
     }

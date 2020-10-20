@@ -1,7 +1,7 @@
-package com.firestartermc.kerosene.commands;
+package com.firestartermc.kerosene.command;
 
 import com.firestartermc.kerosene.Kerosene;
-import com.firestartermc.kerosene.data.redis.Redis;
+import com.firestartermc.kerosene.util.DefaultMessages;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -19,7 +19,6 @@ public class KeroseneCommand implements TabExecutor {
 
     private final Kerosene kerosene;
 
-
     public KeroseneCommand(@NotNull Kerosene kerosene) {
         this.kerosene = kerosene;
     }
@@ -27,7 +26,7 @@ public class KeroseneCommand implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (args.length < 1 || !sender.hasPermission("firestarter.admin")) {
-            sender.sendMessage(Kerosene.PREFIX + "Firestarter utility core (version " + kerosene.getDescription().getVersion() + ").");
+            sender.sendMessage(DefaultMessages.KEROSENE_PREFIX + "Firestarter utility core (version " + kerosene.getDescription().getVersion() + ").");
             return true;
         }
 
@@ -62,8 +61,8 @@ public class KeroseneCommand implements TabExecutor {
     }
 
     public void healthCheck(@NotNull CommandSender sender, @NotNull String[] args) {
-        sender.sendMessage(Kerosene.PREFIX + "Running system health check.");
-        Kerosene.getRedis().reactive().ping().subscribe(result -> {
+        sender.sendMessage(DefaultMessages.KEROSENE_PREFIX + "Running system health check.");
+        Kerosene.getKerosene().getRedis().reactive().ping().subscribe(result -> {
             sender.sendMessage(ChatColor.GRAY + "Redis ping: " + ChatColor.GOLD + result);
         });
     }

@@ -28,7 +28,7 @@ public class GuiListener implements Listener {
         int slot = event.getRawSlot();
         GuiPosition position = new GuiPosition(slot % 9, slot / 9);
 
-        Debug.sendLines(Kerosene.DEBUG_CATEGORY_GUI_INTERACT, event.getWhoClicked(), () -> ImmutableList.of(
+        Debug.sendLines(Debug.DEBUG_CATEGORY_GUI_INTERACT, event.getWhoClicked(), () -> ImmutableList.of(
                 "&7Gui: '&e" + gui.getTitle() + "'",
                 String.format("&7Slot: &e%s &7Position: &e(%s, %s) &7Type: &e%s", slot, position.getX(), position.getY(), event.getSlotType().name()),
                 "&7Click: &e" + event.getClick().name(),

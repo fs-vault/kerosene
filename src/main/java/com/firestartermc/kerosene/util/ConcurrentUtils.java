@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -12,13 +13,14 @@ import java.util.concurrent.CompletionException;
 /**
  * Miscellaneous concurrency utility methods.
  * <p>
- * This class contains methods for writing concurrent and thread
+ * This class provides methods for writing concurrent and thread
  * safe code. It also provides easy-to-use, thread-safe utilities
  * for interacting with Minecraft NMS and the Bukkit API.
  *
  * @author Firestarter Minecraft Servers
  * @since 5.0
  */
+@ThreadSafe
 public final class ConcurrentUtils {
 
     private ConcurrentUtils() {
