@@ -1,6 +1,7 @@
 package com.firestartermc.kerosene.util;
 
 import io.papermc.lib.PaperLib;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +27,7 @@ public final class BlockUtils {
     /**
      * Runs safety checks on a given floor block, ensuring that there
      * is enough space for a player to safely exist in the block's
-     * location. The floor block, as well as two blocks above, are
+     * location. The floor block, as well as one block above, is
      * checked to make sure they are breathable. Otherwise, the check
      * returns a failure.
      * <p>
@@ -38,11 +39,8 @@ public final class BlockUtils {
      * @since 5.0
      */
     public static boolean checkSafety(@NotNull Block floor) {
-        var head = floor.getLocation().add(0, 2, 0).getBlock();
         var legs = floor.getLocation().add(0, 1, 0).getBlock();
-        return floor.getType().isSolid()
-                && head.getType().isSolid()
-                && legs.getType().isSolid();
+        return floor.getType().isSolid() && legs.getType() == Material.AIR;
     }
 
     /**
