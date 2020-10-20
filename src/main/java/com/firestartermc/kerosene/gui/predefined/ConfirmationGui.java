@@ -10,7 +10,7 @@ import com.firestartermc.kerosene.gui.base.Interactable;
 import com.firestartermc.kerosene.gui.components.buttons.ButtonComponent;
 import com.firestartermc.kerosene.gui.components.cosmetic.FillComponent;
 import com.firestartermc.kerosene.gui.components.item.ItemComponent;
-import com.firestartermc.kerosene.util.item.ItemBuilder;
+import com.firestartermc.kerosene.item.ItemBuilder;
 
 import java.util.Arrays;
 import java.util.List;

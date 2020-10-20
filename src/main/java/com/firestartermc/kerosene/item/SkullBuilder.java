@@ -1,4 +1,4 @@
-package com.firestartermc.kerosene.util.item;
+package com.firestartermc.kerosene.item;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;

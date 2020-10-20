@@ -7,7 +7,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import com.firestartermc.kerosene.gui.GuiDefaults;
 import com.firestartermc.kerosene.gui.GuiPosition;
-import com.firestartermc.kerosene.util.item.ItemBuilder;
+import com.firestartermc.kerosene.item.ItemBuilder;
 
 import java.util.List;
 

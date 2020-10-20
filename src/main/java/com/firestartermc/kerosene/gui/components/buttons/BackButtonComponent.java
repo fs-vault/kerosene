@@ -1,7 +1,7 @@
 package com.firestartermc.kerosene.gui.components.buttons;
 
 import com.firestartermc.kerosene.gui.components.buttons.base.ButtonBase;
-import com.firestartermc.kerosene.util.item.ItemBuilder;
+import com.firestartermc.kerosene.item.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
 import com.firestartermc.kerosene.gui.GuiDefaults;
 import com.firestartermc.kerosene.gui.GuiPosition;

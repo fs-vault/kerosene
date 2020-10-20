@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import com.firestartermc.kerosene.gui.GuiDefaults;
 import com.firestartermc.kerosene.gui.GuiPosition;
 import com.firestartermc.kerosene.gui.components.cosmetic.base.BorderBase;
-import com.firestartermc.kerosene.util.item.ItemUtils;
+import com.firestartermc.kerosene.item.ItemUtils;
 
 /**
  * A solid border

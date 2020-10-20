@@ -4,8 +4,8 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import com.firestartermc.kerosene.util.item.ItemBuilder;
-import com.firestartermc.kerosene.util.item.ItemUtils;
+import com.firestartermc.kerosene.item.ItemBuilder;
+import com.firestartermc.kerosene.item.ItemUtils;
 
 /**
  * Default gui settings that are used across different GUI's.

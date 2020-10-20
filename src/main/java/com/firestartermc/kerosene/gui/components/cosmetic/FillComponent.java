@@ -7,7 +7,7 @@ import com.firestartermc.kerosene.gui.Gui;
 import com.firestartermc.kerosene.gui.GuiDefaults;
 import com.firestartermc.kerosene.gui.base.Drawable;
 import com.firestartermc.kerosene.gui.GuiPosition;
-import com.firestartermc.kerosene.util.item.ItemUtils;
+import com.firestartermc.kerosene.item.ItemUtils;
 
 import java.util.HashMap;
 import java.util.Map;

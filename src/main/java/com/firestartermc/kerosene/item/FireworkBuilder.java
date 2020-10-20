@@ -1,4 +1,4 @@
-package com.firestartermc.kerosene.util.item;
+package com.firestartermc.kerosene.item;
 
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;

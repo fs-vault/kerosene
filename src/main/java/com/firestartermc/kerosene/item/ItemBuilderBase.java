@@ -1,4 +1,4 @@
-package com.firestartermc.kerosene.util.item;
+package com.firestartermc.kerosene.item;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
