@@ -2,6 +2,7 @@ package com.firestartermc.kerosene.data.cache;
 
 import com.firestartermc.kerosene.Kerosene;
 import com.firestartermc.kerosene.data.db.RemoteStorage;
+import com.firestartermc.kerosene.util.ConcurrentUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +28,7 @@ public final class ToggleCache {
         this.uuid = uuid;
         this.cache = new PlayerCache<>();
 
-        kerosene.callAsync(() -> {
+        ConcurrentUtils.callAsync(() -> {
             cache();
             return null;
         });
@@ -65,7 +66,7 @@ public final class ToggleCache {
 
     public void setState(String key, boolean state) {
         cache.put(key, state);
-        kerosene.callAsync(() -> {
+        ConcurrentUtils.callAsync(() -> {
             var connection = kerosene.getPlayerData().getConnection();
             var statement = connection.prepareStatement(UPDATE_SQL);
             statement.setString(1, uuid.toString());
@@ -79,5 +80,9 @@ public final class ToggleCache {
 
             return null;
         });
+    }
+
+    public void toggle(String key) {
+        setState(key, !getState(key));
     }
 }

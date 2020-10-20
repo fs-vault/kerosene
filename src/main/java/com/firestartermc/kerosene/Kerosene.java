@@ -39,7 +39,6 @@ public class Kerosene extends JavaPlugin {
 
     private static Redis REDIS;
 
-    private final ForkJoinPool threadPool;
     private final UserManager userManager;
 
     private RemoteStorage playerData; // TODO use in constructor
@@ -47,8 +46,7 @@ public class Kerosene extends JavaPlugin {
     private Essentials essentials;
 
     public Kerosene() {
-        kerosene = this;
-        this.threadPool = new ForkJoinPool(3);
+        this.kerosene = this;
         this.userManager = new UserManager(this);
     }
 
@@ -88,21 +86,6 @@ public class Kerosene extends JavaPlugin {
 
     public static Kerosene getKerosene() {
         return kerosene;
-    }
-
-    public ForkJoinPool getPool() {
-        return threadPool;
-    }
-
-    public CompletableFuture<Void> callAsync(Callable<Void> callable) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                callable.call();
-                return null;
-            } catch (Exception e) {
-                throw new CompletionException(e);
-            }
-        });
     }
 
     public UserManager getUserManager() {

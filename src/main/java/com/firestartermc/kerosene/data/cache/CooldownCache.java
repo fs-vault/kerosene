@@ -1,6 +1,7 @@
 package com.firestartermc.kerosene.data.cache;
 
 import com.firestartermc.kerosene.Kerosene;
+import com.firestartermc.kerosene.util.ConcurrentUtils;
 
 import java.sql.SQLException;
 import java.util.UUID;
@@ -20,7 +21,7 @@ public final class CooldownCache {
         this.uuid = uuid;
         this.cache = new PlayerCache<>();
 
-        kerosene.callAsync(() -> {
+        ConcurrentUtils.callAsync(() -> {
             cache();
             return null;
         });
@@ -58,7 +59,7 @@ public final class CooldownCache {
 
     public void setCooldown(String key, long value) {
         cache.put(key, value);
-        kerosene.callAsync(() -> {
+        ConcurrentUtils.callAsync(() -> {
             var connection = kerosene.getPlayerData().getConnection();
             var statement = connection.prepareStatement(UPDATE_SQL);
             statement.setString(1, uuid.toString());

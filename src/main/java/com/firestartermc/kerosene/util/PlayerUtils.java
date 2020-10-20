@@ -24,7 +24,6 @@ import java.util.concurrent.CompletableFuture;
  * @see Player
  * @since 4.0
  */
-
 @ThreadSafe
 public final class PlayerUtils {
 
@@ -91,7 +90,7 @@ public final class PlayerUtils {
      *
      * @param player   the player to teleport
      * @param location the location to teleport to
-     * @return future that completes on telepotation success
+     * @return future which completes on teleportation success
      * @see PaperLib
      * @since 5.0
      */
