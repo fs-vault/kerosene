@@ -1,11 +1,11 @@
 package com.firestartermc.kerosene.util;
 
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 
 import javax.annotation.concurrent.ThreadSafe;
 
 /**
- * Standard action response messages.
+ * Standard action response messages and colors.
  * <p>
  * This class provides static messages that can be used as standard responses
  * for common actions or results. It also provides common strings for error
@@ -16,11 +16,12 @@ import javax.annotation.concurrent.ThreadSafe;
  * @since 5.0
  */
 @ThreadSafe
-public class DefaultMessages {
+public class Constants {
 
-    public static final String KEROSENE_PREFIX = MessageUtils.formatColors("&6&lKerosene: &7", false);
-    public static final String ERROR_PREFIX = MessageUtils.formatColors("&c&lError: &7", false);
+    public static final ChatColor OFF_WHITE = ChatColor.of("#dedede");
+
+    public static final String ERROR_PREFIX = MessageUtils.formatColors("&c&lERROR: ", false) + OFF_WHITE;
     public static final String NO_PERMISSION = ERROR_PREFIX + "Insufficient permissions";
-    public static final String FAILED_TO_LOAD_DATA = ChatColor.RED + "Failed to read user data. Notify an admin.";
-    public static final String NON_PLAYER = ChatColor.RED + "This function can only be used by a player.";
+    public static final String FAILED_TO_LOAD_DATA = "Failed to read user data. Notify an admin.";
+    public static final String NON_PLAYER = "This function can only be used by a player.";
 }

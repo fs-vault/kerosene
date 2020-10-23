@@ -56,5 +56,4 @@ public class LocalStorage {
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:sqlite:" + location);
     }
-
 }

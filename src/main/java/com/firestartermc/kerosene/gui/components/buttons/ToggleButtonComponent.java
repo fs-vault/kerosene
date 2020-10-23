@@ -165,7 +165,7 @@ public class ToggleButtonComponent extends ButtonBase {
      * @param state The state to set the item for.
      */
     public void setItem(boolean state) {
-        ItemBuilder builder = new ItemBuilder(state ? enabledMaterial : disabledMaterial)
+        ItemBuilder builder = ItemBuilder.of(state ? enabledMaterial : disabledMaterial)
                 .name(title)
                 .lore(description)
                 .addAllItemFlags()

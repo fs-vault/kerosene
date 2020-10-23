@@ -50,7 +50,7 @@ public final class MessageUtils {
         if (rgb) {
             var matcher = RGB_PATTERN.matcher(text);
             while (matcher.find()) {
-                var color = ChatColor.of(matcher.group());
+                var color = ChatColor.of(matcher.group().substring(1));
                 var pre = text.substring(0, matcher.start());
                 var post = text.substring(matcher.end());
                 text = pre + color + post;

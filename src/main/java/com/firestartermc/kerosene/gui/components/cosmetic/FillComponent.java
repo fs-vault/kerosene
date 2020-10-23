@@ -7,7 +7,7 @@ import com.firestartermc.kerosene.gui.Gui;
 import com.firestartermc.kerosene.gui.GuiDefaults;
 import com.firestartermc.kerosene.gui.base.Drawable;
 import com.firestartermc.kerosene.gui.GuiPosition;
-import com.firestartermc.kerosene.item.ItemUtils;
+import com.firestartermc.kerosene.util.ItemUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ public class FillComponent implements Drawable {
      * @param fillMaterial The material to make the fill item out of.
      */
     public FillComponent(Material fillMaterial) {
-        this(ItemUtils.makeFillItem(fillMaterial));
+        this(ItemUtils.createFillItem(fillMaterial));
     }
 
     /**
@@ -53,7 +53,7 @@ public class FillComponent implements Drawable {
      * @param fillMaterial The material to use as a fill item.
      */
     public FillComponent(int x, int y, int width, int height, Material fillMaterial) {
-        this(x, y, width, height, ItemUtils.makeFillItem(fillMaterial));
+        this(x, y, width, height, ItemUtils.createFillItem(fillMaterial));
     }
 
     /**

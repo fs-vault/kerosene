@@ -1,5 +1,6 @@
 package com.firestartermc.kerosene.item;
 
+import com.firestartermc.kerosene.util.MessageUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -12,32 +13,58 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-/**
- * Base utility class intended to allow fast building of items.
- */
-public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
-    public final ItemStack item;
 
-    public ItemBuilderBase(Material material) {
+/**
+ * A Builder class for Bukkit {@link ItemStack}s. This base builder
+ * class provides basic ItemStack manipulation methods. Other item-
+ * specific builders extend this base to add extra methods.
+ * <p>
+ * A new builder can be created using the {@link ItemBuilder#of(Material)}
+ * method, or an existing ItemStack can be converted into a builder
+ * using {@link ItemBuilder#of(ItemStack)}.
+ * <p>
+ * ItemBuilders greatly accelerate development by speeding up creation
+ * and manipulation of items.
+ *
+ * @author Firestarter Minecraft Servers
+ * @see ItemStack
+ * @since 3.3
+ */
+public abstract class ItemBuilderBase<T extends ItemBuilderBase<T>> {
+
+    protected final ItemStack item;
+
+    protected ItemBuilderBase(Material material) {
         this(material, 1);
     }
 
-    public ItemBuilderBase(Material material, int amount) {
+    protected ItemBuilderBase(Material material, int amount) {
         this(new ItemStack(material, amount));
     }
 
-    public ItemBuilderBase(ItemStack item) {
+    protected ItemBuilderBase(ItemStack item) {
         this.item = item;
     }
 
     /**
+     * Get the ItemBuilderBase. This Can be used to convert between different item builders.
+     *
+     * @return Current ItemBuilderBase
+     */
+    public ItemBuilderBase<?> base() {
+        return this;
+    }
+
+    /**
      * Change the material of the ItemStack.
+     *
      * @param material The new Material of the ItemStack
      * @return This instance
      */
@@ -48,6 +75,7 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Change the amount of the ItemStack.
+     *
      * @param amount The new amount of the ItemStack
      * @return This instance
      */
@@ -58,18 +86,20 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Set the display name of the ItemStack.
+     *
      * @param displayName The new name of the ItemStack
      * @return This instance
      */
     public T name(String displayName) {
-        ItemMeta meta = this.item.getItemMeta();
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
+        var meta = item.getItemMeta();
+        meta.setDisplayName(MessageUtils.formatColors(displayName, true));
         this.item.setItemMeta(meta);
         return (T) this;
     }
 
     /**
      * Change the lore of the ItemStack.
+     *
      * @param lore The new lore of the ItemStack
      * @return This instance
      */
@@ -79,6 +109,7 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Change the lore of the ItemStack.
+     *
      * @param lore The new lore of the ItemStack
      * @return This instance
      */
@@ -92,6 +123,7 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Add lore to the ItemStack.
+     *
      * @param lore The lore to add.
      * @return This instance
      */
@@ -101,6 +133,7 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Add lore to the ItemStack.
+     *
      * @param lore The lore to add.
      * @return This instance
      */
@@ -120,6 +153,7 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Removes a line of lore from the ItemStack.
+     *
      * @param line The line to remove.
      * @return This instance
      */
@@ -139,6 +173,7 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Set the damage of the ItemStack
+     *
      * @param damage The new damage of the ItemStack
      * @return This instance
      */
@@ -151,8 +186,9 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Add an enchantment to the ItemStack.
+     *
      * @param enchantment The enchantment type to add
-     * @param level The level of the enchantment
+     * @param level       The level of the enchantment
      * @return This instance
      */
     public T enchant(Enchantment enchantment, int level) {
@@ -162,8 +198,9 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Add an unsafe enchantment to the ItemStack.
+     *
      * @param enchantment The enchantment type to add
-     * @param level The level of the enchantment
+     * @param level       The level of the enchantment
      * @return This instance
      */
     public T enchantUnsafe(Enchantment enchantment, int level) {
@@ -174,8 +211,9 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
     /**
      * Add an stored enchantment to the ItemStack.
      * Should only be used for enchanted books.
+     *
      * @param enchantment The enchantment to add
-     * @param level The level of the enchantment to add.
+     * @param level       The level of the enchantment to add.
      * @return This instance
      */
     public T storeEnchantment(Enchantment enchantment, int level) {
@@ -189,6 +227,7 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Removes an enchantment from the ItemStack.
+     *
      * @param enchantment The enchantment type to remove
      * @return This instance
      */
@@ -199,6 +238,7 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Add all ItemFlags's to the ItemStack.
+     *
      * @return This instance
      */
     public T addAllItemFlags() {
@@ -207,6 +247,7 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Add ItemFlag's to the ItemStack.
+     *
      * @param flags The flags to add
      * @return This instance
      */
@@ -217,8 +258,9 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Add persistent data to the ItemStack.
-     * @param key The NamespacedKey to persist the data under
-     * @param type The type of the data to persist
+     *
+     * @param key   The NamespacedKey to persist the data under
+     * @param type  The type of the data to persist
      * @param value The data to persist
      * @return This instance
      */
@@ -231,9 +273,10 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Add an attribute modifier to the ItemStack.
+     *
      * @param attribute The attribute type to add
-     * @param name The name for the modifier
-     * @param amount The amount for the modifier
+     * @param name      The name for the modifier
+     * @param amount    The amount for the modifier
      * @param operation The operator to use when applying the modifier
      * @return This instance
      */
@@ -246,10 +289,11 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Add an attribute modifier to the ItemStack.
+     *
      * @param attribute The attribute type to add
-     * @param uuid The unique id for the modifier
-     * @param name The name for the modifier
-     * @param amount The amount for the modifier
+     * @param uuid      The unique id for the modifier
+     * @param name      The name for the modifier
+     * @param amount    The amount for the modifier
      * @param operation The operator to use when applying the modifier
      * @return This instance
      */
@@ -262,6 +306,7 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Set customer model data
+     *
      * @param integer Customer model data
      * @return This instance
      */
@@ -274,6 +319,7 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Make the ItemStack unbreakable.
+     *
      * @return This instance
      */
     public T unbreakable() {
@@ -285,26 +331,17 @@ public abstract class ItemBuilderBase<T extends  ItemBuilderBase<T>> {
 
     /**
      * Build the ItemStack.
+     *
      * @return The build ItemStack
      */
     public ItemStack build() {
         return this.item;
     }
 
-    /**
-     * Get the ItemBuilderBase. This Can be used to convert between different item builders.
-     * @return Current ItemBuilderBase
-     */
-    public ItemBuilderBase base() {
-        return this;
-    }
-
-    private List<String> translateLore(List<String> lore) {
-        if(lore == null || lore.size() == 0) {
-            return new ArrayList<>();
-        }
+    @NotNull
+    private List<String> translateLore(@NotNull List<String> lore) {
         return lore.stream()
-                .map(line -> ChatColor.translateAlternateColorCodes('&', line))
+                .map(line -> MessageUtils.formatColors(line, true))
                 .collect(Collectors.toList());
     }
 }

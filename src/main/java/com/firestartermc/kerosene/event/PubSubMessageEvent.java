@@ -12,6 +12,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * This event allows for easy Pub/Sub message handling via Bukkit API
  * listener classes.
+ *
+ * @author Firestarter Minecraft Servers
+ * @see Redis
+ * @since 4.0
  */
 public class PubSubMessageEvent extends Event {
 

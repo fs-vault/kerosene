@@ -12,7 +12,7 @@ public class ItemBuilder extends ItemBuilderBase<ItemBuilder> {
      * Single item
      * @param material The material of the ItemStack
      */
-    public ItemBuilder(Material material) {
+    protected ItemBuilder(Material material) {
         super(material);
     }
 
@@ -21,7 +21,7 @@ public class ItemBuilder extends ItemBuilderBase<ItemBuilder> {
      * @param material The material of the ItemStack
      * @param amount The amount of the ItemStack
      */
-    public ItemBuilder(Material material, int amount) {
+    protected ItemBuilder(Material material, int amount) {
         super(material, amount);
     }
 
@@ -29,7 +29,7 @@ public class ItemBuilder extends ItemBuilderBase<ItemBuilder> {
      * Starting ItemStack
      * @param item The starting ItemStack
      */
-    public ItemBuilder(ItemStack item) {
+    protected ItemBuilder(ItemStack item) {
         super(item);
     }
 
@@ -41,4 +41,7 @@ public class ItemBuilder extends ItemBuilderBase<ItemBuilder> {
         return new ItemBuilder(item.clone());
     }
 
+    public static ItemBuilder of(Material material) {
+        return new ItemBuilder(new ItemStack(material));
+    }
 }

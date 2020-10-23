@@ -85,7 +85,7 @@ public class ConfirmationGui extends Gui {
      * @return Details item.
      */
     protected ItemStack getDetailsItem(List<String> detailsLines) {
-        return new ItemBuilder(Material.BOOK)
+        return ItemBuilder.of(Material.BOOK)
                 .name(detailsLines.get(0))
                 .addLore(detailsLines.subList(1, detailsLines.size()))
                 .build();

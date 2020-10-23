@@ -51,20 +51,21 @@ public final class PlayerUtils {
     }
 
     /**
-     * Pushes a given player away from their current location by adding velocity
-     * in the opposite direction of their location. This effectively launches the
+     * Pushes a given player away from the given {@code location} by adding velocity
+     * in the opposite direction of the;
+     * location. This effectively launches the
      * player into the air. The distance the player is launched can be manipulated with
      * the {@code velocityMultiplier} parameter. Additionally, extra y-axis velocity
      * can be added to the player by modifying the {@code heightMultiplier} parameter.
      *
      * @param player             the player to apply velocity to
+     * @param location           the location to push the player away from
      * @param velocityMultiplier push-back velocity multiplier
      * @param heightMultiplier   y-axis velocity amplification
      * @since 4.0
      */
-    public static void pushAway(@NotNull Player player, double velocityMultiplier, int heightMultiplier) {
-        var locationVector = player.getLocation().toVector();
-        var velocityVector = locationVector.normalize().multiply(velocityMultiplier).setY(heightMultiplier);
+    public static void pushAway(@NotNull Player player, @NotNull Location location, double velocityMultiplier, double heightMultiplier) {
+        var velocityVector = location.toVector().normalize().multiply(velocityMultiplier).setY(heightMultiplier);
         ConcurrentUtils.ensureMain(() -> {
             if (player.isInsideVehicle()) {
                 player.getVehicle().setVelocity(velocityVector);

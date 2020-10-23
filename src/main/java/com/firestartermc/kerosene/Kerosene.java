@@ -86,10 +86,12 @@ public class Kerosene extends JavaPlugin {
         }
     }
 
+    @NotNull
     public static Kerosene getKerosene() {
         return kerosene;
     }
 
+    @NotNull
     public UserManager getUserManager() {
         return userManager;
     }
@@ -99,14 +101,14 @@ public class Kerosene extends JavaPlugin {
         return playerData;
     }
 
-    @Nullable
-    public Redis getRedis() {
-        return redis;
-    }
-
     @NotNull
     public LocalStorage getLocalStorage(String name) {
         return new LocalStorage(getDataFolder(), name);
+    }
+
+    @Nullable
+    public Redis getRedis() {
+        return redis;
     }
 
     @Nullable

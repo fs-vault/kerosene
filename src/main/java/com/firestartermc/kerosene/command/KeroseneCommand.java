@@ -1,7 +1,10 @@
 package com.firestartermc.kerosene.command;
 
 import com.firestartermc.kerosene.Kerosene;
-import com.firestartermc.kerosene.util.DefaultMessages;
+import com.firestartermc.kerosene.util.ConcurrentUtils;
+import com.firestartermc.kerosene.util.Constants;
+import com.firestartermc.kerosene.util.MessageUtils;
+import com.firestartermc.kerosene.util.webhook.DiscordWebhook;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -10,6 +13,7 @@ import org.bukkit.command.TabExecutor;
 import com.firestartermc.kerosene.util.internal.Debug;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +21,7 @@ import java.util.Optional;
 
 public class KeroseneCommand implements TabExecutor {
 
+    public static final String KEROSENE_PREFIX = MessageUtils.formatColors("&6&lKerosene: ", false) + Constants.OFF_WHITE;
     private final Kerosene kerosene;
 
     public KeroseneCommand(@NotNull Kerosene kerosene) {
@@ -26,14 +31,16 @@ public class KeroseneCommand implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (args.length < 1 || !sender.hasPermission("firestarter.admin")) {
-            sender.sendMessage(DefaultMessages.KEROSENE_PREFIX + "Firestarter utility core (version " + kerosene.getDescription().getVersion() + ").");
+            sender.sendMessage(KEROSENE_PREFIX + "Firestarter utility core (version " + kerosene.getDescription().getVersion() + ").");
+            sender.sendMessage(Constants.FAILED_TO_LOAD_DATA);
+            sender.sendMessage(Constants.NO_PERMISSION);
             return true;
         }
 
         if (args[0].equalsIgnoreCase("debug")) {
             handleDebug(sender, args);
         } else if (args[0].equalsIgnoreCase("health")) {
-            healthCheck(sender, args);
+            handleHealthCheck(sender);
         } else {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&lError: &7Invalid operation specified."));
         }
@@ -60,11 +67,47 @@ public class KeroseneCommand implements TabExecutor {
         }
     }
 
-    public void healthCheck(@NotNull CommandSender sender, @NotNull String[] args) {
-        sender.sendMessage(DefaultMessages.KEROSENE_PREFIX + "Running system health check.");
-        Kerosene.getKerosene().getRedis().reactive().ping().subscribe(result -> {
-            sender.sendMessage(ChatColor.GRAY + "Redis ping: " + ChatColor.GOLD + result);
-        });
+    public void handleHealthCheck(@NotNull CommandSender sender) {
+        sender.sendMessage(KEROSENE_PREFIX + "Running system health check.");
+
+
+        var embed = DiscordWebhook.Embed.builder()
+                .description("ALrt!!!")
+                .addField("epic", "yes")
+                .color(Color.ORANGE)
+                .build();
+
+        DiscordWebhook.create("yes.com")
+                .embed(embed)
+                .username("yes")
+                .tts(false)
+                .queue();
+
+
+
+
+        var redis = kerosene.getRedis();
+        if (redis != null) {
+            redis.reactive().ping().subscribe(result -> {
+                sender.sendMessage(ChatColor.GRAY + "Redis ping: " + ChatColor.GOLD + result);
+            });
+        }
+
+        var playerdata = kerosene.getPlayerData();
+        if (playerdata != null) {
+            ConcurrentUtils.callAsync(() -> {
+                long start = System.currentTimeMillis();
+                var connection = playerdata.getConnection();
+                var statement = connection.prepareStatement("SELECT 1");
+
+                try (connection; statement) {
+                    statement.execute();
+                }
+
+                sender.sendMessage(ChatColor.GRAY + "PlayerData ping: " + ChatColor.GOLD + (System.currentTimeMillis() - start) + "ms");
+                return null;
+            });
+        }
     }
 
     @Override
@@ -79,6 +122,4 @@ public class KeroseneCommand implements TabExecutor {
 
         return Collections.emptyList();
     }
-
-
 }

@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import com.firestartermc.kerosene.gui.GuiDefaults;
 import com.firestartermc.kerosene.gui.GuiPosition;
 import com.firestartermc.kerosene.gui.components.cosmetic.base.BorderBase;
-import com.firestartermc.kerosene.item.ItemUtils;
+import com.firestartermc.kerosene.util.ItemUtils;
 
 /**
  * A solid border
@@ -49,7 +49,7 @@ public class BorderComponent extends BorderBase {
      * Create a border around a specific region of the {@link Gui} with a specific {@link Material}
      */
     public BorderComponent(int x, int y, int width, int height, Material fillMaterial) {
-        this(x, y, width, height, ItemUtils.makeFillItem(fillMaterial));
+        this(x, y, width, height, ItemUtils.createFillItem(fillMaterial));
     }
 
     /**

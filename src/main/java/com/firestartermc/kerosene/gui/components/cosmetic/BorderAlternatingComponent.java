@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import com.firestartermc.kerosene.gui.Gui;
 import com.firestartermc.kerosene.gui.GuiPosition;
 import com.firestartermc.kerosene.gui.components.cosmetic.base.BorderBase;
-import com.firestartermc.kerosene.item.ItemUtils;
+import com.firestartermc.kerosene.util.ItemUtils;
 
 /**
  * A border with alternating items.
@@ -43,7 +43,7 @@ public class BorderAlternatingComponent extends BorderBase {
      * @param fillMaterial2 The second material to use as a border item.
      */
     public BorderAlternatingComponent(int x, int y, int width, int height, Material fillMaterial1, Material fillMaterial2) {
-        this(x, y, width, height, ItemUtils.makeFillItem(fillMaterial1), ItemUtils.makeFillItem(fillMaterial2));
+        this(x, y, width, height, ItemUtils.createFillItem(fillMaterial1), ItemUtils.createFillItem(fillMaterial2));
     }
 
     /**
