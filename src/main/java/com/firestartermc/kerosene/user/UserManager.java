@@ -23,6 +23,10 @@ public class UserManager implements Listener {
         this.users = new HashMap<>();
     }
 
+    public void cacheUser(Player player) {
+        users.put(player.getUniqueId(), new User(kerosene, player));
+    }
+
     @Nullable
     public User getUser(Player player) {
         return getUser(player.getUniqueId());
@@ -35,7 +39,7 @@ public class UserManager implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        users.put(event.getPlayer().getUniqueId(), new User(kerosene, event.getPlayer()));
+        cacheUser(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

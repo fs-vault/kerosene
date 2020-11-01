@@ -23,6 +23,7 @@ public class RemoteStorage {
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.setLeakDetectionThreshold(60 * 1000);
         this.config = config;
     }
 

@@ -31,12 +31,16 @@ public final class ToggleCache {
         ConcurrentUtils.callAsync(() -> {
             cache();
             return null;
+        }).exceptionally(e -> {
+            e.printStackTrace();
+            return null;
         });
     }
 
     private void cache() throws SQLException {
         var connection = kerosene.getPlayerData().getConnection();
         var statement = connection.prepareStatement("SELECT `key`, `state` FROM `toggles` WHERE `uuid` = ?;");
+        statement.setString(1, uuid.toString());
         var result = statement.executeQuery();
 
         try (connection; statement; result) {

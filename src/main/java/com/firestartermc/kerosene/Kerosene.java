@@ -13,15 +13,12 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.firestartermc.kerosene.command.KeroseneCommand;
 import com.firestartermc.kerosene.listener.player.QuitListener;
 import com.firestartermc.kerosene.util.internal.Debug;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
 
 /**
  * Kerosene is a core library that nearly all of Firestarter's
@@ -72,6 +69,10 @@ public class Kerosene extends JavaPlugin {
 
         getCommand("kerosene").setExecutor(new KeroseneCommand(this));
         Debug.registerCategory(Debug.DEBUG_CATEGORY_GUI_INTERACT);
+
+        for (var player : getServer().getOnlinePlayers()) {
+            userManager.cacheUser(player);
+        }
     }
 
     public void onDisable() {

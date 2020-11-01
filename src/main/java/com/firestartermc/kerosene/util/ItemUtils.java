@@ -6,9 +6,15 @@ import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.jetbrains.annotations.NotNull;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import javax.annotation.concurrent.ThreadSafe;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Miscellaneous {@link ItemStack} and {@link Material} utility methods.
@@ -43,6 +49,45 @@ public final class ItemUtils {
     @NotNull
     public static String getFriendlyName(@NotNull Material material) {
         return CraftItemStack.asNMSCopy(new ItemStack(material)).getName().getString();
+    }
+
+    @NotNull
+    public static String serializeItemStack(@NotNull ItemStack itemStack) throws IOException {
+        var outputStream = new ByteArrayOutputStream();
+        var dataStream = new BukkitObjectOutputStream(outputStream);
+        dataStream.writeObject(itemStack);
+        dataStream.close();
+        return Base64Coder.encodeLines(outputStream.toByteArray());
+    }
+
+    @NotNull
+    public static String serializeItemStacks(@NotNull ItemStack[] itemStacks) throws IOException {
+        var outputStream = new ByteArrayOutputStream();
+        var dataStream = new BukkitObjectOutputStream(outputStream);
+        for (var item : itemStacks) {
+            dataStream.writeObject(item);
+        }
+        dataStream.close();
+        return Base64Coder.encodeLines(outputStream.toByteArray());
+    }
+
+    @NotNull
+    public static ItemStack deserializeItemStack(@NotNull String serialized) throws IOException, ClassNotFoundException {
+        var inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(serialized));
+        var dataStream = new BukkitObjectInputStream(inputStream);
+        return (ItemStack) dataStream.readObject();
+    }
+
+    @NotNull
+    public static ItemStack[] deserializeItemStacks(@NotNull String serialized) throws IOException, ClassNotFoundException {
+        var inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(serialized));
+        var dataStream = new BukkitObjectInputStream(inputStream);
+        var items = new ItemStack[dataStream.readInt()];
+        for (var i = 0; i < items.length; i++) {
+            items[i] = (ItemStack) dataStream.readObject();
+        }
+        dataStream.close();
+        return items;
     }
 
     /**

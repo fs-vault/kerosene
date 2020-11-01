@@ -12,7 +12,7 @@ softdepend:
 
 commands:
   kerosene:
-    description: "Base Kerosene management command."
+    description: "Base Kerosene administrative command."
     permission: "firestarter.admin"
 
 permissions:

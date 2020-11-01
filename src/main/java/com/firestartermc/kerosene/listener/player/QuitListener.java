@@ -13,8 +13,6 @@ public class QuitListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerQuit(PlayerQuitEvent event) {
-       //  Toggle.CACHE.invalidateAll(event.getPlayer().getUniqueId());
         Debug.disableAll(event.getPlayer());
     }
-
 }

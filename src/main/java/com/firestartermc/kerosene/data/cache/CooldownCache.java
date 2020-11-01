@@ -12,7 +12,7 @@ public final class CooldownCache {
     private final UUID uuid;
     private final PlayerCache<String, Long> cache;
 
-    private static final String CACHE_SQL = "SELECT `key`, `cooldown` FROM `cooldown` WHERE `uuid` = ?;";
+    private static final String CACHE_SQL = "SELECT `key`, `cooldown` FROM `cooldowns` WHERE `uuid` = ?;";
     private static final String SELECT_SQL = "SELECT IFNULL((SELECT `cooldown` FROM `cooldowns` WHERE `key` = ? AND `uuid` = ? LIMIT 1), 0);";
     private static final String UPDATE_SQL = "INSERT INTO `cooldowns` (`uuid`, `key`, `cooldown`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `cooldown` = ?;";
 
@@ -24,12 +24,16 @@ public final class CooldownCache {
         ConcurrentUtils.callAsync(() -> {
             cache();
             return null;
+        }).exceptionally(e -> {
+            e.printStackTrace();
+            return null;
         });
     }
 
     private void cache() throws SQLException {
         var connection = kerosene.getPlayerData().getConnection();
         var statement = connection.prepareStatement(CACHE_SQL);
+        statement.setString(1, uuid.toString());
         var result = statement.executeQuery();
 
         try (connection; statement; result) {

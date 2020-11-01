@@ -78,6 +78,7 @@ public final class MessageUtils {
         var matcher = Pattern.compile("\\b.{1," + (lineSize - 1) + "}\\b\\W?").matcher(text);
         return matcher.results()
                 .map(MatchResult::group)
+                .map(String::trim)
                 .collect(Collectors.toList());
     }
 

@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.firestartermc'
-version '5.0-SNAPSHOT'
+version '5.0'
 
 repositories {
     mavenLocal()
@@ -39,8 +39,8 @@ dependencies {
 }
 
 compileJava {
-    sourceCompatibility = '11'
-    targetCompatibility = '11'
+    sourceCompatibility = '14'
+    targetCompatibility = '14'
 }
 
 shadowJar {
