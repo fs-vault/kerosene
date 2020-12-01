@@ -1,10 +1,10 @@
 package com.firestartermc.kerosene.util;
 
 import io.papermc.lib.PaperLib;
-import net.minecraft.server.v1_16_R2.BlockPosition;
+import net.minecraft.server.v1_16_R3.BlockPosition;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.concurrent.ThreadSafe;

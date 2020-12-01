@@ -28,6 +28,10 @@ public final class ToggleCache {
         this.uuid = uuid;
         this.cache = new PlayerCache<>();
 
+        if (kerosene.getPlayerData() == null) {
+            return;
+        }
+
         ConcurrentUtils.callAsync(() -> {
             cache();
             return null;
