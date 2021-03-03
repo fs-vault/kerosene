@@ -18,7 +18,7 @@ import javax.annotation.concurrent.ThreadSafe;
 @ThreadSafe
 public class Constants {
 
-    public static final String ERROR_PREFIX = MessageUtils.formatColors("&c&lError: &7", false);
+    public static final String ERROR_PREFIX = MessageUtils.formatColors("&c&lERROR: &f", false);
     public static final String NO_PERMISSION = ERROR_PREFIX + "Insufficient permissions";
     public static final String FAILED_TO_LOAD_DATA = ChatColor.RED + "Failed to read user data. Notify an admin.";
     public static final String NON_PLAYER = ChatColor.RED + "This function may only be used by a player.";
