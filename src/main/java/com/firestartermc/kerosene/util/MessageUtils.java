@@ -1,8 +1,11 @@
 package com.firestartermc.kerosene.util;
 
+import com.firestartermc.kerosene.Kerosene;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +33,10 @@ public final class MessageUtils {
     private static final Pattern RGB_PATTERN = Pattern.compile("&#([A-Fa-f0-9]){6}");
 
     private MessageUtils() {
+    }
+
+    public static void sendComponent(@NotNull Player player, @NotNull Component component) {
+        Kerosene.getKerosene().getAudience(player).sendMessage(component);
     }
 
     /**

@@ -36,6 +36,8 @@ dependencies {
     compile "io.papermc:paperlib:1.0.5"
     compile "com.zaxxer:HikariCP:3.4.5"
     compile "io.lettuce:lettuce-core:5.3.3.RELEASE"
+    compile "net.kyori:adventure-api:4.4.0"
+    compile "net.kyori:adventure-platform-bukkit:4.0.0-SNAPSHOT"
 }
 
 compileJava {

@@ -9,6 +9,8 @@ import com.firestartermc.kerosene.gui.Gui;
 import com.firestartermc.kerosene.gui.GuiListener;
 import com.firestartermc.kerosene.user.User;
 import com.firestartermc.kerosene.user.UserManager;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -51,6 +53,7 @@ public class Kerosene extends JavaPlugin {
     private Redis redis;
     private EconomyWrapper economy;
     private Essentials essentials;
+    private BukkitAudiences audiences;
 
     public Kerosene() {
         kerosene = this;
@@ -84,6 +87,10 @@ public class Kerosene extends JavaPlugin {
 
         if (redis != null) {
             redis.close();
+        }
+
+        if (audiences != null) {
+            audiences.close();
         }
     }
 
@@ -122,6 +129,16 @@ public class Kerosene extends JavaPlugin {
         return essentials;
     }
 
+    @NotNull
+    public BukkitAudiences getAudiences() {
+        return audiences;
+    }
+
+    @NotNull
+    public Audience getAudience(@NotNull Player player) {
+        return audiences.player(player);
+    }
+
     private void connectDatabases() {
         var sqlUrl = getConfig().getString("database.playerdata.url");
         if (sqlUrl != null && sqlUrl.length() > 0) {
@@ -153,5 +170,7 @@ public class Kerosene extends JavaPlugin {
 
             economy = new EconomyWrapper(provider.getProvider());
         }
+
+        audiences = BukkitAudiences.create(this);
     }
 }
