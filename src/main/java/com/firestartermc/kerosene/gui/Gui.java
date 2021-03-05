@@ -1,15 +1,12 @@
 package com.firestartermc.kerosene.gui;
 
-import com.firestartermc.kerosene.gui.base.DrawingContext;
+import com.firestartermc.kerosene.gui.base.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import com.firestartermc.kerosene.Kerosene;
-import com.firestartermc.kerosene.gui.base.Drawable;
-import com.firestartermc.kerosene.gui.base.GuiElement;
-import com.firestartermc.kerosene.gui.base.Interactable;
 
 import java.util.*;
 
@@ -19,6 +16,7 @@ public class Gui implements InventoryHolder, Interactable {
     private final Set<GuiElement> guiElements = new LinkedHashSet<>();
     private final Set<Drawable> drawableElements = new LinkedHashSet<>();
     private final Set<Interactable> interactableElements = new LinkedHashSet<>();
+    private final Set<OnGuiClose> closeListenerElements = new LinkedHashSet<>();
     private final Set<Player> viewers = new HashSet<>();
     private final String title;
     private final int rows;
@@ -65,6 +63,10 @@ public class Gui implements InventoryHolder, Interactable {
 
         if (element instanceof Interactable) {
             interactableElements.add((Interactable) element);
+        }
+
+        if (element instanceof OnGuiClose) {
+            closeListenerElements.add((OnGuiClose) element);
         }
     }
 
@@ -166,6 +168,7 @@ public class Gui implements InventoryHolder, Interactable {
     }
 
     void removeViewer(Player player) {
+        closeListenerElements.forEach(element -> element.onClose(player));
         this.onClose(player);
         this.viewers.remove(player);
     }
