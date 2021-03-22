@@ -1,15 +1,18 @@
-name: Kerosene
-version: 4.0
-author: TechToolbox (@nkomarn)
-main: xyz.nkomarn.kerosene.Kerosene
-description: Firestarter's library of little bits and bobs that keep the server ticking.
-website: https://firestartermc.com/opensource
-api-version: 1.16
-depend: ['Essentials', 'Vault']
+name: "Kerosene"
+description: "Library of core server components and APIs."
+main: "com.firestartermc.kerosene.Kerosene"
+author: "Firestarter Minecraft Servers"
+website: "https://firestartermc.com"
+version: "5.1"
+api-version: "1.16"
+
+softdepend:
+  - "Essentials"
+  - "Vault"
 
 commands:
   kerosene:
-    description: "Base Kerosene management command."
+    description: "Base Kerosene administrative command."
     permission: "firestarter.admin"
 
 permissions:

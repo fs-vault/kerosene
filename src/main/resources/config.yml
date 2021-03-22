@@ -1,14 +1,8 @@
 database:
-  url: ""
-  username: ""
-  password: ""
-
-redis:
-  host: 127.0.0.1
-  port: 6379
-  password: ""
-  pool-size: 8
-  timeout: 2000
-
-pool:
-  threads: 3
+  playerdata:
+    url: ""
+    username: ""
+    password: ""
+  redis:
+    uri: ""
+    password: ""
