@@ -56,6 +56,7 @@ public final class ConcurrentUtils {
      * @return future which completes once callable execution succeeds
      * @since 5.0
      */
+    @Deprecated(forRemoval = true)
     public static CompletableFuture<Void> callAsync(@NotNull Callable<Void> callable) {
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -65,5 +66,22 @@ public final class ConcurrentUtils {
                 throw new CompletionException(e);
             }
         });
+    }
+
+    @NotNull
+    public static CompletableFuture<Void> callAsync(@NotNull CheckedConsumer consumer) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                consumer.accept();
+                return null;
+            } catch (Exception e) {
+                throw new CompletionException(e);
+            }
+        });
+    }
+
+    @FunctionalInterface
+    public interface CheckedConsumer {
+        void accept() throws Exception;
     }
 }
