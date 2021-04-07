@@ -11,9 +11,11 @@ import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class DiscordWebhook {
 
+    private static final Queue<DiscordWebhook> WEBHOOK_QUEUE = new ConcurrentLinkedQueue<>();
     private final String url;
     private final List<Embed> embeds;
     private String message;
@@ -61,41 +63,7 @@ public class DiscordWebhook {
     }
 
     public void queue() {
-        if (message == null && embeds.isEmpty()) {
-            throw new IllegalArgumentException("Empty message contents.");
-        }
-
-        var json = new JSONObject();
-        json.put("content", message);
-        json.put("username", username);
-        json.put("avatar_url", avatarUrl);
-        json.put("tts", tts);
-
-        if (!embeds.isEmpty()) {
-            var serialized = embeds.stream().map(Embed::serialize).toArray();
-            json.put("embeds", serialized);
-        }
-
-        Bukkit.getScheduler().runTaskLaterAsynchronously(Kerosene.getKerosene(), () -> {
-            try {
-                var url = new URL(this.url);
-                var connection = (HttpsURLConnection) url.openConnection();
-                connection.addRequestProperty("Content-Type", "application/json");
-                connection.addRequestProperty("User-Agent", "Firestarter");
-                connection.setDoOutput(true);
-                connection.setRequestMethod("POST");
-
-                var stream = connection.getOutputStream();
-                stream.write(json.toString().getBytes());
-                stream.flush();
-                stream.close();
-
-                connection.getInputStream().close();
-                connection.disconnect();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }, 20 * 5L);
+        WEBHOOK_QUEUE.offer(this);
     }
 
     public static class Embed {
@@ -375,5 +343,49 @@ public class DiscordWebhook {
         private String quote(String string) {
             return "\"" + string + "\"";
         }
+    }
+
+    static {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(Kerosene.getKerosene(), () -> {
+            var webhook = WEBHOOK_QUEUE.poll();
+
+            if (webhook == null) {
+                return;
+            }
+
+            if (webhook.message == null && webhook.embeds.isEmpty()) {
+                throw new IllegalArgumentException("Empty message contents.");
+            }
+
+            var json = new JSONObject();
+            json.put("content", webhook.message);
+            json.put("username", webhook.username);
+            json.put("avatar_url", webhook.avatarUrl);
+            json.put("tts", webhook.tts);
+
+            if (!webhook.embeds.isEmpty()) {
+                var serialized = webhook.embeds.stream().map(Embed::serialize).toArray();
+                json.put("embeds", serialized);
+            }
+
+            try {
+                var url = new URL(webhook.url);
+                var connection = (HttpsURLConnection) url.openConnection();
+                connection.addRequestProperty("Content-Type", "application/json");
+                connection.addRequestProperty("User-Agent", "Kerosene");
+                connection.setDoOutput(true);
+                connection.setRequestMethod("POST");
+
+                var stream = connection.getOutputStream();
+                stream.write(json.toString().getBytes());
+                stream.flush();
+                stream.close();
+
+                connection.getInputStream().close();
+                connection.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }, 0L, 20 * 2L);
     }
 }
