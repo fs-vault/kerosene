@@ -1,67 +1,42 @@
 package com.firestartermc.kerosene.command;
 
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandCompletion;
+import co.aikar.commands.annotation.CommandPermission;
+import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.Single;
+import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.annotation.Syntax;
 import com.firestartermc.kerosene.Kerosene;
-import com.firestartermc.kerosene.util.Constants;
 import com.firestartermc.kerosene.util.MessageUtils;
-import com.google.common.collect.ImmutableList;
+import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import com.firestartermc.kerosene.util.internal.Debug;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
-public class KeroseneCommand implements TabExecutor {
+@CommandAlias("kerosene")
+public class KeroseneCommand extends Command {
 
     private final Kerosene kerosene;
-    private final String messagePrefix;
 
     public KeroseneCommand(@NotNull Kerosene kerosene) {
         this.kerosene = kerosene;
-        this.messagePrefix = MessageUtils.formatColors("&6&lKerosene: &e", false);
+        getCommandManager().registerCompletion("debug_categories", context -> Debug.getCategories());
     }
 
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        if (args.length < 1 || !sender.hasPermission("firestarter.admin")) {
-            sender.sendMessage(messagePrefix + "Firestarter core server component (version " + kerosene.getDescription().getVersion() + ").");
-            return true;
-        }
-
-        switch (args[0].toLowerCase()) {
-            case "debug" -> handleDebug(sender, args);
-            case "health" -> handleHealth(sender);
-            default -> sender.sendMessage(Constants.ERROR_PREFIX + "Invalid operation.");
-        }
-        return true;
+    @Default
+    public void base(CommandSender sender) {
+        sender.sendMessage(Component.text("Running Kerosene version " + kerosene.getDescription().getVersion() + "."));
     }
 
-    public void handleDebug(@NotNull CommandSender sender, @NotNull String[] args) {
-        if (args.length == 2) {
-            var cat = args[1];
-            var state = Debug.toggleDebug(cat, sender);
-
-            if (state.isEmpty()) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        "&c&lError: &7Invalid category specified."));
-                return;
-            }
-
-            var stateText = state.get() ? "enabled" : "disabled";
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Debug.PREFIX + String.format("&e%s &7debug messages have been &e%s&7.", cat, stateText)));
-        } else {
-            sender.sendMessage(Debug.PREFIX + "Use '/debug <category>' to toggle a debug category");
-        }
-    }
-
-    public void handleHealth(@NotNull CommandSender sender) {
+    @Subcommand("health")
+    @CommandPermission("firestarter.admin")
+    public void onHealth(CommandSender sender) {
         var sqlFuture = CompletableFuture.supplyAsync(() -> {
             var playerdata = kerosene.getPlayerData();
             if (playerdata == null) {
@@ -92,35 +67,34 @@ public class KeroseneCommand implements TabExecutor {
             return redis.sync().ping() + " ms.";
         });
 
-        sender.sendMessage(messagePrefix + "Running system health check.");
-
         sqlFuture.thenAccept(ping -> {
-            sender.sendMessage(ChatColor.YELLOW + "SQL ping: " + ping);
+            sender.sendMessage(ChatColor.WHITE + "SQL ping: " + ChatColor.GREEN + ping);
         }).exceptionally(throwable -> {
             sender.sendMessage(ChatColor.RED + "Failed to ping SQL.");
             return null;
         });
 
         redisFuture.thenAccept(ping -> {
-            sender.sendMessage(ChatColor.YELLOW + "Redis ping: " + ping);
+            sender.sendMessage(ChatColor.WHITE + "Redis ping: " + ChatColor.GREEN + ping);
         }).exceptionally(throwable -> {
             sender.sendMessage(ChatColor.RED + "Failed to ping Redis.");
             return null;
         });
     }
 
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
-        if (args.length == 1) {
-            return ImmutableList.of("debug", "health");
+    @Subcommand("debug")
+    @CommandPermission("firestarter.admin")
+    @CommandCompletion("@debug_categories")
+    @Syntax("<category>")
+    public void handleDebug(CommandSender sender, @Single String category) {
+        var state = Debug.toggleDebug(category, sender);
+
+        if (state.isEmpty()) {
+            sender.sendMessage(MessageUtils.formatColors("&c&lERROR: &fInvalid category specified."));
+            return;
         }
 
-        if (args.length == 2) {
-            if (args[0].equalsIgnoreCase("debug")) {
-                return new ArrayList<>(Debug.getCategories());
-            }
-        }
-
-        return Collections.emptyList();
+        var stateText = state.get() ? "enabled" : "disabled";
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Debug.PREFIX + String.format("&e%s &7debug messages have been &e%s&7.", category, stateText)));
     }
 }

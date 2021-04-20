@@ -1,6 +1,7 @@
 package com.firestartermc.kerosene;
 
 import com.earth2me.essentials.Essentials;
+import com.firestartermc.kerosene.command.CommandManager;
 import com.firestartermc.kerosene.data.db.LocalStorage;
 import com.firestartermc.kerosene.data.db.RemoteStorage;
 import com.firestartermc.kerosene.data.redis.Redis;
@@ -47,20 +48,20 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Kerosene extends JavaPlugin {
 
-    private static Kerosene kerosene;
-    private final UserManager userManager;
+    private static Kerosene KEROSENE;
+    private UserManager userManager;
+    private CommandManager commandManager;
     private RemoteStorage playerData;
     private Redis redis;
     private EconomyWrapper economy;
     private Essentials essentials;
     private BukkitAudiences audiences;
 
-    public Kerosene() {
-        kerosene = this;
-        this.userManager = new UserManager(this);
-    }
-
     public void onEnable() {
+        KEROSENE = this;
+        userManager = new UserManager(this);
+        commandManager = new CommandManager(this);
+
         saveDefaultConfig();
         connectDatabases();
 
@@ -70,7 +71,7 @@ public class Kerosene extends JavaPlugin {
         pluginManager.registerEvents(new QuitListener(), this);
         registerHooks();
 
-        getCommand("kerosene").setExecutor(new KeroseneCommand(this));
+        getCommandManager().registerCommands(new KeroseneCommand(this));
         Debug.registerCategory(Debug.DEBUG_CATEGORY_GUI_INTERACT);
 
         for (var player : getServer().getOnlinePlayers()) {
@@ -96,12 +97,17 @@ public class Kerosene extends JavaPlugin {
 
     @NotNull
     public static Kerosene getKerosene() {
-        return kerosene;
+        return KEROSENE;
     }
 
     @NotNull
     public UserManager getUserManager() {
         return userManager;
+    }
+
+    @NotNull
+    public CommandManager getCommandManager() {
+        return commandManager;
     }
 
     @Nullable
