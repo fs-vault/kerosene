@@ -41,6 +41,22 @@ public final class MessageUtils {
 
     /**
      * Formats the {@code text} using the alternate color code character '&',
+     * formatting it into a color format usable in messages.
+     * <p>
+     * This method is intended to make it easier to send color formatted messages
+     * to players.
+     *
+     * @param text the text for which to translate colors
+     * @return the color-translated text
+     * @since 5.0
+     */
+    @NotNull
+    public static String formatColors(@NotNull String text) {
+        return formatColors(text, false);
+    }
+
+    /**
+     * Formats the {@code text} using the alternate color code character '&',
      * formatting it into a color format usable in messages. This method also
      * supports RGB hex color code formatting in the format '&#FFFFFF'.
      * <p>
@@ -64,6 +80,7 @@ public final class MessageUtils {
                 matcher = RGB_PATTERN.matcher(text);
             }
         }
+
         return ChatColor.translateAlternateColorCodes('&', text);
     }
 
