@@ -25,10 +25,7 @@ public final class CooldownCache {
             return;
         }
 
-        ConcurrentUtils.callAsync(() -> {
-            cache();
-            return null;
-        }).exceptionally(e -> {
+        ConcurrentUtils.callAsync(this::cache).exceptionally(e -> {
             e.printStackTrace();
             return null;
         });
@@ -78,8 +75,6 @@ public final class CooldownCache {
             try (connection; statement) {
                 statement.executeUpdate();
             }
-
-            return null;
         });
     }
 
