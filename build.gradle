@@ -43,8 +43,6 @@ shadowJar {
     relocate 'com.zaxxer.hikari', 'com.firestartermc.kerosene.lib.hikari'
     relocate 'io.lettuce.core', 'com.firestartermc.kerosene.lib.lettuce'
     relocate 'it.unimi.dsi.fastutil', 'com.firestartermc.kerosene.lib.fastutil'
-    relocate 'co.aikar.commands', 'com.firestartermc.kerosene.lib.commands'
-    relocate 'co.aikar.locales', 'com.firestartermc.kerosene.lib.locales'
     exclude 'org/checkerframework/**'
     exclude 'org/jetbrains/annotations/**'
     exclude 'org/intellij/lang/**'
