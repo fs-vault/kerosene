@@ -103,7 +103,8 @@ public final class PlayerUtils {
         }
 
         CompletableFuture<Boolean> future = new CompletableFuture<>();
-        Kerosene.getKerosene().getEssentials().getUser(player).getAsyncTeleport().now(location, false, cause, future);
+        ConcurrentUtils.ensureMain(() -> Kerosene.getKerosene().getEssentials().getUser(player).getAsyncTeleport()
+                .now(location, false, cause, future));
         return future;
     }
 }
