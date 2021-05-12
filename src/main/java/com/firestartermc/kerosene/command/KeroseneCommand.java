@@ -38,15 +38,12 @@ public class KeroseneCommand extends Command {
     @CommandPermission("firestarter.admin")
     public void onHealth(CommandSender sender) {
         var sqlFuture = CompletableFuture.supplyAsync(() -> {
-            var playerdata = kerosene.getPlayerData();
-            if (playerdata == null) {
-                return "Not connected.";
-            }
+            var playerdata = kerosene.getDatabase();
 
             try {
                 long start = System.currentTimeMillis();
                 var connection = playerdata.getConnection();
-                var statement = connection.prepareStatement("SELECT 1");
+                var statement = connection.prepareStatement("SELECT 1;");
 
                 try (connection; statement) {
                     statement.execute();

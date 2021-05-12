@@ -2,8 +2,8 @@ package com.firestartermc.kerosene;
 
 import com.earth2me.essentials.Essentials;
 import com.firestartermc.kerosene.command.CommandManager;
+import com.firestartermc.kerosene.data.db.RemoteDatabase;
 import com.firestartermc.kerosene.data.db.LocalStorage;
-import com.firestartermc.kerosene.data.db.RemoteStorage;
 import com.firestartermc.kerosene.data.redis.Redis;
 import com.firestartermc.kerosene.economy.EconomyWrapper;
 import com.firestartermc.kerosene.gui.Gui;
@@ -51,7 +51,7 @@ public class Kerosene extends JavaPlugin {
     private static Kerosene KEROSENE;
     private UserManager userManager;
     private CommandManager commandManager;
-    private RemoteStorage playerData;
+    private RemoteDatabase remoteDatabase;
     private Redis redis;
     private EconomyWrapper economy;
     private Essentials essentials;
@@ -82,8 +82,8 @@ public class Kerosene extends JavaPlugin {
     public void onDisable() {
         Gui.closeAll();
 
-        if (playerData != null) {
-            playerData.close();
+        if (remoteDatabase != null) {
+            remoteDatabase.close();
         }
 
         if (redis != null) {
@@ -110,9 +110,9 @@ public class Kerosene extends JavaPlugin {
         return commandManager;
     }
 
-    @Nullable
-    public RemoteStorage getPlayerData() {
-        return playerData;
+    @NotNull
+    public RemoteDatabase getDatabase() {
+        return remoteDatabase;
     }
 
     @NotNull
@@ -150,7 +150,7 @@ public class Kerosene extends JavaPlugin {
         if (sqlUrl != null && sqlUrl.length() > 0) {
             getLogger().info("Connecting to playerdata remote storage.");
             var section = getConfig().getConfigurationSection("database.playerdata");
-            playerData = new RemoteStorage(sqlUrl, section.getString("username"), section.getString("password")).connect();
+            remoteDatabase = new RemoteDatabase(sqlUrl, section.getString("username"), section.getString("password")).connect();
         }
 
         var redisUri = getConfig().getString("database.redis.uri");

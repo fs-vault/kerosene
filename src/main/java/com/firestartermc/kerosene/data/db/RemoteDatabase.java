@@ -10,12 +10,12 @@ import java.sql.SQLException;
 /**
  * Database class which allows pooled access to remote database connections.
  */
-public class RemoteStorage {
+public class RemoteDatabase {
 
     private final HikariConfig config;
     private HikariDataSource dataSource;
 
-    public RemoteStorage(String url, String username, String password) {
+    public RemoteDatabase(String url, String username, String password) {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(url);
         config.setUsername(username);
@@ -28,7 +28,7 @@ public class RemoteStorage {
     }
 
     @NotNull
-    public RemoteStorage connect() {
+    public RemoteDatabase connect() {
         dataSource = new HikariDataSource(config);
         return this;
     }
