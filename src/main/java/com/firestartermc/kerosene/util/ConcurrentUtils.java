@@ -47,27 +47,22 @@ public final class ConcurrentUtils {
     }
 
     /**
-     * Executes a {@link Callable<Void>} asynchronously as a future, returning a
-     * {@link CompletableFuture<Void>} that completes once the given callable has
-     * finished executing. If the callable throws an exception, the future
-     * completes exceptionally with the exception that was thrown.
-     *
-     * @param callable callable to execute
-     * @return future which completes once callable execution succeeds
-     * @since 5.0
+     * @since 5.1.1
      */
-    @Deprecated(forRemoval = true)
-    public static CompletableFuture<Void> callAsync(@NotNull Callable<Void> callable) {
+    @NotNull
+    public static <T> CompletableFuture<T> callAsync(@NotNull Callable<T> callable) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                callable.call();
-                return null;
+                return callable.call();
             } catch (Exception e) {
                 throw new CompletionException(e);
             }
         });
     }
 
+    /**
+     * @since 5.1
+     */
     @NotNull
     public static CompletableFuture<Void> callAsync(@NotNull CheckedConsumer consumer) {
         return CompletableFuture.supplyAsync(() -> {
