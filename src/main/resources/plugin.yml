@@ -3,8 +3,8 @@ description: "Library of core server components and APIs."
 main: "com.firestartermc.kerosene.Kerosene"
 author: "Firestarter Minecraft Servers"
 website: "https://firestartermc.com"
-version: "5.1.2"
-api-version: "1.16"
+version: "5.1.3"
+api-version: "1.17"
 
 softdepend:
   - "Essentials"

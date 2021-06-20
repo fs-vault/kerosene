@@ -24,7 +24,7 @@ public class CommandManager implements Listener {
 
     public CommandManager(@NotNull Kerosene kerosene) {
         commandManager = new PaperCommandManager(kerosene);
-        commandManager.enableUnstableAPI("brigadier");
+        // commandManager.enableUnstableAPI("brigadier");
         registeredCommands = ArrayListMultimap.create();
 
         kerosene.getServer().getPluginManager().registerEvents(this, kerosene);
