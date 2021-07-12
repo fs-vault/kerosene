@@ -75,36 +75,9 @@ public final class PlayerUtils {
         });
     }
 
-    /**
-     * Asynchronously loads the chunk at the given {@code location} and teleports the given
-     * {@code player} to the location once the chunk has loaded. This eliminates any
-     * chunkloading slowdowns when teleporting players.
-     * <p>
-     * If EssentialsX is installed on the server, asynchronous teleportation is delegated
-     * to EssentialsX so that players are able to use /back between teleportation locations.
-     * Otherwise, {@link PaperLib#teleportAsync(Entity, Location, PlayerTeleportEvent.TeleportCause)}
-     * is used to load chunks asynchronously and teleport the player.
-     * <p>
-     * A {@link CompletableFuture} is returned immediately, and is completed once the player
-     * has successfully teleported to the given location. If teleportation fails, the future
-     * is completed exceptionally.
-     *
-     * @param player   the player to teleport
-     * @param location the location to teleport to
-     * @return future which completes on teleportation success
-     * @see PaperLib
-     * @since 5.0
-     */
     @NotNull
+    @Deprecated(forRemoval = true)
     public static CompletableFuture<Boolean> teleportAsync(@NotNull Player player, @NotNull Location location) {
-        var cause = PlayerTeleportEvent.TeleportCause.PLUGIN;
-        if (Kerosene.getKerosene().getEssentials() == null) {
-            return PaperLib.teleportAsync(player, location, cause);
-        }
-
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        ConcurrentUtils.ensureMain(() -> Kerosene.getKerosene().getEssentials().getUser(player).getAsyncTeleport()
-                .now(location, false, cause, future));
-        return future;
+        return TeleportUtils.teleportAsync(player, location);
     }
 }
