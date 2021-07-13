@@ -30,6 +30,7 @@ dependencies {
     implementation "io.lettuce:lettuce-core:5.3.3.RELEASE"
     implementation "net.kyori:adventure-platform-bukkit:4.0.0-SNAPSHOT"
     implementation "co.aikar:acf-paper:0.5.0-SNAPSHOT"
+    implementation 'me.lucko:commodore:1.10'
 }
 
 compileJava {
@@ -42,11 +43,16 @@ shadowJar {
     relocate 'com.zaxxer.hikari', 'com.firestartermc.kerosene.lib.hikari'
     relocate 'io.lettuce.core', 'com.firestartermc.kerosene.lib.lettuce'
     relocate 'it.unimi.dsi.fastutil', 'com.firestartermc.kerosene.lib.fastutil'
+    relocate 'me.lucko.commodore', 'com.firestartermc.kerosene.lib.commodore'
     exclude 'org/checkerframework/**'
     exclude 'org/jetbrains/annotations/**'
     exclude 'org/intellij/lang/**'
     exclude 'org/slf4j/**'
     exclude 'io/netty/**'
+
+    dependencies {
+        exclude(dependency('com.mojang:brigadier'))
+    }
 }
 
 publishing {

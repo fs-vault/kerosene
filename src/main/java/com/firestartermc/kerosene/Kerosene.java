@@ -10,6 +10,8 @@ import com.firestartermc.kerosene.gui.Gui;
 import com.firestartermc.kerosene.gui.GuiListener;
 import com.firestartermc.kerosene.user.User;
 import com.firestartermc.kerosene.user.UserManager;
+import me.lucko.commodore.Commodore;
+import me.lucko.commodore.CommodoreProvider;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.milkbowl.vault.economy.Economy;
@@ -56,6 +58,7 @@ public class Kerosene extends JavaPlugin {
     private EconomyWrapper economy;
     private Essentials essentials;
     private BukkitAudiences audiences;
+    private Commodore commodore;
 
     public void onEnable() {
         KEROSENE = this;
@@ -141,6 +144,11 @@ public class Kerosene extends JavaPlugin {
     }
 
     @NotNull
+    public Commodore getCommodore() {
+        return commodore;
+    }
+
+    @NotNull
     public Audience getAudience(@NotNull Player player) {
         return audiences.player(player);
     }
@@ -178,5 +186,6 @@ public class Kerosene extends JavaPlugin {
         }
 
         audiences = BukkitAudiences.create(this);
+        commodore = CommodoreProvider.getCommodore(this);
     }
 }

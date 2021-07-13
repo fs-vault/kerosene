@@ -15,14 +15,17 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class CommandManager implements Listener {
 
+    private final Kerosene kerosene;
     private final PaperCommandManager commandManager;
     private final Multimap<Plugin, Command> registeredCommands;
 
     public CommandManager(@NotNull Kerosene kerosene) {
+        this.kerosene = kerosene;
         commandManager = new PaperCommandManager(kerosene);
         // commandManager.enableUnstableAPI("brigadier");
         registeredCommands = ArrayListMultimap.create();
@@ -45,6 +48,12 @@ public class CommandManager implements Listener {
     @NotNull
     public PaperCommandManager getRawManager() {
         return commandManager;
+    }
+
+    public void registerCompletions(@NotNull BrigadierCommand... commands) {
+        Arrays.stream(commands)
+                .flatMap(command -> command.getCompletions().stream())
+                .forEach(completion -> kerosene.getCommodore().register(completion));
     }
 
     public void registerCommands(@NotNull Command... commands) {
