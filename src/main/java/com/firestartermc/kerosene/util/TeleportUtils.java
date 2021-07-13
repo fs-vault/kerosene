@@ -49,7 +49,14 @@ public class TeleportUtils {
 
     public static void teleport(@NotNull Player player, @NotNull Location location) {
         setLastLocation(player);
-        player.teleport(location);
+
+        getEssentials().ifPresentOrElse(essentials -> {
+            try {
+                essentials.getUser(player).getTeleport().now(location, false, TELEPORT_CAUSE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, () -> player.teleport(location));
     }
 
     /**
