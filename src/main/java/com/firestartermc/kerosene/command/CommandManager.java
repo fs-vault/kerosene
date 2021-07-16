@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+@Deprecated(forRemoval = true)
 public class CommandManager implements Listener {
 
     private final Kerosene kerosene;
@@ -46,6 +47,7 @@ public class CommandManager implements Listener {
     }
 
     @NotNull
+    @Deprecated(forRemoval = true)
     public PaperCommandManager getRawManager() {
         return commandManager;
     }
@@ -56,6 +58,7 @@ public class CommandManager implements Listener {
                 .forEach(completion -> kerosene.getCommodore().register(completion));
     }
 
+    @Deprecated(forRemoval = true)
     public void registerCommands(@NotNull Command... commands) {
         for (var command : commands) {
             getRawManager().registerCommand(command, true);
@@ -63,12 +66,14 @@ public class CommandManager implements Listener {
         }
     }
 
+    @Deprecated(forRemoval = true)
     public void unregisterCommands(@NotNull Command... commands) {
         for (var command : commands) {
             getRawManager().unregisterCommand(command);
         }
     }
 
+    @Deprecated(forRemoval = true)
     public void registerCompletion(@NotNull String id, @NotNull CommandCompletions.AsyncCommandCompletionHandler<BukkitCommandCompletionContext> handler) {
         getRawManager().getCommandCompletions().registerCompletion(id, handler);
     }

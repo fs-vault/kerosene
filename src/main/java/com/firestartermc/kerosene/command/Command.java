@@ -4,6 +4,7 @@ import co.aikar.commands.BaseCommand;
 import com.firestartermc.kerosene.Kerosene;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated(forRemoval = true)
 public class Command extends BaseCommand {
 
     @NotNull
