@@ -12,8 +12,6 @@ import com.firestartermc.kerosene.user.User;
 import com.firestartermc.kerosene.user.UserManager;
 import me.lucko.commodore.Commodore;
 import me.lucko.commodore.CommodoreProvider;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
