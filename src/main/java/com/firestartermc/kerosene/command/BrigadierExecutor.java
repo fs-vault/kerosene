@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-public interface BrigadierCommand extends CommandExecutor {
+public interface BrigadierExecutor extends CommandExecutor {
 
     @NotNull
     default List<LiteralArgumentBuilder<?>> getCompletions() {
