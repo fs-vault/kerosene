@@ -62,23 +62,4 @@ public final class BlockUtils {
     public static CompletableFuture<Boolean> checkSafetyAsync(@NotNull Block floor) {
         return PaperLib.getChunkAtAsync(floor.getLocation()).thenApply(chunk -> checkSafety(floor));
     }
-
-    /**
-     * Sends a chest opening or closing action with the given {@code block}
-     * as the chest block. The {@code open} boolean can be manipulated to
-     * specify whether the chest should play an opening or closing animation.
-     * <p>
-     * Players in the same world and within range will see this animation.
-     * The chest will not close until another player interacts with it or
-     * a closing action is sent.
-     *
-     * @param block the chest block to animate
-     * @param open  whether the chest should be opening (or closing)
-     * @since 5.0
-     */
-    public static void animateChestAction(@NotNull Block block, boolean open) {
-        var nmsWorld = ((CraftWorld) block.getWorld()).getHandle();
-        var blockPos = new BlockPosition(block.getX(), block.getY(), block.getZ());
-        nmsWorld.playBlockAction(blockPos, nmsWorld.getType(blockPos).getBlock(), 1, open ? 1 : 0);
-    }
 }
