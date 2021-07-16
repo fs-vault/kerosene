@@ -16,7 +16,7 @@ import javax.annotation.concurrent.ThreadSafe;
  * @since 5.0
  */
 @ThreadSafe
-public class Constants {
+public final class Constants {
 
     public static final String ERROR_PREFIX = MessageUtils.formatColors("&c&lERROR: &f", false);
     public static final String NO_PERMISSION = ERROR_PREFIX + "Insufficient permissions";

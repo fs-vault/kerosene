@@ -27,7 +27,7 @@ import static com.firestartermc.kerosene.util.ConcurrentUtils.ensureMain;
  * @since 5.1.4
  */
 @ThreadSafe
-public class TeleportUtils {
+public final class TeleportUtils {
 
     private static final PlayerTeleportEvent.TeleportCause TELEPORT_CAUSE = PlayerTeleportEvent.TeleportCause.PLUGIN;
 
