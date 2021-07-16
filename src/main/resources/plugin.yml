@@ -1,21 +1,21 @@
-name: "Kerosene"
-description: "Library of core server components and APIs."
-main: "com.firestartermc.kerosene.Kerosene"
-author: "Firestarter Minecraft Servers"
-website: "https://firestartermc.com"
-version: "5.1.4"
-api-version: "1.17"
+name: Kerosene
+description: Library of core server components and utilities.
+main: com.firestartermc.kerosene.Kerosene
+author: Firestarter Minecraft Servers
+website: https://firestartermc.com
+version: 5.2
+api-version: 1.17
 
 softdepend:
-  - "Essentials"
-  - "Vault"
+  - Essentials
+  - Vault
 
 commands:
   kerosene:
-    description: "Base Kerosene administrative command."
-    permission: "firestarter.admin"
+    description: Base Kerosene administrative command.
+    permission: firestarter.admin
 
 permissions:
   firestarter.admin:
     default: op
-    description: "Allow access to administrative features."
+    description: Allow access to administrative features.

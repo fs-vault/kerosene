@@ -1,7 +1,6 @@
 package com.firestartermc.kerosene;
 
 import com.earth2me.essentials.Essentials;
-import com.firestartermc.kerosene.command.CommandManager;
 import com.firestartermc.kerosene.data.db.RemoteDatabase;
 import com.firestartermc.kerosene.data.db.LocalStorage;
 import com.firestartermc.kerosene.data.redis.Redis;
@@ -17,7 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import com.firestartermc.kerosene.command.KeroseneCommand;
 import com.firestartermc.kerosene.listener.player.QuitListener;
 import com.firestartermc.kerosene.util.internal.Debug;
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +48,6 @@ public class Kerosene extends JavaPlugin {
 
     private static Kerosene KEROSENE;
     private UserManager userManager;
-    private CommandManager commandManager;
     private RemoteDatabase remoteDatabase;
     private Redis redis;
     private EconomyWrapper economy;
@@ -60,7 +57,6 @@ public class Kerosene extends JavaPlugin {
     public void onEnable() {
         KEROSENE = this;
         userManager = new UserManager(this);
-        commandManager = new CommandManager(this);
 
         saveDefaultConfig();
         connectDatabases();
@@ -71,7 +67,8 @@ public class Kerosene extends JavaPlugin {
         pluginManager.registerEvents(new QuitListener(), this);
         registerHooks();
 
-        getCommandManager().registerCommands(new KeroseneCommand(this));
+        // TODO
+        // getCommandManager().registerCommands(new KeroseneCommand(this));
         Debug.registerCategory(Debug.DEBUG_CATEGORY_GUI_INTERACT);
 
         for (var player : getServer().getOnlinePlayers()) {
@@ -92,6 +89,7 @@ public class Kerosene extends JavaPlugin {
     }
 
     @NotNull
+    @Deprecated(forRemoval = true)
     public static Kerosene getKerosene() {
         return KEROSENE;
     }
@@ -99,11 +97,6 @@ public class Kerosene extends JavaPlugin {
     @NotNull
     public UserManager getUserManager() {
         return userManager;
-    }
-
-    @NotNull
-    public CommandManager getCommandManager() {
-        return commandManager;
     }
 
     @NotNull

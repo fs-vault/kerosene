@@ -1,3 +1,4 @@
+/*
 package com.firestartermc.kerosene.command;
 
 import co.aikar.commands.annotation.CommandAlias;
@@ -95,3 +96,4 @@ public class KeroseneCommand extends Command {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Debug.PREFIX + String.format("&e%s &7debug messages have been &e%s&7.", category, stateText)));
     }
 }
+ */

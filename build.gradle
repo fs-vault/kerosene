@@ -5,13 +5,12 @@ plugins {
 }
 
 group 'com.firestartermc'
-version '5.1.4'
+version '5.2'
 
 repositories {
     mavenLocal()
     mavenCentral()
     maven { url 'https://papermc.io/repo/repository/maven-public/' }
-    maven { url 'https://repo.aikar.co/content/groups/aikar/' }
     maven { url 'https://ci.ender.zone/plugin/repository/everything/' }
     maven { url 'https://libraries.minecraft.net/' }
     maven { url 'https://jitpack.io/' }
@@ -23,12 +22,9 @@ dependencies {
     compileOnly 'net.ess3:EssentialsX:2.17.2'
     compileOnly 'com.github.milkbowl:vaultapi:1.7'
     compileOnly 'com.mojang:authlib:1.5.21'
-    implementation 'org.jetbrains:annotations:20.0.0'
-    implementation 'it.unimi.dsi:fastutil:8.4.2'
-    implementation "io.papermc:paperlib:1.0.5"
-    implementation "com.zaxxer:HikariCP:3.4.5"
-    implementation "io.lettuce:lettuce-core:5.3.3.RELEASE"
-    implementation "co.aikar:acf-paper:0.5.0-SNAPSHOT"
+    compileOnly 'org.jetbrains:annotations:20.0.0'
+    implementation 'com.zaxxer:HikariCP:3.4.5'
+    implementation 'io.lettuce:lettuce-core:5.3.3.RELEASE'
     implementation 'me.lucko:commodore:1.10'
 }
 
@@ -38,20 +34,13 @@ compileJava {
 }
 
 shadowJar {
-    relocate 'io.papermc.lib', 'com.firestartermc.kerosene.lib.paperlib'
-    relocate 'com.zaxxer.hikari', 'com.firestartermc.kerosene.lib.hikari'
-    relocate 'io.lettuce.core', 'com.firestartermc.kerosene.lib.lettuce'
-    relocate 'it.unimi.dsi.fastutil', 'com.firestartermc.kerosene.lib.fastutil'
-    relocate 'me.lucko.commodore', 'com.firestartermc.kerosene.lib.commodore'
+    relocate 'com.zaxxer.hikari', 'com.firestartermc.library.hikari'
+    relocate 'io.lettuce.core', 'com.firestartermc.library.lettuce'
+    relocate 'me.lucko.commodore', 'com.firestartermc.library.commodore'
+    exclude 'com/mojang/brigadier/**'
     exclude 'org/checkerframework/**'
-    exclude 'org/jetbrains/annotations/**'
-    exclude 'org/intellij/lang/**'
     exclude 'org/slf4j/**'
     exclude 'io/netty/**'
-
-    dependencies {
-        exclude(dependency('com.mojang:brigadier'))
-    }
 }
 
 publishing {
