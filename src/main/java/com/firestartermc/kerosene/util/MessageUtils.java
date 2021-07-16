@@ -35,8 +35,9 @@ public final class MessageUtils {
     private MessageUtils() {
     }
 
+    @Deprecated(forRemoval = true)
     public static void sendComponent(@NotNull Player player, @NotNull Component component) {
-        Kerosene.getKerosene().getAudience(player).sendMessage(component);
+        player.sendMessage(component);
     }
 
     /**

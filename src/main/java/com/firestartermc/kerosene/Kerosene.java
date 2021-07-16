@@ -57,7 +57,6 @@ public class Kerosene extends JavaPlugin {
     private Redis redis;
     private EconomyWrapper economy;
     private Essentials essentials;
-    private BukkitAudiences audiences;
     private Commodore commodore;
 
     public void onEnable() {
@@ -91,10 +90,6 @@ public class Kerosene extends JavaPlugin {
 
         if (redis != null) {
             redis.close();
-        }
-
-        if (audiences != null) {
-            audiences.close();
         }
     }
 
@@ -139,18 +134,8 @@ public class Kerosene extends JavaPlugin {
     }
 
     @NotNull
-    public BukkitAudiences getAudiences() {
-        return audiences;
-    }
-
-    @NotNull
     public Commodore getCommodore() {
         return commodore;
-    }
-
-    @NotNull
-    public Audience getAudience(@NotNull Player player) {
-        return audiences.player(player);
     }
 
     private void connectDatabases() {
@@ -185,7 +170,6 @@ public class Kerosene extends JavaPlugin {
             economy = new EconomyWrapper(provider.getProvider());
         }
 
-        audiences = BukkitAudiences.create(this);
         commodore = CommodoreProvider.getCommodore(this);
     }
 }
