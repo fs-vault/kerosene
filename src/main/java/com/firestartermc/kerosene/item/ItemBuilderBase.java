@@ -218,9 +218,11 @@ public abstract class ItemBuilderBase<T extends ItemBuilderBase<T>> {
      */
     public T storeEnchantment(Enchantment enchantment, int level) {
         ItemMeta meta = this.item.getItemMeta();
-        if (meta instanceof EnchantmentStorageMeta) {
-            ((EnchantmentStorageMeta) meta).addStoredEnchant(enchantment, level, true);
+
+        if (meta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
+            enchantmentStorageMeta.addStoredEnchant(enchantment, level, true);
         }
+
         this.item.setItemMeta(meta);
         return (T) this;
     }

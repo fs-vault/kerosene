@@ -57,16 +57,16 @@ public class Gui implements InventoryHolder, Interactable {
     public void addElement(GuiElement element) {
         guiElements.add(element);
 
-        if (element instanceof Drawable) {
-            drawableElements.add((Drawable) element);
+        if (element instanceof Drawable drawable) {
+            drawableElements.add(drawable);
         }
 
-        if (element instanceof Interactable) {
-            interactableElements.add((Interactable) element);
+        if (element instanceof Interactable interactable) {
+            interactableElements.add(interactable);
         }
 
-        if (element instanceof OnGuiClose) {
-            closeListenerElements.add((OnGuiClose) element);
+        if (element instanceof OnGuiClose closeListener) {
+            closeListenerElements.add(closeListener);
         }
     }
 
@@ -100,8 +100,7 @@ public class Gui implements InventoryHolder, Interactable {
     public void open(Set<Player> players) {
         Bukkit.getScheduler().runTask(Kerosene.getKerosene(), () -> {
             players.forEach(player -> {
-                if (player.getOpenInventory().getTopInventory().getHolder() instanceof Gui) {
-                    Gui gui = (Gui) player.getOpenInventory().getTopInventory().getHolder();
+                if (player.getOpenInventory().getTopInventory().getHolder() instanceof Gui gui) {
                     if (!gui.isOverridable()) {
                         return;
                     }

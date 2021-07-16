@@ -16,13 +16,11 @@ public class GuiListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
-        InventoryHolder holder = event.getInventory().getHolder();
-        if (!(holder instanceof Gui)) {
+        if (!(event.getInventory().getHolder() instanceof Gui gui)) {
             return;
         }
 
         try {
-            Gui gui = (Gui) holder;
             Player player = (Player) event.getWhoClicked();
 
             int slot = event.getRawSlot();
@@ -51,8 +49,7 @@ public class GuiListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryDrag(InventoryDragEvent event) {
-        InventoryHolder holder = event.getInventory().getHolder();
-        if (!(holder instanceof Gui)) {
+        if (!(event.getInventory().getHolder() instanceof Gui)) {
             return;
         }
 
@@ -61,12 +58,10 @@ public class GuiListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClose(InventoryCloseEvent event) {
-        InventoryHolder holder = event.getInventory().getHolder();
-        if (!(holder instanceof Gui)) {
+        if (!(event.getInventory().getHolder() instanceof Gui gui)) {
             return;
         }
 
-        Gui gui = (Gui) holder;
         gui.removeViewer((Player) event.getPlayer());
     }
 

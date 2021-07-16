@@ -177,8 +177,8 @@ public abstract class PlayerPagedItemGuiBase extends PlayerGui {
         super.onInteract(event);
 
         this.pageContent.forEach(component -> {
-            if (component instanceof Interactable) {
-                ((Interactable) component).onInteract(event);
+            if (component instanceof Interactable interactable) {
+                interactable.onInteract(event);
             }
         });
     }
