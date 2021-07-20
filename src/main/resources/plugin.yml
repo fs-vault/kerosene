@@ -10,10 +10,10 @@ softdepend:
   - Essentials
   - Vault
 
-commands:
-  kerosene:
-    description: Base Kerosene administrative command.
-    permission: firestarter.admin
+# commands:
+#   kerosene:
+#     description: Base Kerosene administrative command.
+#     permission: firestarter.admin
 
 permissions:
   firestarter.admin:

@@ -1,7 +1,6 @@
 package com.firestartermc.kerosene.plugin;
 
 import com.firestartermc.kerosene.Kerosene;
-import com.firestartermc.kerosene.command.BrigadierExecutor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +14,7 @@ public class BukkitPlugin extends JavaPlugin {
         return KEROSENE;
     }
 
+    /*
     public void registerCommand(@NotNull String name, @NotNull CommandExecutor executor) {
         var command = getCommand(name);
 
@@ -30,4 +30,5 @@ public class BukkitPlugin extends JavaPlugin {
             brigadier.getCompletions().forEach(commodore::register);
         }
     }
+     */
 }

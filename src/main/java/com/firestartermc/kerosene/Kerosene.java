@@ -1,6 +1,8 @@
 package com.firestartermc.kerosene;
 
 import com.earth2me.essentials.Essentials;
+import com.firestartermc.kerosene.command.CommandBus;
+import com.firestartermc.kerosene.command.KeroseneCommand;
 import com.firestartermc.kerosene.data.db.RemoteDatabase;
 import com.firestartermc.kerosene.data.db.LocalStorage;
 import com.firestartermc.kerosene.data.redis.Redis;
@@ -9,8 +11,6 @@ import com.firestartermc.kerosene.gui.Gui;
 import com.firestartermc.kerosene.gui.GuiListener;
 import com.firestartermc.kerosene.user.User;
 import com.firestartermc.kerosene.user.UserManager;
-import me.lucko.commodore.Commodore;
-import me.lucko.commodore.CommodoreProvider;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -49,10 +49,10 @@ public class Kerosene extends JavaPlugin {
     private static Kerosene KEROSENE;
     private UserManager userManager;
     private RemoteDatabase remoteDatabase;
+    private CommandBus commandBus;
     private Redis redis;
     private EconomyWrapper economy;
     private Essentials essentials;
-    private Commodore commodore;
 
     public void onEnable() {
         KEROSENE = this;
@@ -67,7 +67,14 @@ public class Kerosene extends JavaPlugin {
         pluginManager.registerEvents(new QuitListener(), this);
         registerHooks();
 
+        try {
+            commandBus = new CommandBus(this);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         // TODO
+        getCommandBus().command(new KeroseneCommand(this));
         // getCommandManager().registerCommands(new KeroseneCommand(this));
         Debug.registerCategory(Debug.DEBUG_CATEGORY_GUI_INTERACT);
 
@@ -100,6 +107,11 @@ public class Kerosene extends JavaPlugin {
     }
 
     @NotNull
+    public CommandBus getCommandBus() {
+        return commandBus;
+    }
+
+    @NotNull
     public RemoteDatabase getDatabase() {
         return remoteDatabase;
     }
@@ -120,13 +132,9 @@ public class Kerosene extends JavaPlugin {
     }
 
     @Nullable
+    @Deprecated(forRemoval = true)
     public Essentials getEssentials() {
         return essentials;
-    }
-
-    @NotNull
-    public Commodore getCommodore() {
-        return commodore;
     }
 
     private void connectDatabases() {
@@ -160,7 +168,5 @@ public class Kerosene extends JavaPlugin {
 
             economy = new EconomyWrapper(provider.getProvider());
         }
-
-        commodore = CommodoreProvider.getCommodore(this);
     }
 }
